@@ -1,0 +1,5 @@
+{"id": "q1", "question": "What are the main parts of a RAG system?", "answer": "A RAG system retrieves relevant documents or passages and gives them to a language model for answer generation.", "expected_source": "rag_intro.txt"}
+{"id": "q2", "question": "Why is RAG useful?", "answer": "RAG is useful when a model needs specific facts, private documents, recent information, or domain-specific material.", "expected_source": "rag_intro.txt"}
+{"id": "q3", "question": "What is chunking?", "answer": "Chunking is splitting long documents into smaller pieces.", "expected_source": "rag_intro.txt"}
+{"id": "q4", "question": "What is the difference between dense retrieval and BM25?", "answer": "Dense retrieval uses embedding vectors for semantic similarity, while BM25 uses keyword matching.", "expected_source": "rag_intro.txt"}
+{"id": "q5", "question": "What are common RAG evaluation metrics?", "answer": "Common metrics include Recall@k, Precision@k, Mean Reciprocal Rank, faithfulness, answer correctness, latency, and citation accuracy.", "expected_source": "rag_intro.txt"}
