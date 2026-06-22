@@ -60,7 +60,7 @@ def main():
     chunks = []
 
     for doc in documents:
-        doc_chunks = simple_chunk_text(doc["text"])
+        doc_chunks = simple_chunk_text(doc["text"], chunk_size_words=120, overlap_words=30)
 
         for i, chunk_text in enumerate(doc_chunks):
             chunks.append({
