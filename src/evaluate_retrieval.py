@@ -1,15 +1,16 @@
 import json
-from pathlib import Path
 
-from sentence_transformers import SentenceTransformer
 from qdrant_client import QdrantClient
+from sentence_transformers import SentenceTransformer
 
-
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-EVAL_FILE = PROJECT_ROOT / "data" / "eval" / "questions.jsonl"
-
-COLLECTION_NAME = "rag_chunks"
-EMBEDDING_MODEL_NAME = "BAAI/bge-small-en-v1.5"
+from config import (
+    COLLECTION_NAME,
+    EMBEDDING_MODEL_NAME,
+    EVAL_FILE,
+    EVAL_TOP_KS,
+    QDRANT_PATH,
+)
+from results import save_run
 
 
 def load_questions():
@@ -32,32 +33,50 @@ def retrieve(client, model, query, top_k):
     return results.points
 
 
+def find_rank(results, expected_source):
+    for rank, point in enumerate(results, start=1):
+        if point.payload["source"] == expected_source:
+            return rank
+    return None
+
+
 def main():
     questions = load_questions()
+    max_top_k = max(EVAL_TOP_KS)
 
     model = SentenceTransformer(EMBEDDING_MODEL_NAME)
-    client = QdrantClient(path=str(PROJECT_ROOT / "data" / "qdrant"))
+    client = QdrantClient(path=str(QDRANT_PATH))
 
-    top_ks = [1, 3, 5]
+    per_question = []
 
-    for top_k in top_ks:
+    for item in questions:
+        results = retrieve(client, model, item["question"], top_k=max_top_k)
+        expected_source = item["expected_source"]
+
+        per_question.append({
+            "question": item["question"],
+            "expected_source": expected_source,
+            "found_rank": find_rank(results, expected_source),
+            "retrieved": [
+                {
+                    "rank": rank,
+                    "source": point.payload["source"],
+                    "chunk_index": point.payload["chunk_index"],
+                    "score": point.score,
+                }
+                for rank, point in enumerate(results, start=1)
+            ],
+        })
+
+    metrics = {}
+
+    for top_k in EVAL_TOP_KS:
         hits = 0
         reciprocal_ranks = []
 
-        for item in questions:
-            results = retrieve(client, model, item["question"], top_k=top_k)
-            expected_source = item["expected_source"]
-
-            found_rank = None
-
-            for rank, point in enumerate(results, start=1):
-                source = point.payload["source"]
-
-                if source == expected_source:
-                    found_rank = rank
-                    break
-
-            if found_rank is not None:
+        for item in per_question:
+            found_rank = item["found_rank"]
+            if found_rank is not None and found_rank <= top_k:
                 hits += 1
                 reciprocal_ranks.append(1 / found_rank)
             else:
@@ -66,9 +85,22 @@ def main():
         recall_at_k = hits / len(questions)
         mrr_at_k = sum(reciprocal_ranks) / len(reciprocal_ranks)
 
+        metrics[str(top_k)] = {
+            "recall": recall_at_k,
+            "mrr": mrr_at_k,
+        }
+
         print(f"Recall@{top_k}: {recall_at_k:.3f}")
         print(f"MRR@{top_k}: {mrr_at_k:.3f}")
         print()
+
+    result_path = save_run("evaluate_retrieval", {
+        "eval_file": str(EVAL_FILE),
+        "question_count": len(questions),
+        "metrics": metrics,
+        "per_question": per_question,
+    })
+    print(f"Saved run results to {result_path}")
 
 
 if __name__ == "__main__":

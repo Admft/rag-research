@@ -1,14 +1,10 @@
 import sys
-from pathlib import Path
+
 import requests
-
-from sentence_transformers import SentenceTransformer
 from qdrant_client import QdrantClient
+from sentence_transformers import SentenceTransformer
 
-
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-COLLECTION_NAME = "rag_chunks"
-EMBEDDING_MODEL_NAME = "BAAI/bge-small-en-v1.5"
+from config import COLLECTION_NAME, EMBEDDING_MODEL_NAME, QDRANT_PATH
 OLLAMA_URL = "http://localhost:11434/api/generate"
 OLLAMA_MODEL = "llama3.1:8b"
 
@@ -17,7 +13,7 @@ def retrieve(query, top_k=5):
     model = SentenceTransformer(EMBEDDING_MODEL_NAME)
     query_vector = model.encode(query, normalize_embeddings=True)
 
-    client = QdrantClient(path=str(PROJECT_ROOT / "data" / "qdrant"))
+    client = QdrantClient(path=str(QDRANT_PATH))
 
     results = client.query_points(
         collection_name=COLLECTION_NAME,

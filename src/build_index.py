@@ -1,19 +1,20 @@
-from pathlib import Path
 import json
 import uuid
 
-from sentence_transformers import SentenceTransformer
 from qdrant_client import QdrantClient
-from qdrant_client.models import Distance, VectorParams, PointStruct
+from qdrant_client.models import Distance, PointStruct, VectorParams
+from sentence_transformers import SentenceTransformer
 
-
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-RAW_DIR = PROJECT_ROOT / "data" / "raw"
-PROCESSED_DIR = PROJECT_ROOT / "data" / "processed"
-PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
-
-COLLECTION_NAME = "rag_chunks"
-EMBEDDING_MODEL_NAME = "BAAI/bge-small-en-v1.5"
+from config import (
+    CHUNK_SIZE_WORDS,
+    COLLECTION_NAME,
+    EMBEDDING_MODEL_NAME,
+    OVERLAP_WORDS,
+    PROCESSED_DIR,
+    QDRANT_PATH,
+    RAW_DIR,
+)
+from results import save_run
 
 
 def load_text_files():
@@ -29,7 +30,7 @@ def load_text_files():
     return documents
 
 
-def simple_chunk_text(text, chunk_size_words=120, overlap_words=30):
+def simple_chunk_text(text, chunk_size_words=CHUNK_SIZE_WORDS, overlap_words=OVERLAP_WORDS):
     words = text.split()
     chunks = []
 
@@ -48,6 +49,8 @@ def simple_chunk_text(text, chunk_size_words=120, overlap_words=30):
 
 
 def main():
+    PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
+
     print("Loading documents...")
     documents = load_text_files()
 
@@ -60,7 +63,7 @@ def main():
     chunks = []
 
     for doc in documents:
-        doc_chunks = simple_chunk_text(doc["text"], chunk_size_words=120, overlap_words=30)
+        doc_chunks = simple_chunk_text(doc["text"])
 
         for i, chunk_text in enumerate(doc_chunks):
             chunks.append({
@@ -87,7 +90,7 @@ def main():
     vectors = model.encode(texts, normalize_embeddings=True, show_progress_bar=True)
 
     print("Creating local Qdrant database...")
-    qdrant_path = str(PROJECT_ROOT / "data" / "qdrant")
+    qdrant_path = str(QDRANT_PATH)
     client = QdrantClient(path=qdrant_path)
 
     vector_size = len(vectors[0])
@@ -123,6 +126,21 @@ def main():
     print("Index built successfully.")
     print(f"Qdrant local path: {qdrant_path}")
     print(f"Collection name: {COLLECTION_NAME}")
+
+    result_path = save_run("build_index", {
+        "stats": {
+            "document_count": len(documents),
+            "chunk_count": len(chunks),
+            "vector_size": vector_size,
+            "sources": [doc["source"] for doc in documents],
+        },
+        "outputs": {
+            "chunks_path": str(chunks_path),
+            "qdrant_path": qdrant_path,
+            "collection_name": COLLECTION_NAME,
+        },
+    })
+    print(f"Saved run results to {result_path}")
 
 
 if __name__ == "__main__":
