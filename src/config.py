@@ -23,8 +23,8 @@ EVAL_TOP_KS = [1, 3, 5]
 OLLAMA_URL = "http://localhost:11434/api/generate"
 OLLAMA_MODEL = "llama3.1:8b"
 
-DATASET_STAGE = "toy"
+DATASET_STAGE = "real"
 TARGET_DOC_COUNT_MIN = 20
 TARGET_DOC_COUNT_MAX = 50
-TARGET_QUESTION_COUNT = 50
+TARGET_QUESTION_COUNT = 60
 MILESTONE_NAME = "Part 21: Local RAG baseline over 20-50 documents"

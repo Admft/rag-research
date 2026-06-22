@@ -65,9 +65,12 @@ def main():
     if DATASET_STAGE == "toy":
         print("Next step")
         print("-" * 40)
-        print("The toy example in data/raw/rag_intro.txt is working.")
-        print("Replace it with a real dataset before treating results as research-grade.")
+        print("Add 20-50 documents to data/raw/ and hand-written eval questions.")
         print("See data/README.md for dataset options.")
+    elif doc_count < TARGET_DOC_COUNT_MIN:
+        print("Next step")
+        print("-" * 40)
+        print(f"Add {TARGET_DOC_COUNT_MIN - doc_count} more documents to reach the Part 21 minimum.")
     print("=" * 72)
 
 
