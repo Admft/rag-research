@@ -14,7 +14,7 @@ from config import (
     QDRANT_PATH,
     RAW_DIR,
 )
-from results import save_run
+from results import save_build_results
 
 
 def load_text_files():
@@ -127,20 +127,18 @@ def main():
     print(f"Qdrant local path: {qdrant_path}")
     print(f"Collection name: {COLLECTION_NAME}")
 
-    result_path = save_run("build_index", {
-        "stats": {
-            "document_count": len(documents),
-            "chunk_count": len(chunks),
-            "vector_size": vector_size,
-            "sources": [doc["source"] for doc in documents],
-        },
-        "outputs": {
+    result_paths = save_build_results(
+        documents=documents,
+        chunks=chunks,
+        vector_size=vector_size,
+        outputs={
             "chunks_path": str(chunks_path),
             "qdrant_path": qdrant_path,
             "collection_name": COLLECTION_NAME,
         },
-    })
-    print(f"Saved run results to {result_path}")
+    )
+    print(f"Saved run results to {result_paths[0]}")
+    print(f"Saved readable report to {result_paths[1]}")
 
 
 if __name__ == "__main__":

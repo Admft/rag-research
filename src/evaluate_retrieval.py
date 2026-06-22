@@ -10,7 +10,7 @@ from config import (
     EVAL_TOP_KS,
     QDRANT_PATH,
 )
-from results import save_run
+from results import save_eval_results
 
 
 def load_questions():
@@ -40,6 +40,14 @@ def find_rank(results, expected_source):
     return None
 
 
+def text_preview(text, max_words=12):
+    words = text.split()
+    preview = " ".join(words[:max_words])
+    if len(words) > max_words:
+        preview += "..."
+    return preview
+
+
 def main():
     questions = load_questions()
     max_top_k = max(EVAL_TOP_KS)
@@ -54,8 +62,10 @@ def main():
         expected_source = item["expected_source"]
 
         per_question.append({
+            "id": item.get("id", "unknown"),
             "question": item["question"],
             "expected_source": expected_source,
+            "expected_answer": item.get("answer", ""),
             "found_rank": find_rank(results, expected_source),
             "retrieved": [
                 {
@@ -63,6 +73,7 @@ def main():
                     "source": point.payload["source"],
                     "chunk_index": point.payload["chunk_index"],
                     "score": point.score,
+                    "text_preview": text_preview(point.payload["text"]),
                 }
                 for rank, point in enumerate(results, start=1)
             ],
@@ -88,19 +99,22 @@ def main():
         metrics[str(top_k)] = {
             "recall": recall_at_k,
             "mrr": mrr_at_k,
+            "hits": hits,
         }
 
-        print(f"Recall@{top_k}: {recall_at_k:.3f}")
+        print(f"Recall@{top_k}: {recall_at_k:.3f} ({hits}/{len(questions)})")
         print(f"MRR@{top_k}: {mrr_at_k:.3f}")
         print()
 
-    result_path = save_run("evaluate_retrieval", {
-        "eval_file": str(EVAL_FILE),
-        "question_count": len(questions),
-        "metrics": metrics,
-        "per_question": per_question,
-    })
-    print(f"Saved run results to {result_path}")
+    result_paths = save_eval_results(
+        eval_file=EVAL_FILE,
+        question_count=len(questions),
+        metrics=metrics,
+        per_question=per_question,
+        top_ks=EVAL_TOP_KS,
+    )
+    print(f"Saved run results to {result_paths[0]}")
+    print(f"Saved readable report to {result_paths[1]}")
 
 
 if __name__ == "__main__":
