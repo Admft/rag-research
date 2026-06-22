@@ -8,7 +8,9 @@
 
 ## Real stage (Part 21)
 
-Replace the toy file with **20-50 public `.txt` documents** in this folder.
+Replace the toy file with **20-50 public documents** in this folder.
+
+Supported formats: **`.txt`** and **`.pdf`** (text is extracted automatically with pypdf).
 
 ### Option A: Cornell course catalog pages
 
@@ -24,8 +26,8 @@ Good for beginners because pages are structured and factual.
 Good if you care about technical retrieval.
 
 1. Pick 20-50 public AI/ML papers with permissive access.
-2. Convert PDFs to text (one file per paper).
-3. Name files after the paper, e.g. `attention_is_all_you_need.txt`.
+2. Drop PDFs directly into `data/raw/` (one paper per file), or convert to `.txt` if you want to inspect the text.
+3. Name files after the paper, e.g. `2305.14283v3.pdf`.
 
 ### Option C: BEIR (later, not Part 21)
 
@@ -40,7 +42,7 @@ Target: **50 hand-written questions** in `data/eval/questions.jsonl`.
 Each line:
 
 ```json
-{"id": "q1", "question": "...", "answer": "...", "expected_source": "filename.txt"}
+{"id": "q1", "question": "...", "answer": "...", "expected_source": "2305.14283v3.pdf"}
 ```
 
 Write questions **after** you have the real corpus so they match your documents.

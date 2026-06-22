@@ -12,22 +12,9 @@ from config import (
     OVERLAP_WORDS,
     PROCESSED_DIR,
     QDRANT_PATH,
-    RAW_DIR,
 )
+from documents import load_raw_documents
 from results import save_build_results
-
-
-def load_text_files():
-    documents = []
-
-    for path in RAW_DIR.glob("*.txt"):
-        text = path.read_text(encoding="utf-8")
-        documents.append({
-            "source": path.name,
-            "text": text
-        })
-
-    return documents
 
 
 def simple_chunk_text(text, chunk_size_words=CHUNK_SIZE_WORDS, overlap_words=OVERLAP_WORDS):
@@ -52,12 +39,21 @@ def main():
     PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
 
     print("Loading documents...")
-    documents = load_text_files()
+    documents, skipped = load_raw_documents()
+
+    if skipped:
+        print(f"Skipped {len(skipped)} file(s):")
+        for name, reason in skipped:
+            print(f"  - {name}: {reason}")
 
     if not documents:
-        raise RuntimeError(f"No .txt files found in {RAW_DIR}")
+        raise RuntimeError(
+            f"No readable .txt or .pdf files found in {RAW_DIR}"
+        )
 
-    print(f"Loaded {len(documents)} document(s).")
+    txt_count = sum(1 for doc in documents if doc["format"] == "txt")
+    pdf_count = sum(1 for doc in documents if doc["format"] == "pdf")
+    print(f"Loaded {len(documents)} document(s) ({txt_count} txt, {pdf_count} pdf).")
 
     print("Chunking documents...")
     chunks = []

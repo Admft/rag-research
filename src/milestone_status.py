@@ -2,15 +2,15 @@ from config import (
     DATASET_STAGE,
     EVAL_FILE,
     MILESTONE_NAME,
-    RAW_DIR,
     TARGET_DOC_COUNT_MAX,
     TARGET_DOC_COUNT_MIN,
     TARGET_QUESTION_COUNT,
 )
+from documents import list_raw_documents
 
 
 def count_raw_documents():
-    return len(list(RAW_DIR.glob("*.txt")))
+    return len(list_raw_documents())
 
 
 def count_eval_questions():
@@ -45,7 +45,7 @@ def main():
     print("Progress")
     print("-" * 40)
     print(f"Documents in data/raw: {progress_bar(doc_count, TARGET_DOC_COUNT_MIN)}")
-    print(f"  Target range: {TARGET_DOC_COUNT_MIN}-{TARGET_DOC_COUNT_MAX} public .txt files")
+    print(f"  Target range: {TARGET_DOC_COUNT_MIN}-{TARGET_DOC_COUNT_MAX} public .txt or .pdf files")
     print()
     print(f"Eval questions:        {progress_bar(question_count, TARGET_QUESTION_COUNT)}")
     print(f"  File: {EVAL_FILE}")
