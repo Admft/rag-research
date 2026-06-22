@@ -5,6 +5,7 @@ from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, PointStruct, VectorParams
 from sentence_transformers import SentenceTransformer
 
+from chunking import chunk_text
 from config import (
     CHUNK_SIZE_WORDS,
     COLLECTION_NAME,
@@ -12,27 +13,10 @@ from config import (
     OVERLAP_WORDS,
     PROCESSED_DIR,
     QDRANT_PATH,
+    RAW_DIR,
 )
 from documents import load_raw_documents
 from results import save_build_results
-
-
-def simple_chunk_text(text, chunk_size_words=CHUNK_SIZE_WORDS, overlap_words=OVERLAP_WORDS):
-    words = text.split()
-    chunks = []
-
-    start = 0
-    while start < len(words):
-        end = start + chunk_size_words
-        chunk_words = words[start:end]
-        chunk_text = " ".join(chunk_words)
-
-        if chunk_text.strip():
-            chunks.append(chunk_text)
-
-        start += chunk_size_words - overlap_words
-
-    return chunks
 
 
 def main():
@@ -59,14 +43,14 @@ def main():
     chunks = []
 
     for doc in documents:
-        doc_chunks = simple_chunk_text(doc["text"])
+        doc_chunks = chunk_text(doc["text"], CHUNK_SIZE_WORDS, OVERLAP_WORDS)
 
-        for i, chunk_text in enumerate(doc_chunks):
+        for i, chunk_text_value in enumerate(doc_chunks):
             chunks.append({
                 "id": str(uuid.uuid4()),
                 "source": doc["source"],
                 "chunk_index": i,
-                "text": chunk_text
+                "text": chunk_text_value
             })
 
     print(f"Created {len(chunks)} chunks.")

@@ -43,6 +43,21 @@ Results: `results/baseline/evaluation/`
 
 Eval questions live in `data/eval/questions.jsonl`. The toy set has 5 questions; the Part 21 target is 50.
 
+## Experiment grid
+
+Run baseline + one-variable-at-a-time tests (chunk size, overlap, top-k, retriever, reranker).
+
+```bash
+python src/run_experiments.py --list
+python src/run_experiments.py --run baseline --retrieval-only
+python src/run_experiments.py --round chunk_size
+python src/run_experiments.py --all
+```
+
+Results CSV: `results/experiments/experiment_results.csv`
+
+See `experiments/README.md` for the full 25-run plan and scoring formula.
+
 ## Small experiments
 
 Use `experiments/` to log parameter sweeps and comparisons (chunk size, overlap, embedding model, top-k, etc.).
@@ -92,7 +107,8 @@ data/raw/              source documents (.txt)
 data/eval/             hand-written eval questions
 data/processed/        generated chunks
 results/baseline/      retrieval, evaluation, generation runs
-experiments/           small experiment logs
+results/experiments/   experiment grid CSV + per-run reports
+experiments/           grid config and experiment notes
 notes/                 failure case notes
 docs/                  milestone and research notes
 src/                   scripts and shared config

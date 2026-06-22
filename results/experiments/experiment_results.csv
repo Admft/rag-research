@@ -1,0 +1,2 @@
+run_id,round,chunk_size,overlap,top_k,retriever,embedding_model,reranker,query_transform,prompt,context_filter,final_score,answer_correctness,faithfulness,context_recall,context_precision,citation_accuracy,recall_at_k,mrr_at_k,avg_latency,avg_prompt_tokens,question_count,run_time_central,json_path
+baseline,baseline,512,50,5,dense,BAAI/bge-small-en-v1.5,none,none,strict_context,none,,,,,,,0.0,0.0,0.024,,2,2026-06-21 23:28:06 CDT,/home/adamm/projects/rag-research/results/experiments/baseline/baseline__chunk512-overlap50__topk5__dense__2026-06-21_23-28-06_CDT.json

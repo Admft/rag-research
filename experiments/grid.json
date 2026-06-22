@@ -1,0 +1,62 @@
+{
+  "baseline": {
+    "name": "baseline",
+    "chunk_size": 512,
+    "chunk_overlap": 50,
+    "retriever": "dense",
+    "embedding_model": "BAAI/bge-small-en-v1.5",
+    "top_k": 5,
+    "reranker": "none",
+    "query_transform": "none",
+    "prompt": "strict_context",
+    "context_filter": "none",
+    "generator": "llama3.1:8b"
+  },
+  "runs": [
+    {"name": "baseline", "round": "baseline", "description": "Control group. Change one variable per round after this."},
+
+    {"name": "chunk_128", "round": "chunk_size", "overrides": {"chunk_size": 128}},
+    {"name": "chunk_256", "round": "chunk_size", "overrides": {"chunk_size": 256}},
+    {"name": "chunk_512", "round": "chunk_size", "overrides": {"chunk_size": 512}},
+    {"name": "chunk_1024", "round": "chunk_size", "overrides": {"chunk_size": 1024}},
+    {"name": "chunk_2048", "round": "chunk_size", "overrides": {"chunk_size": 2048}},
+
+    {"name": "overlap_0", "round": "overlap", "overrides": {"chunk_overlap": 0}},
+    {"name": "overlap_50", "round": "overlap", "overrides": {"chunk_overlap": 50}},
+    {"name": "overlap_100", "round": "overlap", "overrides": {"chunk_overlap": 100}},
+    {"name": "overlap_200", "round": "overlap", "overrides": {"chunk_overlap": 200}},
+
+    {"name": "topk_1", "round": "top_k", "overrides": {"top_k": 1}},
+    {"name": "topk_3", "round": "top_k", "overrides": {"top_k": 3}},
+    {"name": "topk_5", "round": "top_k", "overrides": {"top_k": 5}},
+    {"name": "topk_8", "round": "top_k", "overrides": {"top_k": 8}},
+    {"name": "topk_10", "round": "top_k", "overrides": {"top_k": 10}},
+    {"name": "topk_15", "round": "top_k", "overrides": {"top_k": 15}},
+
+    {"name": "retriever_dense", "round": "retriever", "overrides": {"retriever": "dense"}},
+    {"name": "retriever_bm25", "round": "retriever", "overrides": {"retriever": "bm25"}},
+    {"name": "retriever_hybrid", "round": "retriever", "overrides": {"retriever": "hybrid"}},
+    {"name": "retriever_hyde", "round": "retriever", "overrides": {"retriever": "hyde"}},
+    {"name": "retriever_hyde_hybrid", "round": "retriever", "overrides": {"retriever": "hyde_hybrid"}},
+
+    {"name": "rerank_none", "round": "reranker", "overrides": {"reranker": "none"}},
+    {"name": "rerank_bge", "round": "reranker", "overrides": {"reranker": "bge"}},
+    {"name": "rerank_cross_encoder", "round": "reranker", "overrides": {"reranker": "cross_encoder"}},
+
+    {
+      "name": "best_full_pipeline",
+      "round": "final",
+      "description": "Update settings here after earlier rounds. Starting guess from research plan.",
+      "overrides": {
+        "chunk_size": 512,
+        "chunk_overlap": 100,
+        "top_k": 8,
+        "retriever": "hybrid",
+        "reranker": "bge",
+        "query_transform": "hyde",
+        "prompt": "strict_context_with_citations",
+        "context_filter": "top_sentences_5"
+      }
+    }
+  ]
+}

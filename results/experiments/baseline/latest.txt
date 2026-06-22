@@ -1,0 +1,36 @@
+========================================================================
+EXPERIMENT: baseline
+========================================================================
+Round: baseline
+Run time: 2026-06-21 23:28:06 CDT
+
+CONFIG
+----------------------------------------
+Chunk size:       512
+Overlap:          50
+Top-k:            5
+Retriever:        dense
+Embedding model:  BAAI/bge-small-en-v1.5
+Reranker:         none
+Query transform:  none
+Prompt:           strict_context
+Context filter:   none
+
+SCORES
+----------------------------------------
+Recall@5:            0.0%
+MRR@5:                0.0%
+Avg latency:          0.024s
+
+PER-QUESTION
+----------------------------------------
+
+[q1] What are the main parts of a RAG system?
+  Expected source: rag_intro.txt
+  Recall hit: no (rank None)
+
+[q2] Why is RAG useful?
+  Expected source: rag_intro.txt
+  Recall hit: no (rank None)
+
+========================================================================
