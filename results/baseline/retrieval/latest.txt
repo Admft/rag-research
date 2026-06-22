@@ -1,0 +1,43 @@
+========================================================================
+INDEX BUILD RESULTS
+========================================================================
+Run time: 2026-06-21 19:13:24 CDT
+
+INDEX SETTINGS
+----------------------------------------
+Chunk size:      60 words
+Overlap:         10 words
+Step size:       50 words
+Embedding model: BAAI/bge-small-en-v1.5
+Collection:      rag_chunks
+Distance:        cosine
+
+BUILD SUMMARY
+----------------------------------------
+Documents indexed: 1
+Total chunks:      4
+Vector size:       384
+Avg chunk length:  51.8 words
+
+SOURCE BREAKDOWN
+----------------------------------------
+  rag_intro.txt: 4 chunks (avg 51.8 words)
+
+CHUNKS CREATED
+----------------------------------------
+  [0] rag_intro.txt (60 words): "Retrieval-Augmented Generation, often called RAG, is a technique that combines information retrieval..."
+  [1] rag_intro.txt (60 words): "external information. RAG is useful when a language model does not know..."
+  [2] rag_intro.txt (60 words): "overlap can strongly affect retrieval quality. Dense retrieval uses embedding vectors to..."
+  [3] rag_intro.txt (27 words): "retrieval misses the right context, when retrieved chunks conflict, when chunks are..."
+
+OUTPUT PATHS
+----------------------------------------
+Chunks file:  /home/adamm/projects/rag-research/data/processed/chunks.jsonl
+Qdrant path:  /home/adamm/projects/rag-research/data/qdrant
+
+NEXT STEP
+----------------------------------------
+Run evaluate_retrieval.py for baseline evaluation.
+Run milestone_status.py to track Part 21 progress.
+See docs/part21-next-milestone.md for the full checklist.
+========================================================================

@@ -1,4 +1,5 @@
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
@@ -8,6 +9,8 @@ EVAL_FILE = PROJECT_ROOT / "data" / "eval" / "questions.jsonl"
 QDRANT_PATH = PROJECT_ROOT / "data" / "qdrant"
 RESULTS_DIR = PROJECT_ROOT / "results"
 
+RESULT_TIMEZONE = ZoneInfo("America/Chicago")
+
 COLLECTION_NAME = "rag_chunks"
 EMBEDDING_MODEL_NAME = "BAAI/bge-small-en-v1.5"
 DISTANCE = "cosine"
@@ -16,3 +19,12 @@ CHUNK_SIZE_WORDS = 60
 OVERLAP_WORDS = 10
 
 EVAL_TOP_KS = [1, 3, 5]
+
+OLLAMA_URL = "http://localhost:11434/api/generate"
+OLLAMA_MODEL = "llama3.1:8b"
+
+DATASET_STAGE = "toy"
+TARGET_DOC_COUNT_MIN = 20
+TARGET_DOC_COUNT_MAX = 50
+TARGET_QUESTION_COUNT = 50
+MILESTONE_NAME = "Part 21: Local RAG baseline over 20-50 documents"

@@ -1,27 +1,71 @@
 import json
 from datetime import datetime, timezone
 
-from config import RESULTS_DIR
+from config import (
+    CHUNK_SIZE_WORDS,
+    DATASET_STAGE,
+    OVERLAP_WORDS,
+    RESULTS_DIR,
+    RESULT_TIMEZONE,
+    TARGET_DOC_COUNT_MAX,
+    TARGET_DOC_COUNT_MIN,
+    TARGET_QUESTION_COUNT,
+)
+
+
+RUN_CATEGORIES = {
+    "build_index": {
+        "label": "build",
+        "category": "baseline",
+        "subcategory": "retrieval",
+        "title": "Baseline retrieval",
+    },
+    "evaluate_retrieval": {
+        "label": "eval",
+        "category": "baseline",
+        "subcategory": "evaluation",
+        "title": "Baseline evaluation",
+    },
+    "generation": {
+        "label": "gen",
+        "category": "baseline",
+        "subcategory": "generation",
+        "title": "Baseline generation",
+    },
+}
+
+
+def run_results_dir(run_type):
+    info = RUN_CATEGORIES[run_type]
+    return RESULTS_DIR / info["category"] / info["subcategory"]
+
+
+def latest_result_path(run_type, extension="json"):
+    return run_results_dir(run_type) / f"latest.{extension}"
 
 
 def build_config_snapshot():
     from config import (
-        CHUNK_SIZE_WORDS,
         COLLECTION_NAME,
+        DATASET_STAGE,
         DISTANCE,
         EMBEDDING_MODEL_NAME,
         EVAL_TOP_KS,
-        OVERLAP_WORDS,
+        OLLAMA_MODEL,
         QDRANT_PATH,
+        TARGET_QUESTION_COUNT,
     )
 
     step_words = CHUNK_SIZE_WORDS - OVERLAP_WORDS
 
     return {
+        "dataset_stage": DATASET_STAGE,
+        "target_question_count": TARGET_QUESTION_COUNT,
         "chunk_size_words": CHUNK_SIZE_WORDS,
         "overlap_words": OVERLAP_WORDS,
         "step_words": step_words,
         "embedding_model": EMBEDDING_MODEL_NAME,
+        "generation_model": OLLAMA_MODEL,
         "collection_name": COLLECTION_NAME,
         "distance": DISTANCE,
         "qdrant_path": str(QDRANT_PATH),
@@ -29,8 +73,41 @@ def build_config_snapshot():
     }
 
 
+def get_run_times():
+    utc_now = datetime.now(timezone.utc)
+    central_dt = utc_now.astimezone(RESULT_TIMEZONE)
+    return utc_now, central_dt
+
+
+def config_slug(settings=None):
+    settings = settings or build_config_snapshot()
+    return f"chunk{settings['chunk_size_words']}-overlap{settings['overlap_words']}"
+
+
+def format_central_timestamp(central_dt):
+    tz_abbr = central_dt.tzname() or "CT"
+    return central_dt.strftime(f"%Y-%m-%d_%H-%M-%S_{tz_abbr}")
+
+
+def build_run_basename(run_type, central_dt, settings=None, metrics=None):
+    label = RUN_CATEGORIES[run_type]["label"]
+    parts = [
+        label,
+        config_slug(settings),
+    ]
+
+    if run_type == "evaluate_retrieval" and metrics:
+        recall_1 = metrics.get("1", {}).get("recall")
+        mrr_1 = metrics.get("1", {}).get("mrr")
+        if recall_1 is not None and mrr_1 is not None:
+            parts.append(f"r1-{recall_1:.3f}_mrr1-{mrr_1:.3f}")
+
+    parts.append(format_central_timestamp(central_dt))
+    return "__".join(parts)
+
+
 def load_latest_build_run():
-    latest_path = RESULTS_DIR / "latest_build_index.json"
+    latest_path = latest_result_path("build_index")
     if not latest_path.exists():
         return None
 
@@ -66,7 +143,7 @@ def format_build_report(payload):
         "=" * 72,
         "INDEX BUILD RESULTS",
         "=" * 72,
-        f"Run time: {payload['run_time_local']}",
+        f"Run time: {payload['run_time_central']}",
         "",
         format_settings_block(settings),
         "",
@@ -109,7 +186,9 @@ def format_build_report(payload):
         "",
         "NEXT STEP",
         "-" * 40,
-        "Run evaluate_retrieval.py to get Recall@k and MRR@k scores.",
+        "Run evaluate_retrieval.py for baseline evaluation.",
+        "Run milestone_status.py to track Part 21 progress.",
+        "See docs/part21-next-milestone.md for the full checklist.",
         "=" * 72,
     ])
 
@@ -123,7 +202,7 @@ def format_eval_report(payload):
         "=" * 72,
         "RETRIEVAL EVALUATION RESULTS",
         "=" * 72,
-        f"Run time: {payload['run_time_local']}",
+        f"Run time: {payload['run_time_central']}",
         f"Eval set: {payload['eval_file']} ({payload['question_count']} questions)",
         "",
         format_settings_block(settings),
@@ -179,25 +258,74 @@ def format_eval_report(payload):
     return "\n".join(lines)
 
 
-def save_run(run_type, data, report_formatter=None):
-    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+def format_generation_report(payload):
+    settings = payload["index_settings"]
+    lines = [
+        "=" * 72,
+        "BASELINE GENERATION RESULT",
+        "=" * 72,
+        f"Run time: {payload['run_time_central']}",
+        "",
+        format_settings_block(settings),
+        "",
+        "GENERATION SETTINGS",
+        "-" * 40,
+        f"Model: {settings['generation_model']}",
+        f"Top-k retrieved: {payload['top_k']}",
+        "",
+        "QUESTION",
+        "-" * 40,
+        payload["query"],
+        "",
+        "ANSWER",
+        "-" * 40,
+        payload["answer"],
+        "",
+        "RETRIEVED SOURCES",
+        "-" * 40,
+    ]
 
-    timestamp = datetime.now(timezone.utc)
-    stamp = timestamp.strftime("%Y%m%d_%H%M%S")
-    run_time_local = timestamp.astimezone().strftime("%Y-%m-%d %H:%M:%S %Z")
+    for hit in payload["retrieved"]:
+        lines.extend([
+            f"  #{hit['rank']} {hit['source']} chunk {hit['chunk_index']} (score {hit['score']:.3f})",
+            f"     \"{hit['text_preview']}\"",
+            "",
+        ])
+
+    lines.append("=" * 72)
+    return "\n".join(lines)
+
+
+def save_run(run_type, data, report_formatter=None, metrics=None):
+    output_dir = run_results_dir(run_type)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    utc_now, central_dt = get_run_times()
+    settings = build_config_snapshot()
+    basename = build_run_basename(run_type, central_dt, settings, metrics=metrics)
+    category_info = RUN_CATEGORIES[run_type]
 
     payload = {
         "run_type": run_type,
-        "run_time_utc": timestamp.isoformat(),
-        "run_time_local": run_time_local,
-        "index_settings": build_config_snapshot(),
+        "run_category": category_info["title"],
+        "run_name": basename,
+        "run_time_utc": utc_now.isoformat(),
+        "run_time_central": central_dt.strftime("%Y-%m-%d %H:%M:%S %Z"),
+        "run_timezone": "America/Chicago",
+        "milestone": {
+            "name": "Part 21: Local RAG baseline over 20-50 documents",
+            "dataset_stage": settings["dataset_stage"],
+            "target_documents": f"{TARGET_DOC_COUNT_MIN}-{TARGET_DOC_COUNT_MAX}",
+            "target_questions": TARGET_QUESTION_COUNT,
+        },
+        "index_settings": settings,
         **data,
     }
 
-    json_path = RESULTS_DIR / f"{run_type}_{stamp}.json"
-    latest_json_path = RESULTS_DIR / f"latest_{run_type}.json"
-    txt_path = RESULTS_DIR / f"{run_type}_{stamp}.txt"
-    latest_txt_path = RESULTS_DIR / f"latest_{run_type}.txt"
+    json_path = output_dir / f"{basename}.json"
+    latest_json_path = latest_result_path(run_type, "json")
+    txt_path = output_dir / f"{basename}.txt"
+    latest_txt_path = latest_result_path(run_type, "txt")
 
     for path in (json_path, latest_json_path):
         with path.open("w", encoding="utf-8") as f:
@@ -288,7 +416,9 @@ def save_eval_results(eval_file, question_count, metrics, per_question, top_ks):
 
     if linked_build:
         build_ref = {
-            "build_run_time_utc": linked_build.get("run_time_utc"),
+            "run_name": linked_build.get("run_name"),
+            "run_time_utc": linked_build.get("run_time_utc"),
+            "run_time_central": linked_build.get("run_time_central"),
             "build_stats": linked_build.get("build_stats"),
         }
 
@@ -305,4 +435,36 @@ def save_eval_results(eval_file, question_count, metrics, per_question, top_ks):
             for k in top_ks
         },
         "questions": per_question,
-    }, report_formatter=format_eval_report)
+    }, report_formatter=format_eval_report, metrics=metrics)
+
+
+def save_generation_results(query, answer, retrieved, top_k):
+    linked_build = load_latest_build_run()
+    build_ref = None
+
+    if linked_build:
+        build_ref = {
+            "run_name": linked_build.get("run_name"),
+            "run_time_central": linked_build.get("run_time_central"),
+            "build_stats": linked_build.get("build_stats"),
+        }
+
+    retrieved_rows = []
+    for rank, point in enumerate(retrieved, start=1):
+        words = point.payload["text"].split()
+        preview = " ".join(words[:12]) + ("..." if len(words) > 12 else "")
+        retrieved_rows.append({
+            "rank": rank,
+            "source": point.payload["source"],
+            "chunk_index": point.payload["chunk_index"],
+            "score": point.score,
+            "text_preview": preview,
+        })
+
+    return save_run("generation", {
+        "query": query,
+        "answer": answer,
+        "top_k": top_k,
+        "linked_build": build_ref,
+        "retrieved": retrieved_rows,
+    }, report_formatter=format_generation_report)

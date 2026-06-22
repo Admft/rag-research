@@ -4,9 +4,8 @@ import requests
 from qdrant_client import QdrantClient
 from sentence_transformers import SentenceTransformer
 
-from config import COLLECTION_NAME, EMBEDDING_MODEL_NAME, QDRANT_PATH
-OLLAMA_URL = "http://localhost:11434/api/generate"
-OLLAMA_MODEL = "llama3.1:8b"
+from config import COLLECTION_NAME, EMBEDDING_MODEL_NAME, OLLAMA_MODEL, OLLAMA_URL, QDRANT_PATH
+from results import save_generation_results
 
 
 def retrieve(query, top_k=5):
@@ -77,11 +76,12 @@ def main():
         sys.exit(1)
 
     query = sys.argv[1]
+    top_k = 5
 
     print("Retrieving context...")
-    retrieved = retrieve(query, top_k=5)
+    retrieved = retrieve(query, top_k=top_k)
 
-    print("Generating answer with Ollama...")
+    print(f"Generating answer with {OLLAMA_MODEL}...")
     prompt = build_prompt(query, retrieved)
     answer = call_ollama(prompt)
 
@@ -99,6 +99,11 @@ def main():
     for i, point in enumerate(retrieved, start=1):
         payload = point.payload
         print(f"[Source {i}] score={point.score:.4f} file={payload['source']} chunk={payload['chunk_index']}")
+
+    result_paths = save_generation_results(query, answer, retrieved, top_k=top_k)
+    print()
+    print(f"Saved run results to {result_paths[0]}")
+    print(f"Saved readable report to {result_paths[1]}")
 
 
 if __name__ == "__main__":
