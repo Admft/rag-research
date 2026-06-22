@@ -1,0 +1,172 @@
+{
+  "run_name": "chunk_128",
+  "run_time_central": "2026-06-21 23:47:38 CDT",
+  "run_timezone": "America/Chicago",
+  "summary": {
+    "config": {
+      "name": "chunk_128",
+      "chunk_size": 128,
+      "chunk_overlap": 50,
+      "retriever": "dense",
+      "embedding_model": "BAAI/bge-small-en-v1.5",
+      "top_k": 5,
+      "reranker": "none",
+      "query_transform": "none",
+      "prompt": "strict_context",
+      "context_filter": "none",
+      "generator": "llama3.1:8b",
+      "round": "chunk_size",
+      "description": ""
+    },
+    "index_stats": {
+      "chunks": 1469
+    },
+    "question_count": 3,
+    "recall_at_k": 1.0,
+    "mrr_at_k": 1.0,
+    "avg_latency_s": 0.022
+  },
+  "questions": [
+    {
+      "id": "queryrewrite_q1",
+      "question": "What new framework does Query Rewriting for Retrieval-Augmented Large Language Models introduce?",
+      "question_type": "normal",
+      "expected_source": "2305.14283v3.pdf",
+      "expected_answer": "The paper introduces Rewrite-Retrieve-Read, a framework that adds a query rewriting step before retrieval and reading in retrieval-augmented LLM pipelines.",
+      "found_rank": 1,
+      "recall_hit": true,
+      "retrieve_latency_s": 0.034,
+      "retrieved": [
+        {
+          "id": "0fb423d9-7b9a-40e5-be31-5f1c086e5361",
+          "source": "2305.14283v3.pdf",
+          "chunk_index": 0,
+          "text": "Query Rewriting for Retrieval-Augmented Large Language Models Xinbei Ma1,2,\u2217 , Y eyun Gong3, #, \u2020, Pengcheng He4, #, Hai Zhao 1,2,\u2020, Nan Duan 3 1Department of Computer Science and Engineering, Shanghai Jiao Tong University 2Key Laboratory of Shanghai Education Commission for Intelligent Interaction and Cognitive Engineering, Shanghai Jiao Tong University 3Microsoft Research Asia 4Microsoft Azure AI sjtumaxb@sjtu.edu.cn, zhaohai@cs.sjtu.edu.cn, {yegong, nanduan}@microsoft.com , Herbert.he@gmail.com Abstract Large Language Models (LLMs) play pow- erful, black-box readers in the retrieve-then- read pipeline, making remarkable progress in knowledge-intensive tasks. This work in- troduces a new framework, Rewrite-Retrieve- Read instead of the previous retrieve-then-read for the retrieval-augmented LLMs from the per- spective of the query rewriting. Unlike prior studies focusing on adapting either the retriever or the reader, our approach pays attention to the adaptation",
+          "score": 0.9292294527401251
+        },
+        {
+          "id": "f7b98bdb-4000-41d2-baa8-0fd6fe0f7bcb",
+          "source": "2305.14283v3.pdf",
+          "chunk_index": 70,
+          "text": "rewriting step is added for the retrieval-augmented LLM. This approach is applicable for adopting a frozen large language model as the reader and a real-time web search engine as the retriever. Further, we propose to ap- ply a tuneable small language model the rewriter, which can be trained to cater to the frozen retriever and reader. The training implementation consists of two stages, warm-up and reinforcement learn- ing. Evaluation and analyses on open-domain QA and multiple-choice QA show the effectiveness of query rewriting. Our work proposes a novel retrieval-augmented black-box LLM framework, proves that the retrieval augmentation can be en- hanced from the aspect of query rewriting, and provides a new method for integrating trainable modules into black-box LLMs. Limitations We acknowledge the limitations of this work. (i)",
+          "score": 0.9199626550076674
+        },
+        {
+          "id": "cfc2ed86-987c-42b2-8c5a-9056a46893f4",
+          "source": "2305.14283v3.pdf",
+          "chunk_index": 1,
+          "text": "remarkable progress in knowledge-intensive tasks. This work in- troduces a new framework, Rewrite-Retrieve- Read instead of the previous retrieve-then-read for the retrieval-augmented LLMs from the per- spective of the query rewriting. Unlike prior studies focusing on adapting either the retriever or the reader, our approach pays attention to the adaptation of the search query itself, for there is inevitably a gap between the input text and the needed knowledge in retrieval. We first prompt an LLM to generate the query, then use a web search engine to retrieve con- texts. Furthermore, to better align the query to the frozen modules, we propose a trainable scheme for our pipeline. A small language model is adopted as a trainable rewriter to cater to the black-box LLM reader. The rewriter is",
+          "score": 0.8953723557152502
+        },
+        {
+          "id": "4572b1a1-d217-45b4-86b3-811d253af3a0",
+          "source": "2305.14283v3.pdf",
+          "chunk_index": 2,
+          "text": "the query, then use a web search engine to retrieve con- texts. Furthermore, to better align the query to the frozen modules, we propose a trainable scheme for our pipeline. A small language model is adopted as a trainable rewriter to cater to the black-box LLM reader. The rewriter is trained using the feedback of the LLM reader by reinforcement learning. Evaluation is con- ducted on downstream tasks, open-domain QA and multiple-choice QA. Experiments results show consistent performance improvement, in- dicating that our framework is proven effective and scalable, and brings a new framework for retrieval-augmented LLM 1. 1 Introduction Large Language Models (LLMs) have shown re- markable abilities for human language processing and extraordinary scalability and adaptability in few- or zero-shot settings.(Ouyang et al., 2022; Brown et",
+          "score": 0.8950660465677176
+        },
+        {
+          "id": "fa9acb15-d8e2-4022-99e6-3637ed6efc5f",
+          "source": "2305.14283v3.pdf",
+          "chunk_index": 13,
+          "text": "et al., 2021)). The experiments are implemented on T5-large (Raffel et al., 2020) as the rewriter, ChatGPT (Ouyang et al., 2022) and Vicuna-13B (Chiang et al., 2023) as the LLM reader. The results show that query rewriting con- sistently improves the retrieve-augmented LLM performance. The results also indicate that the smaller language model can be competent for query rewriting. To sum up, our proposed novel retrieval- augmentation method, rewrite-retrieve-read is the first framework where the input text is adapted for the frozen retriever and LLM reader. We introduce a tuneable scheme with a small, trainable model, achieving performance gains with less resource consumption. 2 Related Work 2.1 Retrieval Augmentation Language models require external knowledge to al- leviate the factuality drawbacks. Retrieval augmen- tation has been regarded as the",
+          "score": 0.8934498313606959
+        }
+      ]
+    },
+    {
+      "id": "queryrewrite_q2",
+      "question": "Why do the authors argue that query rewriting is useful for retrieval-augmented LLMs?",
+      "question_type": "normal",
+      "expected_source": "2305.14283v3.pdf",
+      "expected_answer": "The authors argue that there is often a gap between the original input text and the knowledge needed for retrieval, so rewriting the query can better express the retrieval need and improve downstream answers.",
+      "found_rank": 1,
+      "recall_hit": true,
+      "retrieve_latency_s": 0.014,
+      "retrieved": [
+        {
+          "id": "cfc2ed86-987c-42b2-8c5a-9056a46893f4",
+          "source": "2305.14283v3.pdf",
+          "chunk_index": 1,
+          "text": "remarkable progress in knowledge-intensive tasks. This work in- troduces a new framework, Rewrite-Retrieve- Read instead of the previous retrieve-then-read for the retrieval-augmented LLMs from the per- spective of the query rewriting. Unlike prior studies focusing on adapting either the retriever or the reader, our approach pays attention to the adaptation of the search query itself, for there is inevitably a gap between the input text and the needed knowledge in retrieval. We first prompt an LLM to generate the query, then use a web search engine to retrieve con- texts. Furthermore, to better align the query to the frozen modules, we propose a trainable scheme for our pipeline. A small language model is adopted as a trainable rewriter to cater to the black-box LLM reader. The rewriter is",
+          "score": 0.9144636054076258
+        },
+        {
+          "id": "f7b98bdb-4000-41d2-baa8-0fd6fe0f7bcb",
+          "source": "2305.14283v3.pdf",
+          "chunk_index": 70,
+          "text": "rewriting step is added for the retrieval-augmented LLM. This approach is applicable for adopting a frozen large language model as the reader and a real-time web search engine as the retriever. Further, we propose to ap- ply a tuneable small language model the rewriter, which can be trained to cater to the frozen retriever and reader. The training implementation consists of two stages, warm-up and reinforcement learn- ing. Evaluation and analyses on open-domain QA and multiple-choice QA show the effectiveness of query rewriting. Our work proposes a novel retrieval-augmented black-box LLM framework, proves that the retrieval augmentation can be en- hanced from the aspect of query rewriting, and provides a new method for integrating trainable modules into black-box LLMs. Limitations We acknowledge the limitations of this work. (i)",
+          "score": 0.9142515669104199
+        },
+        {
+          "id": "24d92d32-4113-4295-b610-3198673a92da",
+          "source": "2305.14283v3.pdf",
+          "chunk_index": 71,
+          "text": "the effectiveness of query rewriting. Our work proposes a novel retrieval-augmented black-box LLM framework, proves that the retrieval augmentation can be en- hanced from the aspect of query rewriting, and provides a new method for integrating trainable modules into black-box LLMs. Limitations We acknowledge the limitations of this work. (i) There is still a trade-off between generalization and specialization among downstream tasks. Adding a training process, the scalability to direct transfer is compromised, compared to few-shot in-context learning. (ii) The research line of LLM agent has shown impressive performance but relies on mul- tiple calls to the LLM for each sample (Khattab et al., 2022; Yao et al., 2023), where the LLM plays as an agent to flexibly call the retriever multi- ple times, reads the context in",
+          "score": 0.9093105640483853
+        },
+        {
+          "id": "fa9acb15-d8e2-4022-99e6-3637ed6efc5f",
+          "source": "2305.14283v3.pdf",
+          "chunk_index": 13,
+          "text": "et al., 2021)). The experiments are implemented on T5-large (Raffel et al., 2020) as the rewriter, ChatGPT (Ouyang et al., 2022) and Vicuna-13B (Chiang et al., 2023) as the LLM reader. The results show that query rewriting con- sistently improves the retrieve-augmented LLM performance. The results also indicate that the smaller language model can be competent for query rewriting. To sum up, our proposed novel retrieval- augmentation method, rewrite-retrieve-read is the first framework where the input text is adapted for the frozen retriever and LLM reader. We introduce a tuneable scheme with a small, trainable model, achieving performance gains with less resource consumption. 2 Related Work 2.1 Retrieval Augmentation Language models require external knowledge to al- leviate the factuality drawbacks. Retrieval augmen- tation has been regarded as the",
+          "score": 0.9054279230624835
+        },
+        {
+          "id": "518ba6e5-b92c-4db0-aa1a-e7a1a39f0eb6",
+          "source": "2407.01219v1.pdf",
+          "chunk_index": 44,
+          "text": "formulate an appropriate response to the query. However, original queries often underperform due to poor expression and lack of semantic information [6], negatively impacting the retrieval process. To address these issues, we evaluated three query transformation methods using the LLM-Embedder recommended in Section 3.2 as the query and document encoder: \u2022 Query Rewriting: Query rewriting refines queries to better match relevant documents. Inspired by the Rewrite-Retrieve-Read framework [9], we prompt an LLM to rewrite queries to enhance performance. \u2022 Query Decomposition: This approach involves retrieving documents based on sub-questions derived from the original query, which is more complex to comprehend and handle. \u2022 Pseudo-documents Generation: This approach generates a hypothetical document based on the user query and uses the embedding of hypothetical answers to retrieve similar documents. One",
+          "score": 0.8939652082100685
+        }
+      ]
+    },
+    {
+      "id": "queryrewrite_q3",
+      "question": "What are the three steps of the Rewrite-Retrieve-Read pipeline?",
+      "question_type": "normal",
+      "expected_source": "2305.14283v3.pdf",
+      "expected_answer": "The three steps are query rewrite, retrieve, and read: the system rewrites the input into a search query, retrieves related context, and then asks the LLM reader to answer using the input and retrieved context.",
+      "found_rank": 1,
+      "recall_hit": true,
+      "retrieve_latency_s": 0.018,
+      "retrieved": [
+        {
+          "id": "e4acb771-3faa-49b8-b5f1-19652f7739f6",
+          "source": "2305.14283v3.pdf",
+          "chunk_index": 26,
+          "text": "overview. This section first introduces the pipeline framework in section 3.1, then the trainable scheme in section 3.2. 3.1 Rewrite-Retrieve-Read A task with retrieval augmentation can be de- noted as follows. Given a dataset of a knowledge- intensive task (e.g., open-domain QA), D = {(x, y)i}, i= 0, 1, 2, . . . , N, x (e.g., a question) is the input to the pipeline, y is the expected output (e.g., the correct answer). Our pipeline consists of three steps. (i) Query rewrite: generate a query \u02dcx for required knowledge based on the original input x. (ii) Retrieve: search for related context, doc. (iii) Read: comprehend the input along with contexts [doc, x] and predict the output \u02c6y. A straightforward but effective method is to ask an LLM",
+          "score": 0.8243254849558395
+        },
+        {
+          "id": "49885a62-06ea-4d29-9f43-826311280592",
+          "source": "2305.14283v3.pdf",
+          "chunk_index": 11,
+          "text": "2022). Different from previous studies (Khattab et al., 2022; Yao et al., 2023) that require the mem- ory of multiple interaction rounds between the re- triever and the LLM for each sample, the motiva- tion of our rewriting step is to clarify the retrieval need from the input text. We also propose a trainable scheme for our rewrite-retrieve-read framework (Figure 1 (c)). The black-box retriever and the reader form a frozen system. To further smooth the steps of our pipeline, we apply a small, trainable language model to perform the rewriting step, denoted as the rewriter. The rewriter is trained by reinforcement learning using the LLM performance as a reward, learning to adapt the retrieval query to improve the reader on downstream tasks. Our proposed methods are evaluated",
+          "score": 0.8059786314921948
+        },
+        {
+          "id": "edfaafd2-6b5d-4ffc-b3fb-82a781872cbb",
+          "source": "2305.14283v3.pdf",
+          "chunk_index": 25,
+          "text": "response generation), which is updated according to the LLM reward. Different from the inspiring work mentioned above, our proposed pipeline contains a query rewriting step in front of the retrieve-then-read module. We further propose a trainable scheme with a small rewriting model, which is a novel enhancement for retrieval-augmented LLM by re- constructing the search query. 3 Methodology We present Rewrite-Retrieve-Read, a pipeline that improves the retrieval-augmented LLM from the perspective of query rewriting. Figure 1 shows an overview. This section first introduces the pipeline framework in section 3.1, then the trainable scheme in section 3.2. 3.1 Rewrite-Retrieve-Read A task with retrieval augmentation can be de- noted as follows. Given a dataset of a knowledge- intensive task (e.g., open-domain QA), D = {(x, y)i}, i= 0, 1, 2,",
+          "score": 0.8012969310810658
+        },
+        {
+          "id": "34cd5a5a-c296-4c09-bf60-eb60f78cd7de",
+          "source": "2305.14283v3.pdf",
+          "chunk_index": 69,
+          "text": "the LLM rewriter failed but the query from T5 gets the correct answer. The number 2000 is misunderstood in query 1, while query 2 keeps 200 movie together, avoiding mean- ingless retrieval. Example 3 is for multiple choice. The query simplifies the background and enhances the keyword community planner. The retrieve con- texts are mainly about Introduction to Community Planning where the answer environment appears several times. 7 Conclusion This paper introduces the Rewrite-Retrieve-Read pipeline, where a query rewriting step is added for the retrieval-augmented LLM. This approach is applicable for adopting a frozen large language model as the reader and a real-time web search engine as the retriever. Further, we propose to ap- ply a tuneable small language model the rewriter, which can be trained to cater",
+          "score": 0.8006611180605887
+        },
+        {
+          "id": "fa9acb15-d8e2-4022-99e6-3637ed6efc5f",
+          "source": "2305.14283v3.pdf",
+          "chunk_index": 13,
+          "text": "et al., 2021)). The experiments are implemented on T5-large (Raffel et al., 2020) as the rewriter, ChatGPT (Ouyang et al., 2022) and Vicuna-13B (Chiang et al., 2023) as the LLM reader. The results show that query rewriting con- sistently improves the retrieve-augmented LLM performance. The results also indicate that the smaller language model can be competent for query rewriting. To sum up, our proposed novel retrieval- augmentation method, rewrite-retrieve-read is the first framework where the input text is adapted for the frozen retriever and LLM reader. We introduce a tuneable scheme with a small, trainable model, achieving performance gains with less resource consumption. 2 Related Work 2.1 Retrieval Augmentation Language models require external knowledge to al- leviate the factuality drawbacks. Retrieval augmen- tation has been regarded as the",
+          "score": 0.7850089121489117
+        }
+      ]
+    }
+  ]
+}

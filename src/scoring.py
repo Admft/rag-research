@@ -42,20 +42,48 @@ def estimate_citation_accuracy(answer, retrieved, expected_source):
     return min(score, 100.0)
 
 
-def score_answer(question, expected_answer, expected_source, answer, retrieved):
+def normalize_metric_scores(metrics):
+    for key in ("answer_correctness", "faithfulness", "context_recall", "context_precision"):
+        value = float(metrics.get(key, 0))
+        metrics[key] = max(0.0, min(100.0, value))
+    return metrics
+
+
+def fallback_metric_scores(question, expected_answer, answer, retrieved):
+    expected_words = set(expected_answer.lower().split())
+    answer_words = set(answer.lower().split())
+    overlap = len(expected_words & answer_words)
+    correctness = min(100.0, (overlap / max(len(expected_words), 1)) * 100)
+
+    context_text = " ".join(item["text"].lower() for item in retrieved)
+    context_overlap = len(expected_words & set(context_text.split()))
+    context_recall = min(100.0, (context_overlap / max(len(expected_words), 1)) * 100)
+
+    return {
+        "answer_correctness": correctness,
+        "faithfulness": correctness * 0.8,
+        "context_recall": context_recall,
+        "context_precision": 60.0 if retrieved else 0.0,
+        "judge_fallback": True,
+    }
+
+
+def judge_metrics(question, expected_answer, expected_source, answer, retrieved):
     context = "\n\n".join(
         f"[{item['source']} chunk {item['chunk_index']}]\n{item['text']}"
         for item in retrieved
     )
 
-    judge_prompt = f"""You are evaluating a RAG system.
-Score each metric from 0 to 100.
+    judge_prompt = f"""You are a strict RAG evaluator. Do not answer the question.
+Your only job is to score the system output.
 
-Return ONLY valid JSON with these keys:
-- answer_correctness
-- faithfulness
-- context_recall
-- context_precision
+Return ONLY a JSON object with exactly these numeric keys (0-100):
+{{
+  "answer_correctness": 0,
+  "faithfulness": 0,
+  "context_recall": 0,
+  "context_precision": 0
+}}
 
 Definitions:
 - answer_correctness: how well the generated answer matches the expected answer
@@ -77,17 +105,28 @@ Retrieved context:
 
 Generated answer:
 {answer}
-
-JSON:
 """
 
-    raw, _ = call_ollama(judge_prompt, timeout=180)
-    metrics = parse_json_response(raw)
+    raw, _ = call_ollama(judge_prompt, timeout=180, json_mode=True)
+    try:
+        return normalize_metric_scores(parse_json_response(raw))
+    except ValueError:
+        retry_prompt = judge_prompt + "\nReminder: output JSON only, no explanation."
+        raw, _ = call_ollama(retry_prompt, timeout=180, json_mode=True)
+        try:
+            return normalize_metric_scores(parse_json_response(raw))
+        except ValueError:
+            return fallback_metric_scores(question, expected_answer, answer, retrieved)
 
-    for key in ("answer_correctness", "faithfulness", "context_recall", "context_precision"):
-        value = float(metrics.get(key, 0))
-        metrics[key] = max(0.0, min(100.0, value))
 
+def score_answer(question, expected_answer, expected_source, answer, retrieved):
+    metrics = judge_metrics(
+        question=question,
+        expected_answer=expected_answer,
+        expected_source=expected_source,
+        answer=answer,
+        retrieved=retrieved,
+    )
     metrics["citation_accuracy"] = estimate_citation_accuracy(
         answer, retrieved, expected_source
     )

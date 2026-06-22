@@ -21,6 +21,11 @@ class ExperimentIndex:
         tokenized = [text.lower().split() for text in self.chunk_texts]
         self.bm25 = BM25Okapi(tokenized)
 
+    def close(self):
+        if self.qdrant_client is not None:
+            self.qdrant_client.close()
+            self.qdrant_client = None
+
     def bm25_search(self, query, top_k):
         scores = self.bm25.get_scores(query.lower().split())
         ranked = sorted(range(len(scores)), key=lambda i: scores[i], reverse=True)[:top_k]
@@ -51,6 +56,12 @@ def build_chunks(documents, chunk_size, overlap):
                 "text": text,
             })
     return chunks
+
+
+def close_cached_indices(index_cache):
+    for index in index_cache.values():
+        index.close()
+    index_cache.clear()
 
 
 def build_experiment_index(config, show_progress=False):

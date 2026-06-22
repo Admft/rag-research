@@ -3,7 +3,7 @@ import json
 
 from config import RESULTS_DIR
 from experiment_config import build_experiment_configs, get_run_by_name, get_runs_for_round
-from indexing import build_experiment_index
+from indexing import build_experiment_index, close_cached_indices
 from pipeline import load_questions, run_experiment
 from results import get_run_times
 
@@ -190,6 +190,7 @@ def run_grid(configs, questions, retrieval_only=False, show_progress=False):
         key = config.index_key()
         if key not in index_cache:
             print("Building index...")
+            close_cached_indices(index_cache)
             index_cache[key] = build_experiment_index(config, show_progress=show_progress)[0]
         else:
             print("Reusing cached index for this chunk/embedding setting.")
@@ -218,4 +219,5 @@ def run_grid(configs, questions, retrieval_only=False, show_progress=False):
 
     print()
     print(f"CSV updated: {CSV_PATH}")
+    close_cached_indices(index_cache)
     return results
