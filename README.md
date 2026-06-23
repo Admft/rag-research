@@ -56,6 +56,14 @@ python src/run_experiments.py --all
 
 Results CSV: `results/experiments/experiment_results.csv`
 
+Human-readable log: **`experiments/Results/EXPERIMENT_LOG.txt`**
+
+Regenerate the log anytime from existing CSV:
+
+```bash
+python src/regenerate_experiment_log.py
+```
+
 See `experiments/README.md` for the full 25-run plan and scoring formula.
 
 ## Small experiments

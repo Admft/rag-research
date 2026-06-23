@@ -1,0 +1,301 @@
+========================================================================
+RAG EXPERIMENT LOG
+All times in Central Time (America/Chicago)
+Last updated: 2026-06-22 17:32:45 CDT
+========================================================================
+
+HOW TO READ THIS FILE
+----------------------------------------
+  • Each run changes ONE setting from baseline (unless noted).
+  • Retrieval only = Recall@k and MRR@k (fast, no Ollama generation).
+  • Full pipeline = final_score + sub-metrics (slower, uses Ollama).
+  • Higher final_score or Recall@k = better.
+  • Detailed per-question data: results/experiments/{run_id}/
+
+BEST IN EACH ROUND (latest run on full question set when available)
+----------------------------------------
+  Baseline test: baseline — Final score 15.89
+    Mode: Full pipeline (retrieve + generate + score)
+    Settings: chunk=512, overlap=50, top_k=5, retriever=dense
+    Ran: 2026-06-22 00:05:14 CDT
+
+  Chunk size round: chunk_512 — Recall@5 98.33%
+    Mode: Retrieval only
+    Settings: chunk=512, overlap=50, top_k=5, retriever=dense
+    Ran: 2026-06-21 23:51:04 CDT
+
+LEADERBOARDS BY ROUND (newest result per run, sorted by score)
+----------------------------------------
+
+[Baseline test — Retrieval only]
+  1. baseline — Recall@5 98.3% | chunk 512 | overlap 50 | top_k 5 | dense | 2026-06-21 23:40:16 CDT
+
+[Baseline test — Full pipeline]
+  1. baseline — Final score 15.9 | chunk 512 | overlap 50 | top_k 5 | dense | 2026-06-22 00:05:14 CDT
+
+[Chunk size round — Retrieval only]
+  1. chunk_512 — Recall@5 98.3% | chunk 512 | overlap 50 | top_k 5 | dense | 2026-06-21 23:51:04 CDT
+  2. chunk_256 — Recall@5 98.3% | chunk 256 | overlap 50 | top_k 5 | dense | 2026-06-21 23:50:50 CDT
+  3. chunk_128 — Recall@5 96.7% | chunk 128 | overlap 50 | top_k 5 | dense | 2026-06-21 23:50:26 CDT
+  4. chunk_1024 — Recall@5 95.0% | chunk 1024 | overlap 50 | top_k 5 | dense | 2026-06-21 23:51:13 CDT
+  5. chunk_2048 — Recall@5 93.3% | chunk 2048 | overlap 50 | top_k 5 | dense | 2026-06-21 23:51:20 CDT
+
+========================================================================
+ALL RUNS (newest first)
+========================================================================
+
+#1 — baseline | Baseline test | Full pipeline (retrieve + generate + score)
+Ran: 2026-06-22 00:05:14 CDT | Questions: 60
+
+SETTINGS
+  Chunk size: 512 words    Overlap: 50 words    Top-k: 5
+  Retriever: dense    Embedding: BAAI/bge-small-en-v1.5
+  Reranker: none    Query transform: none
+  Prompt: strict_context    Context filter: none
+
+SCORES
+  Final score:          15.89
+  Answer correctness:   14.75
+  Faithfulness:         20.18
+  Context recall:       17.42
+  Context precision:    18.62
+  Citation accuracy:    3.33
+  Recall@5:           98.33%
+  MRR@5:               90.06%
+  Avg latency:          1.906s
+  Avg prompt tokens:    2598.0
+
+------------------------------------------------------------------------
+
+#2 — baseline | Baseline test | Full pipeline (retrieve + generate + score)
+Ran: 2026-06-21 23:56:13 CDT | Questions: 60
+
+SETTINGS
+  Chunk size: 512 words    Overlap: 50 words    Top-k: 5
+  Retriever: dense    Embedding: BAAI/bge-small-en-v1.5
+  Reranker: none    Query transform: none
+  Prompt: strict_context    Context filter: none
+
+SCORES
+  Final score:          15.93
+  Answer correctness:   12.3
+  Faithfulness:         20.22
+  Context recall:       20.87
+  Context precision:    21.33
+  Citation accuracy:    2.67
+  Recall@5:           98.33%
+  MRR@5:               90.06%
+  Avg latency:          2.264s
+  Avg prompt tokens:    2598.0
+
+------------------------------------------------------------------------
+
+#3 — chunk_2048 | Chunk size round | Retrieval only
+Ran: 2026-06-21 23:51:20 CDT | Questions: 60
+
+SETTINGS
+  Chunk size: 2048 words    Overlap: 50 words    Top-k: 5
+  Retriever: dense    Embedding: BAAI/bge-small-en-v1.5
+  Reranker: none    Query transform: none
+  Prompt: strict_context    Context filter: none
+
+SCORES
+  Recall@5:           93.33%
+  MRR@5:               78.11%
+  Avg latency:          0.005s
+
+------------------------------------------------------------------------
+
+#4 — chunk_1024 | Chunk size round | Retrieval only
+Ran: 2026-06-21 23:51:13 CDT | Questions: 60
+
+SETTINGS
+  Chunk size: 1024 words    Overlap: 50 words    Top-k: 5
+  Retriever: dense    Embedding: BAAI/bge-small-en-v1.5
+  Reranker: none    Query transform: none
+  Prompt: strict_context    Context filter: none
+
+SCORES
+  Recall@5:           95.0%
+  MRR@5:               79.5%
+  Avg latency:          0.005s
+
+------------------------------------------------------------------------
+
+#5 — chunk_512 | Chunk size round | Retrieval only
+Ran: 2026-06-21 23:51:04 CDT | Questions: 60
+
+SETTINGS
+  Chunk size: 512 words    Overlap: 50 words    Top-k: 5
+  Retriever: dense    Embedding: BAAI/bge-small-en-v1.5
+  Reranker: none    Query transform: none
+  Prompt: strict_context    Context filter: none
+
+SCORES
+  Recall@5:           98.33%
+  MRR@5:               90.06%
+  Avg latency:          0.008s
+
+------------------------------------------------------------------------
+
+#6 — chunk_256 | Chunk size round | Retrieval only
+Ran: 2026-06-21 23:50:50 CDT | Questions: 60
+
+SETTINGS
+  Chunk size: 256 words    Overlap: 50 words    Top-k: 5
+  Retriever: dense    Embedding: BAAI/bge-small-en-v1.5
+  Reranker: none    Query transform: none
+  Prompt: strict_context    Context filter: none
+
+SCORES
+  Recall@5:           98.33%
+  MRR@5:               90.69%
+  Avg latency:          0.008s
+
+------------------------------------------------------------------------
+
+#7 — chunk_128 | Chunk size round | Retrieval only
+Ran: 2026-06-21 23:50:26 CDT | Questions: 60
+
+SETTINGS
+  Chunk size: 128 words    Overlap: 50 words    Top-k: 5
+  Retriever: dense    Embedding: BAAI/bge-small-en-v1.5
+  Reranker: none    Query transform: none
+  Prompt: strict_context    Context filter: none
+
+SCORES
+  Recall@5:           96.67%
+  MRR@5:               87.92%
+  Avg latency:          0.014s
+
+------------------------------------------------------------------------
+
+#8 — chunk_2048 | Chunk size round | Retrieval only
+Ran: 2026-06-21 23:48:34 CDT | Questions: 3
+
+SETTINGS
+  Chunk size: 2048 words    Overlap: 50 words    Top-k: 5
+  Retriever: dense    Embedding: BAAI/bge-small-en-v1.5
+  Reranker: none    Query transform: none
+  Prompt: strict_context    Context filter: none
+
+SCORES
+  Recall@5:           100.0%
+  MRR@5:               100.0%
+  Avg latency:          0.006s
+
+------------------------------------------------------------------------
+
+#9 — chunk_1024 | Chunk size round | Retrieval only
+Ran: 2026-06-21 23:48:25 CDT | Questions: 3
+
+SETTINGS
+  Chunk size: 1024 words    Overlap: 50 words    Top-k: 5
+  Retriever: dense    Embedding: BAAI/bge-small-en-v1.5
+  Reranker: none    Query transform: none
+  Prompt: strict_context    Context filter: none
+
+SCORES
+  Recall@5:           100.0%
+  MRR@5:               100.0%
+  Avg latency:          0.01s
+
+------------------------------------------------------------------------
+
+#10 — chunk_512 | Chunk size round | Retrieval only
+Ran: 2026-06-21 23:48:15 CDT | Questions: 3
+
+SETTINGS
+  Chunk size: 512 words    Overlap: 50 words    Top-k: 5
+  Retriever: dense    Embedding: BAAI/bge-small-en-v1.5
+  Reranker: none    Query transform: none
+  Prompt: strict_context    Context filter: none
+
+SCORES
+  Recall@5:           100.0%
+  MRR@5:               100.0%
+  Avg latency:          0.009s
+
+------------------------------------------------------------------------
+
+#11 — chunk_256 | Chunk size round | Retrieval only
+Ran: 2026-06-21 23:48:03 CDT | Questions: 3
+
+SETTINGS
+  Chunk size: 256 words    Overlap: 50 words    Top-k: 5
+  Retriever: dense    Embedding: BAAI/bge-small-en-v1.5
+  Reranker: none    Query transform: none
+  Prompt: strict_context    Context filter: none
+
+SCORES
+  Recall@5:           100.0%
+  MRR@5:               100.0%
+  Avg latency:          0.012s
+
+------------------------------------------------------------------------
+
+#12 — chunk_128 | Chunk size round | Retrieval only
+Ran: 2026-06-21 23:47:38 CDT | Questions: 3
+
+SETTINGS
+  Chunk size: 128 words    Overlap: 50 words    Top-k: 5
+  Retriever: dense    Embedding: BAAI/bge-small-en-v1.5
+  Reranker: none    Query transform: none
+  Prompt: strict_context    Context filter: none
+
+SCORES
+  Recall@5:           100.0%
+  MRR@5:               100.0%
+  Avg latency:          0.022s
+
+------------------------------------------------------------------------
+
+#13 — chunk_128 | Chunk size round | Retrieval only
+Ran: 2026-06-21 23:44:21 CDT | Questions: 60
+
+SETTINGS
+  Chunk size: 128 words    Overlap: 50 words    Top-k: 5
+  Retriever: dense    Embedding: BAAI/bge-small-en-v1.5
+  Reranker: none    Query transform: none
+  Prompt: strict_context    Context filter: none
+
+SCORES
+  Recall@5:           96.67%
+  MRR@5:               87.92%
+  Avg latency:          0.012s
+
+------------------------------------------------------------------------
+
+#14 — baseline | Baseline test | Retrieval only
+Ran: 2026-06-21 23:40:16 CDT | Questions: 60
+
+SETTINGS
+  Chunk size: 512 words    Overlap: 50 words    Top-k: 5
+  Retriever: dense    Embedding: BAAI/bge-small-en-v1.5
+  Reranker: none    Query transform: none
+  Prompt: strict_context    Context filter: none
+
+SCORES
+  Recall@5:           98.33%
+  MRR@5:               90.06%
+  Avg latency:          0.006s
+
+------------------------------------------------------------------------
+
+#15 — baseline | Baseline test | Retrieval only
+Ran: 2026-06-21 23:28:06 CDT | Questions: 2
+
+SETTINGS
+  Chunk size: 512 words    Overlap: 50 words    Top-k: 5
+  Retriever: dense    Embedding: BAAI/bge-small-en-v1.5
+  Reranker: none    Query transform: none
+  Prompt: strict_context    Context filter: none
+
+SCORES
+  Recall@5:           0.0%
+  MRR@5:               0.0%
+  Avg latency:          0.024s
+
+------------------------------------------------------------------------
+
+End of log.

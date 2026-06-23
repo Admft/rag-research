@@ -26,6 +26,7 @@ python src/run_experiments.py --all
 | Output | Location |
 |--------|----------|
 | Comparison CSV | `results/experiments/experiment_results.csv` |
+| **Human-readable log** | **`experiments/Results/EXPERIMENT_LOG.txt`** |
 | Per-run JSON + report | `results/experiments/{run_name}/` |
 
 CSV columns include `final_score`, sub-metrics, recall/MRR, latency, and all config fields.

@@ -5,6 +5,7 @@ from config import RESULTS_DIR
 from experiment_config import build_experiment_configs, get_run_by_name, get_runs_for_round
 from indexing import build_experiment_index, close_cached_indices
 from pipeline import load_questions, run_experiment
+from experiment_summary import regenerate_experiment_log
 from results import get_run_times
 
 EXPERIMENT_RESULTS_DIR = RESULTS_DIR / "experiments"
@@ -33,12 +34,13 @@ CSV_COLUMNS = [
     "avg_latency",
     "avg_prompt_tokens",
     "question_count",
+    "run_mode",
     "run_time_central",
     "json_path",
 ]
 
 
-def summary_to_csv_row(summary, run_time_central, json_path):
+def summary_to_csv_row(summary, run_time_central, json_path, run_mode="full_pipeline"):
     config = summary["config"]
     return {
         "run_id": config["name"],
@@ -63,6 +65,7 @@ def summary_to_csv_row(summary, run_time_central, json_path):
         "avg_latency": summary.get("avg_latency_s", ""),
         "avg_prompt_tokens": summary.get("avg_prompt_tokens_est", ""),
         "question_count": summary.get("question_count", ""),
+        "run_mode": run_mode,
         "run_time_central": run_time_central,
         "json_path": str(json_path),
     }
@@ -79,7 +82,7 @@ def append_csv_row(row):
         writer.writerow(row)
 
 
-def save_experiment_result(config, payload):
+def save_experiment_result(config, payload, run_mode="full_pipeline"):
     _, central_dt = get_run_times()
     run_time_central = central_dt.strftime("%Y-%m-%d %H:%M:%S %Z")
 
@@ -113,10 +116,11 @@ def save_experiment_result(config, payload):
     latest_json.write_text(json_path.read_text(encoding="utf-8"), encoding="utf-8")
     latest_txt.write_text(txt_path.read_text(encoding="utf-8"), encoding="utf-8")
 
-    csv_row = summary_to_csv_row(payload["summary"], run_time_central, json_path)
+    csv_row = summary_to_csv_row(payload["summary"], run_time_central, json_path, run_mode=run_mode)
     append_csv_row(csv_row)
+    log_path = regenerate_experiment_log()
 
-    return json_path, txt_path
+    return json_path, txt_path, log_path
 
 
 def format_experiment_report(output):
@@ -203,13 +207,18 @@ def run_grid(configs, questions, retrieval_only=False, show_progress=False):
             show_progress=show_progress,
         )
 
-        paths = save_experiment_result(config, {
-            "summary": payload["summary"],
-            "questions": payload["questions"],
-        })
+        paths = save_experiment_result(
+            config,
+            {
+                "summary": payload["summary"],
+                "questions": payload["questions"],
+            },
+            run_mode="retrieval_only" if retrieval_only else "full_pipeline",
+        )
         results.append(payload["summary"])
 
         print(f"Saved: {paths[0]}")
+        print(f"Experiment log: {paths[2]}")
         if "final_score" in payload["summary"]:
             print(f"Final score: {payload['summary']['final_score']}")
         print(
@@ -219,5 +228,7 @@ def run_grid(configs, questions, retrieval_only=False, show_progress=False):
 
     print()
     print(f"CSV updated: {CSV_PATH}")
+    log_path = regenerate_experiment_log()
+    print(f"Human-readable log: {log_path}")
     close_cached_indices(index_cache)
     return results
