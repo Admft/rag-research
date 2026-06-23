@@ -35,7 +35,7 @@ Answer:
 </documents>
 
 Follow these strict instructions:
-1. You must first use a <scratchpad> block to extract relevant facts from the documents and explicitly map them to their corresponding [Doc X] IDs.
+1. You must first use a <scratchpad> block to extract relevant facts from the documents and explicitly map them to their corresponding [Doc X] IDs. Keep scratchpad notes brief: 3-4 short bullet points maximum.
 2. After your scratchpad, provide your final response inside an <answer> block.
 3. Every factual claim in your <answer> MUST be immediately followed by its exact source citation using the format [Doc X].
 4. Do not combine citations. If a sentence uses facts from Document 1 and Document 3, write "[Doc 1] [Doc 3]", NOT "[Doc 1, 3]".

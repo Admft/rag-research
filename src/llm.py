@@ -4,11 +4,18 @@ import time
 
 import requests
 
-from config import OLLAMA_MODEL, OLLAMA_URL
+from config import (
+    OLLAMA_GENERATION_MAX_TOKENS,
+    OLLAMA_JUDGE_MAX_TOKENS,
+    OLLAMA_MODEL,
+    OLLAMA_URL,
+)
 
 
-def call_ollama(prompt, model=None, timeout=180, json_mode=False, max_tokens=2048):
+def call_ollama(prompt, model=None, timeout=180, json_mode=False, max_tokens=None):
     model = model or OLLAMA_MODEL
+    if max_tokens is None:
+        max_tokens = OLLAMA_JUDGE_MAX_TOKENS if json_mode else OLLAMA_GENERATION_MAX_TOKENS
     start = time.perf_counter()
 
     payload = {

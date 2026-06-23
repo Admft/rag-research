@@ -1,7 +1,7 @@
 import json
 import time
 
-from config import EVAL_FILE
+from config import EVAL_FILE, OLLAMA_GENERATION_MAX_TOKENS
 from experiment_config import ExperimentConfig
 from indexing import build_experiment_index
 from llm import call_ollama
@@ -75,7 +75,9 @@ def run_experiment(config, questions, index=None, retrieval_only=False, show_pro
         prompt_token_estimates.append(len(prompt.split()))
 
         gen_start = time.perf_counter()
-        raw_answer, gen_latency = call_ollama(prompt, model=config.generator)
+        raw_answer, gen_latency = call_ollama(
+            prompt, model=config.generator, max_tokens=OLLAMA_GENERATION_MAX_TOKENS,
+        )
         answer = extract_final_answer(raw_answer)
         total_latency = retrieve_latency + gen_latency
         latencies.append(total_latency)

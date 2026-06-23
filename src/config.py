@@ -28,6 +28,8 @@ EVAL_TOP_KS = [1, 3, 5]
 OLLAMA_URL = "http://localhost:11434/api/generate"
 # For better generation quality, try a larger model e.g. llama3.1:70b or qwen2.5:14b
 OLLAMA_MODEL = "llama3.1:8b"
+OLLAMA_GENERATION_MAX_TOKENS = 2560
+OLLAMA_JUDGE_MAX_TOKENS = 1024
 
 DATASET_STAGE = "real"
 TARGET_DOC_COUNT_MIN = 20

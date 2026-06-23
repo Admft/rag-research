@@ -3,7 +3,7 @@ import sys
 from qdrant_client import QdrantClient
 from sentence_transformers import SentenceTransformer
 
-from config import COLLECTION_NAME, EMBEDDING_MODEL_NAME, OLLAMA_MODEL, QDRANT_PATH
+from config import COLLECTION_NAME, EMBEDDING_MODEL_NAME, OLLAMA_GENERATION_MAX_TOKENS, OLLAMA_MODEL, QDRANT_PATH
 from llm import call_ollama
 from prompts import build_generation_prompt, extract_final_answer
 from results import save_generation_results
@@ -50,7 +50,7 @@ def main():
 
     print(f"Generating answer with {OLLAMA_MODEL}...")
     prompt = build_generation_prompt(query, retrieved, prompt_style)
-    raw_answer, _ = call_ollama(prompt)
+    raw_answer, _ = call_ollama(prompt, max_tokens=OLLAMA_GENERATION_MAX_TOKENS)
     answer = extract_final_answer(raw_answer)
 
     print()
