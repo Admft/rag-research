@@ -66,7 +66,7 @@ Recall@k / MRR@k are reported separately and are **not** part of `final_score`.
 | Reranker | bge |
 | Top-k | 5 |
 | Prompt | `strict_context_json` (Ollama JSON schema) |
-| Context filter | `top_sentences_5` |
+| Context filter | none (006 used top_sentences_5 — disabled for 007) |
 | Generator | `qwen2.5:14b` |
 | Judge | `qwen2.5:14b` (separate from generator) |
 

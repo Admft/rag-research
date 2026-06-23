@@ -12,10 +12,15 @@ GENERATION_RESPONSE_SCHEMA = {
         },
         "answer": {
             "type": "string",
-            "description": "Final grounded answer; every claim followed by [Doc X].",
+            "description": "Final grounded answer. Cite inline using exact format [Doc 1], [Doc 2], etc.",
+        },
+        "citations": {
+            "type": "array",
+            "items": {"type": "integer"},
+            "description": "Document numbers referenced in the answer, e.g. [1, 2].",
         },
     },
-    "required": ["scratchpad", "answer"],
+    "required": ["scratchpad", "answer", "citations"],
 }
 
 JSON_PROMPT_STYLES = {"strict_context_json"}
@@ -84,12 +89,16 @@ Question:
 {context}
 </documents>
 
-Return a single JSON object with exactly two keys:
+Return a single JSON object with exactly three keys:
 - "scratchpad": 2-3 brief bullet points mapping facts to [Doc X] IDs. Hard limit: 400 characters total.
-- "answer": final answer only. Every factual claim MUST be followed by [Doc X]. No combined citations.
+- "answer": final answer only. Every factual claim MUST be followed by [Doc X].
+- "citations": array of document numbers cited in the answer (e.g. [1, 2]).
+
+CRITICAL: Every citation in the answer field MUST use the exact format [Doc N] where N is the
+document number. Do not write [Document N], [Document ID="N"], [Doc. N], or [N] alone.
 
 If documents lack sufficient information, set answer to exactly:
-"The provided context does not contain the answer."
+"The provided context does not contain the answer." and citations to [].
 
 Question:
 {query}
@@ -114,6 +123,16 @@ def format_context(retrieved, style="xml"):
     return "\n\n".join(blocks)
 
 
+def normalize_citations(text):
+    if not text:
+        return text
+    text = re.sub(r'\[Document ID=["\']?(\d+)["\']?\]', r"[Doc \1]", text, flags=re.IGNORECASE)
+    text = re.sub(r"\[Document (\d+)\]", r"[Doc \1]", text, flags=re.IGNORECASE)
+    text = re.sub(r"\[Doc\.\s*(\d+)\]", r"[Doc \1]", text, flags=re.IGNORECASE)
+    text = re.sub(r"\[(\d+)\]", r"[Doc \1]", text)
+    return text
+
+
 def uses_json_output(prompt_style):
     return prompt_style in JSON_PROMPT_STYLES
 
@@ -122,13 +141,13 @@ def parse_generation_response(raw, prompt_style):
     if uses_json_output(prompt_style):
         try:
             data = parse_json_response(raw)
-            answer = str(data.get("answer", "")).strip()
+            answer = normalize_citations(str(data.get("answer", "")).strip())
             scratchpad = str(data.get("scratchpad", "")).strip()
             return answer, bool(answer), scratchpad
         except (ValueError, json.JSONDecodeError, TypeError):
             return "", False, ""
 
-    answer = extract_final_answer(raw)
+    answer = normalize_citations(extract_final_answer(raw))
     return answer, bool(answer), ""
 
 
@@ -139,7 +158,7 @@ def extract_final_answer(text):
     if uses_json_output_from_text(text):
         try:
             data = parse_json_response(text)
-            return str(data.get("answer", "")).strip()
+            return normalize_citations(str(data.get("answer", "")).strip())
         except (ValueError, json.JSONDecodeError, TypeError):
             pass
 
@@ -166,7 +185,7 @@ def extract_final_answer(text):
     if re.search(r"<scratchpad>|here are the facts|planning", text, re.IGNORECASE):
         return ""
 
-    return text.strip()
+    return normalize_citations(text.strip())
 
 
 def uses_json_output_from_text(text):

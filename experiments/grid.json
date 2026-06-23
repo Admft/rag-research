@@ -9,12 +9,12 @@
     "reranker": "bge",
     "query_transform": "none",
     "prompt": "strict_context_json",
-    "context_filter": "top_sentences_5",
+    "context_filter": "none",
     "generator": "qwen2.5:14b",
     "judge": "qwen2.5:14b"
   },
   "runs": [
-    {"name": "baseline", "round": "baseline", "description": "Upgraded baseline: hybrid retrieval, JSON output, qwen2.5:14b gen+judge, sentence filter."},
+    {"name": "baseline", "round": "baseline", "description": "Run 007 stack: hybrid + JSON citations + qwen2.5:14b, no sentence filter."},
 
     {"name": "chunk_128", "round": "chunk_size", "overrides": {"chunk_size": 128}},
     {"name": "chunk_256", "round": "chunk_size", "overrides": {"chunk_size": 256}},
@@ -53,6 +53,7 @@
 
     {"name": "filter_none", "round": "context_filter", "overrides": {"context_filter": "none"}},
     {"name": "filter_top5", "round": "context_filter", "overrides": {"context_filter": "top_sentences_5"}},
+    {"name": "filter_top10", "round": "context_filter", "overrides": {"context_filter": "top_sentences_10"}},
 
     {
       "name": "best_full_pipeline",
@@ -67,7 +68,7 @@
         "reranker": "bge",
         "query_transform": "hyde",
         "prompt": "strict_context_json",
-        "context_filter": "top_sentences_5",
+        "context_filter": "none",
         "generator": "qwen2.5:14b",
         "judge": "qwen2.5:14b"
       }
