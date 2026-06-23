@@ -53,10 +53,23 @@ SCORES
   Retrieval only  → higher Recall@k / MRR@k is better
   Full pipeline   → higher final_score is better (0-100)
 
-  Full pipeline metrics in REPORT.txt:
-    final_score, answer_correctness, faithfulness,
-    context_recall, context_precision, citation_accuracy,
-    answer_parse_rate, Recall@k, MRR@k, avg latency
+  Full methodology: README.md (Scoring section) and
+  000-005_FULL_REPORT.txt (section 3).
+
+  Retrieval (no LLM):
+    Recall@k  — expected PDF in top-k? (binary per question, averaged)
+    MRR@k     — mean of 1/rank when found, else 0
+
+  Full pipeline (per question, then averaged):
+    answer_correctness, faithfulness, context_recall, context_precision
+      → LLM judge (Ollama JSON mode, same model as generation)
+    citation_accuracy
+      → deterministic [Doc X] parse (0 if no citations)
+    final_score
+      → weighted sum: 35% / 25% / 20% / 10% / 10%
+
+  Also reported: answer_parse_rate, avg latency.
+  Recall@k and MRR@k are NOT included in final_score.
 
 BASELINE PROGRESSION (000–005)
 ------------------------------

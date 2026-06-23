@@ -5,7 +5,7 @@ Generated:  2026-06-22
 Corpus:     12 RAG research PDFs in data/raw/
 Eval set:   60 hand-written questions (5 per paper) in data/eval/questions.jsonl
 Generator:  llama3.1:8b via Ollama (local)
-Judge:      Same model, JSON-mode LLM-as-judge (runs 000, 002–005)
+Scoring:    See section 3 (retrieval metrics + LLM judge + citation parser)
 Timezone:   All run timestamps in Central Time (America/Chicago)
 
 ========================================================================
@@ -50,7 +50,156 @@ Run   Folder                                      Mode            N    Notes
  000__og_baseline__2026-06-22_23-19-35_CDT — excluded from score tables.)
 
 ========================================================================
-3. CONFIGURATION COMPARISON
+3. SCORING METHODOLOGY
+========================================================================
+
+Source code: src/scoring.py, src/pipeline.py, src/prompts.py
+
+All full-pipeline runs (000, 002–005) use the same scoring pipeline unless
+noted. Run 001 is retrieval-only and has no final_score.
+
+------------------------------------------------------------------------
+3.1 Retrieval metrics (Recall@k, MRR@k)
+------------------------------------------------------------------------
+
+Computed without any LLM. For each eval question:
+
+  expected_source  — PDF filename from data/eval/questions.jsonl
+  retrieved        — top-k chunks returned by the retriever (after reranker)
+  found_rank       — 1-based rank of expected_source in retrieved list, or null
+  recall_hit       — true if found_rank <= k
+
+Aggregate across N questions:
+
+  Recall@k = (1/N) × Σ [1 if recall_hit else 0]
+  MRR@k    = (1/N) × Σ [1/found_rank if found_rank else 0]
+
+Reported in REPORT.txt as percentages (e.g. 98.3%). These metrics answer:
+"Did we fetch the right paper?" They do NOT measure answer quality.
+
+Important: Recall@k and MRR@k are reported alongside final_score but are
+NOT weighted into it. A run can have excellent retrieval and poor generation.
+
+------------------------------------------------------------------------
+3.2 Full-pipeline flow (per question)
+------------------------------------------------------------------------
+
+  1. Retrieve top-k chunks
+  2. Generate answer (llama3.1:8b via Ollama)
+  3. Parse answer text for scoring
+  4. LLM judge → four sub-scores (0–100 each)
+  5. Citation parser → citation_accuracy (0–100)
+  6. Weighted sum → final_score
+
+Latency in REPORT.txt is retrieve + generate + judge wall-clock time.
+
+------------------------------------------------------------------------
+3.3 Answer parsing (before scoring)
+------------------------------------------------------------------------
+
+Runs 003–005 (strict_context_with_citations):
+  • Only text inside <answer>...</answer> is scored
+  • extract_final_answer() in src/prompts.py strips scratchpad/reasoning
+  • answer_parse_rate = fraction of questions with a non-empty parsed answer
+
+Run 000 (og_strict):
+  • No XML blocks; full model output is scored as-is
+  • answer_parse_rate is 100% if any non-empty answer is returned
+
+Run 002:
+  • No <answer> tags yet; extract_final_answer() returns full text unless
+    scratchpad-like markers are detected (CoT leak caused scoring noise)
+
+------------------------------------------------------------------------
+3.4 LLM judge (four metrics, 0–100 each)
+------------------------------------------------------------------------
+
+Model: same as generation (llama3.1:8b), Ollama API with format: json.
+Token budget: OLLAMA_JUDGE_MAX_TOKENS = 1024 (src/config.py).
+
+The judge prompt includes:
+  • question, expected_answer, expected_source
+  • full retrieved context (XML <Document> blocks)
+  • parsed generated answer
+
+Required JSON output:
+
+  {
+    "answer_correctness": <0-100>,
+    "faithfulness": <0-100>,
+    "context_recall": <0-100>,
+    "context_precision": <0-100>
+  }
+
+Definitions sent to the judge:
+  answer_correctness — match to hand-written expected answer
+  faithfulness       — answer supported by retrieved context only
+  context_recall     — retrieved chunks contain info for expected answer
+  context_precision  — retrieved chunks relevant, low noise
+
+Failure handling:
+  1. First judge call
+  2. Retry with "output JSON only" reminder
+  3. Fallback heuristics: word overlap between expected/generated answer
+     and between expected answer and context (flagged judge_fallback in data.json)
+
+Judge scores are clamped to [0, 100].
+
+------------------------------------------------------------------------
+3.5 Citation accuracy (deterministic, 0–100)
+------------------------------------------------------------------------
+
+Not LLM-judged. Regex scan for [Doc X] in the parsed answer (X = integer).
+
+Scoring rubric (src/scoring.py → estimate_citation_accuracy):
+
+  No [Doc X] found           → 0
+  Valid doc ID fraction      → up to 40 points
+    (cited ID maps to position 1..k in retrieved list)
+  Any cite hits expected_source → +50 points
+  All cites only expected_source → +10 bonus
+  Maximum                    → 100
+
+Why run 000 scores 0%: og_strict prompt does not require [Doc X] format,
+so citation_accuracy is structurally zero regardless of answer quality.
+This removes 10% of the final_score ceiling for OG vs grid runs.
+
+------------------------------------------------------------------------
+3.6 Final score (weighted average)
+------------------------------------------------------------------------
+
+  final_score = 0.35 × answer_correctness
+              + 0.25 × faithfulness
+              + 0.20 × context_recall
+              + 0.10 × context_precision
+              + 0.10 × citation_accuracy
+
+Rounded to 2 decimal places per question; REPORT.txt summary is the mean
+over all 60 questions.
+
+Weights (SCORE_WEIGHTS in src/scoring.py):
+  answer_correctness   35%
+  faithfulness         25%
+  context_recall       20%
+  context_precision    10%
+  citation_accuracy    10%
+
+------------------------------------------------------------------------
+3.7 How to read a REPORT.txt scores block
+------------------------------------------------------------------------
+
+  Final score          — primary end-to-end metric (0–100)
+  Answer correctness   — judge: content vs expected answer
+  Faithfulness         — judge: grounded in retrieved chunks
+  Context recall       — judge: chunks contain needed information
+  Context precision    — judge: chunks are on-topic
+  Citation accuracy    — parser: [Doc X] format and source alignment
+  Answer parse rate    — pipeline: <answer> block extracted (003–005)
+  Recall@5 / MRR@5    — retrieval only (see 3.1)
+  Avg latency          — seconds per question (retrieve+generate+judge)
+
+========================================================================
+4. CONFIGURATION COMPARISON
 ========================================================================
 
 Setting              000 OG        001           002–005 Grid
@@ -77,15 +226,10 @@ Prompt semantics:
   strict_context_     — CoT planning (002) then <scratchpad>/<answer>
   with_citations        blocks (003–005); mandatory [Doc X] per claim.
 
-Scoring weights (002–005, and 000 when judge succeeds):
-  answer_correctness  35%
-  faithfulness        25%
-  context_recall      20%
-  context_precision   10%
-  citation_accuracy   10%
+Scoring methodology: see section 3.
 
 ========================================================================
-4. RESULTS TABLE (60-QUESTION FULL PIPELINE RUNS)
+5. RESULTS TABLE (60-QUESTION FULL PIPELINE RUNS)
 ========================================================================
 
 Metric                  000      002      003      004      005     Best
@@ -105,7 +249,7 @@ Retrieval-only reference (001, 2 questions, chunk 512):
   Recall@5 100.0% | MRR@5 100.0% | latency 0.014s
 
 ========================================================================
-5. TRANSITION-BY-TRANSITION ANALYSIS
+6. TRANSITION-BY-TRANSITION ANALYSIS
 ========================================================================
 
 ------------------------------------------------------------------------
@@ -229,7 +373,7 @@ Neither parse-rate nor faithfulness is stable enough to declare a winner;
 both configs are the same.
 
 ========================================================================
-6. RETRIEVAL STABILITY
+7. RETRIEVAL STABILITY
 ========================================================================
 
 Across all 60-question runs (000, 002–005), Recall@5 is identical at
@@ -246,7 +390,7 @@ Adding the BGE reranker in run 002 recovered ~4 percentage points of MRR
 without changing Recall@5—reranking improves rank position, not recall.
 
 ========================================================================
-7. CITATION ACCURACY AS A DIAGNOSTIC
+8. CITATION ACCURACY AS A DIAGNOSTIC
 ========================================================================
 
 Citation accuracy reveals prompt-structure quality more than retrieval:
@@ -263,7 +407,7 @@ roughly +5.5 points to the weighted final score—matching the observed +4.5
 overall improvement once other metrics moved in mixed directions.
 
 ========================================================================
-8. LATENCY
+9. LATENCY
 ========================================================================
 
 Per-question average latency (retrieve + generate + judge):
@@ -279,7 +423,7 @@ encoder reranking and uses a shorter generation prompt. Quality trade-off
 is substantial (−17 points final score vs run 004).
 
 ========================================================================
-9. CODEBASE EVOLUTION (WHAT CHANGED IN SOFTWARE)
+10. CODEBASE EVOLUTION (WHAT CHANGED IN SOFTWARE)
 ========================================================================
 
 Phase 0 — OG baseline (run_og_baseline.py):
@@ -307,7 +451,7 @@ Phase 3 — Generation reliability (runs 004–005):
   • Scratchpad brevity constraint (3–4 bullets)
 
 ========================================================================
-10. KNOWN FAILURE MODES
+11. KNOWN FAILURE MODES
 ========================================================================
 
 Retrieval (all runs):
@@ -329,7 +473,7 @@ Judge reliability:
   • Faithfulness swings ±7 points between 004 and 005 with identical config.
 
 ========================================================================
-11. RECOMMENDATIONS FOR THE RESEARCH PAPER
+12. RECOMMENDATIONS FOR THE RESEARCH PAPER
 ========================================================================
 
 1. Report run 004 (or the 004/005 average) as the current grid baseline:
@@ -353,7 +497,7 @@ Judge reliability:
    • Best grid: 004__baseline__2026-06-22_22-51-27_CDT
 
 ========================================================================
-12. CONCLUSION
+13. CONCLUSION
 ========================================================================
 
 Over six recorded runs (000–005), the pipeline evolved from a minimal

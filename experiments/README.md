@@ -41,9 +41,21 @@ See `experiments/Results/README.txt` for the full guide.
 
 ## Scoring
 
-**Retrieval-only:** Recall@k and MRR@k.
+See the main **`README.md` → Scoring** section for the full methodology (`src/scoring.py`).
 
-**Full pipeline:** weighted `final_score` (0–100) from answer correctness, faithfulness, context recall/precision, and citation accuracy. Judge calls use Ollama JSON mode.
+**Retrieval-only:** Recall@k, MRR@k — binary hit on `expected_source` in top-k, no LLM.
+
+**Full pipeline:** LLM judge (4 metrics, 0–100) + deterministic citation check → weighted `final_score`:
+
+| Component | Weight |
+|-----------|--------|
+| Answer correctness | 35% |
+| Faithfulness | 25% |
+| Context recall | 20% |
+| Context precision | 10% |
+| Citation accuracy | 10% |
+
+Recall@k / MRR@k are reported separately and are **not** part of `final_score`.
 
 ## Current grid baseline (runs 004/005)
 

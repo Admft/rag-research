@@ -67,19 +67,81 @@ These also save runs under `experiments/Results/runs/`.
 
 ## Scoring
 
-**Retrieval-only:** Recall@k, MRR@k (higher is better).
+Implementation: `src/scoring.py` and `src/pipeline.py`. Every full-pipeline run scores each of the 60 eval questions, then averages per-metric scores into the summary block in `REPORT.txt`.
 
-**Full pipeline:** weighted `final_score` (0–100):
+### Retrieval metrics (all runs)
 
-| Metric | Weight |
-|--------|--------|
-| Answer correctness | 35% |
-| Faithfulness | 25% |
-| Context recall | 20% |
-| Context precision | 10% |
-| Citation accuracy | 10% |
+Computed from `expected_source` in `data/eval/questions.jsonl` vs the top-k retrieved chunks. No LLM involved.
 
-Judge scoring uses Ollama JSON mode. Generation uses `llama3.1:8b`; answers with `[Doc X]` citations are parsed from the `<answer>` block only.
+| Metric | Definition |
+|--------|------------|
+| **Recall@k** | Fraction of questions where the expected PDF appears anywhere in the top-k results (binary hit per question, then averaged). |
+| **MRR@k** | Mean Reciprocal Rank: for each question, `1 / rank` if the expected source is found, else `0`; then averaged. Rank 1 → 1.0, rank 3 → 0.33. |
+| **Recall hit** | Per-question yes/no shown in `REPORT.txt` (expected source in top-k). |
+
+`k` matches the run's `top_k` setting (5 for all baselines 000–005).
+
+### Full-pipeline metrics (runs 000, 002–005)
+
+Each question goes through **retrieve → generate → score**. Generation uses `llama3.1:8b`. Scoring uses the **same model as an LLM judge** (Ollama, `format: json`) plus a deterministic citation check.
+
+**Step 1 — Parse the answer**
+
+For grid runs (003–005), only the `<answer>...</answer>` block is scored (`extract_final_answer()` in `src/prompts.py`). Scratchpad text is ignored. OG run 000 uses the full raw answer (no XML blocks).
+
+**Step 2 — LLM judge (4 sub-scores, 0–100 each)**
+
+The judge receives the question, expected answer, expected source filename, retrieved context, and parsed generated answer. It must return JSON only:
+
+```json
+{
+  "answer_correctness": 0,
+  "faithfulness": 0,
+  "context_recall": 0,
+  "context_precision": 0
+}
+```
+
+| Judge metric | What it measures |
+|--------------|------------------|
+| **answer_correctness** | How well the generated answer matches the hand-written expected answer. |
+| **faithfulness** | Whether the answer is supported by the retrieved context only (no hallucination beyond chunks). |
+| **context_recall** | Whether the retrieved chunks contain the information needed to produce the expected answer. |
+| **context_precision** | Whether the retrieved chunks are relevant and low-noise for the question. |
+
+If the judge returns invalid JSON, the pipeline retries once, then falls back to word-overlap heuristics (`judge_fallback` in `data.json`).
+
+**Step 3 — Citation accuracy (deterministic, 0–100)**
+
+Not judged by the LLM. Parsed from `[Doc X]` tags in the scored answer text:
+
+- **0** if no `[Doc X]` citations are present (this is why run 000 scores 0% — `og_strict` does not require citations).
+- Up to **40** points: fraction of cited doc IDs that map to valid positions in the retrieved list.
+- **+50** if any cited doc matches `expected_source`.
+- **+10** bonus if all citations point only to the expected source file.
+
+**Step 4 — Final score (weighted average)**
+
+```
+final_score = 0.35 × answer_correctness
+            + 0.25 × faithfulness
+            + 0.20 × context_recall
+            + 0.10 × context_precision
+            + 0.10 × citation_accuracy
+```
+
+Reported as 0–100, rounded to two decimal places. Per-question `final_score` values appear under each question in `REPORT.txt`; the summary line is the mean across all 60 questions.
+
+### Auxiliary metrics
+
+| Metric | Definition |
+|--------|------------|
+| **answer_parse_rate** | Fraction of questions where `<answer>` was successfully parsed (grid runs 003–005 only). |
+| **avg_latency** | Mean wall-clock seconds per question (retrieve + generate + judge). |
+
+### What is not in final_score
+
+Retrieval Recall@k and MRR@k are reported separately. They are **not** folded into `final_score` — you can have 98.3% Recall@5 and a low final score if generation or citations fail.
 
 ## Baseline progression (runs 000–005)
 
