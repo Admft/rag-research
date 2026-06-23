@@ -206,38 +206,253 @@ Weights (SCORE_WEIGHTS in src/scoring.py):
   Avg latency          — seconds per question (retrieve+generate+judge)
 
 ========================================================================
-4. CONFIGURATION COMPARISON
+4. PER-RUN CONFIGURATION (FULL SETTINGS)
 ========================================================================
 
-Setting              000 OG   001      002–005        006–007 v2
--------------------  -------  -------  -------------  ------------------
-Chunk size (words)   120      512      256            256
-Overlap (words)      30       50       50             50
-Index chunks         1,273    253*     558            558
-Top-k                5        5        5              5
-Retriever            dense    dense    dense          hybrid
-Embedding            bge-sm   bge-sm   bge-sm         bge-sm
-Reranker             none     none     bge            bge
-Query transform      none     none     none           none
-Prompt               og       strict   strict_ctx_    strict_context_json
-                              _ctx     with_citations
-Context filter       none     none     none           top_sent_5 → none†
-Qdrant path          qdrant_og qdrant  qdrant         qdrant
-Generator            llama8b  —        llama8b        qwen2.5:14b
-Judge                —        —        llama8b        qwen2.5:14b
+Every setting recorded below is taken from each run's REPORT.txt and
+data.json. Runs 002–005 use llama3.1:8b for both generation and judging
+(judge was implicit, same model as generator). Software-only settings
+(token budgets, output format, rerank pool) are noted where they differ
+from the grid defaults even if not stored in data.json.
 
-† Run 006 used top_sentences_5; run 007 disabled it (context_filter: none).
+------------------------------------------------------------------------
+RUN 000 — OG baseline (full_pipeline, 60 questions)
+------------------------------------------------------------------------
+Folder:           000__og_baseline__2026-06-22_23-40-42_CDT
+Run time:         2026-06-22 23:40:42 CDT
+Script:           src/run_og_baseline.py (standalone, not grid.json)
 
-* 001 used chunk 512 but only 2 questions; index size not representative.
+Chunk size:       120 words
+Chunk overlap:    30 words
+Top-k:            5
+Index chunks:     1,273 (12 PDFs)
+Retriever:        dense (cosine similarity)
+Embedding model:  BAAI/bge-small-en-v1.5
+Reranker:         none
+Rerank pool:      5 (top_k only; no reranker)
+Query transform:  none
+Prompt:           og_strict
+Context filter:   none
+Generator:        llama3.1:8b
+Judge:            llama3.1:8b (same as generator)
+Vector DB:        data/qdrant_og (separate from main index)
+Chunks file:      data/processed/chunks_og_baseline.jsonl
+Output format:    plain text; no [Doc X] citation requirement
+Gen max tokens:   2048 (default)
+
+------------------------------------------------------------------------
+RUN 001 — Grid smoke test (retrieval_only, 2 questions)
+------------------------------------------------------------------------
+Folder:           001__baseline__2026-06-22_20-28-46_CDT
+Run time:         2026-06-22 20:28:46 CDT
+
+Chunk size:       512 words
+Chunk overlap:    50 words
+Top-k:            5
+Index chunks:     253
+Retriever:        dense
+Embedding model:  BAAI/bge-small-en-v1.5
+Reranker:         none
+Rerank pool:      5
+Query transform:  none
+Prompt:           strict_context
+Context filter:   none
+Generator:        llama3.1:8b (not invoked — retrieval_only mode)
+Judge:            — (not invoked)
+Vector DB:        data/qdrant
+Output format:    — (no generation step)
+
+------------------------------------------------------------------------
+RUN 002 — First full grid baseline (full_pipeline, 60 questions)
+------------------------------------------------------------------------
+Folder:           002__baseline__2026-06-22_20-51-37_CDT
+Run time:         2026-06-22 20:51:37 CDT
+
+Chunk size:       256 words
+Chunk overlap:    50 words
+Top-k:            5
+Index chunks:     558
+Retriever:        dense
+Embedding model:  BAAI/bge-small-en-v1.5
+Reranker:         bge (BAAI/bge-reranker-base cross-encoder)
+Rerank pool:      10 candidates fetched, top 5 returned
+Query transform:  none
+Prompt:           strict_context_with_citations
+Context filter:   none
+Generator:        llama3.1:8b
+Judge:            llama3.1:8b (same as generator)
+Vector DB:        data/qdrant
+Output format:    free-form CoT planning + answer (no XML tags yet)
+Gen max tokens:   2048
+Judge max tokens: 1024 (default)
+
+------------------------------------------------------------------------
+RUN 003 — Scratchpad/answer isolation (full_pipeline, 60 questions)
+------------------------------------------------------------------------
+Folder:           003__baseline__2026-06-22_22-43-46_CDT
+Run time:         2026-06-22 22:43:46 CDT
+
+Chunk size:       256 words
+Chunk overlap:    50 words
+Top-k:            5
+Index chunks:     558
+Retriever:        dense
+Embedding model:  BAAI/bge-small-en-v1.5
+Reranker:         bge (BAAI/bge-reranker-base)
+Rerank pool:      10
+Query transform:  none
+Prompt:           strict_context_with_citations
+Context filter:   none
+Generator:        llama3.1:8b
+Judge:            llama3.1:8b (same as generator)
+Vector DB:        data/qdrant
+Output format:    required <scratchpad> and <answer> XML blocks
+Gen max tokens:   2048
+Judge max tokens: 1024
+
+------------------------------------------------------------------------
+RUN 004 — Token budget + scratchpad brevity (full_pipeline, 60 questions)
+------------------------------------------------------------------------
+Folder:           004__baseline__2026-06-22_22-51-27_CDT
+Run time:         2026-06-22 22:51:27 CDT
+
+Chunk size:       256 words
+Chunk overlap:    50 words
+Top-k:            5
+Index chunks:     558
+Retriever:        dense
+Embedding model:  BAAI/bge-small-en-v1.5
+Reranker:         bge (BAAI/bge-reranker-base)
+Rerank pool:      10
+Query transform:  none
+Prompt:           strict_context_with_citations
+Context filter:   none
+Generator:        llama3.1:8b
+Judge:            llama3.1:8b (same as generator)
+Vector DB:        data/qdrant
+Output format:    <scratchpad> (3–4 bullet max) + <answer> XML blocks
+Gen max tokens:   2560 (raised from 2048)
+Judge max tokens: 1024
+
+------------------------------------------------------------------------
+RUN 005 — Identical re-run of 004 (full_pipeline, 60 questions)
+------------------------------------------------------------------------
+Folder:           005__baseline__2026-06-22_23-04-09_CDT
+Run time:         2026-06-22 23:04:09 CDT
+
+Chunk size:       256 words
+Chunk overlap:    50 words
+Top-k:            5
+Index chunks:     558
+Retriever:        dense
+Embedding model:  BAAI/bge-small-en-v1.5
+Reranker:         bge (BAAI/bge-reranker-base)
+Rerank pool:      10
+Query transform:  none
+Prompt:           strict_context_with_citations
+Context filter:   none
+Generator:        llama3.1:8b
+Judge:            llama3.1:8b (same as generator)
+Vector DB:        data/qdrant
+Output format:    <scratchpad> (3–4 bullet max) + <answer> XML blocks
+Gen max tokens:   2560
+Judge max tokens: 1024
+Note:             No config or code changes vs run 004; LLM variance only.
+
+------------------------------------------------------------------------
+RUN 006 — v2 stack (full_pipeline, 60 questions)
+------------------------------------------------------------------------
+Folder:           006__baseline__2026-06-23_00-38-23_CDT
+Run time:         2026-06-23 00:38:23 CDT
+
+Chunk size:       256 words
+Chunk overlap:    50 words
+Top-k:            5
+Index chunks:     558
+Retriever:        hybrid (BGE dense + BM25, alpha=0.5 weighted merge)
+Embedding model:  BAAI/bge-small-en-v1.5
+Reranker:         bge (BAAI/bge-reranker-base)
+Rerank pool:      25 (max(top_k×5, 25); hybrid fetch pool also 25)
+Query transform:  none
+Prompt:           strict_context_json
+Context filter:   top_sentences_5 (first 5 sentences per chunk)
+Generator:        qwen2.5:14b
+Judge:            qwen2.5:14b (separate config field)
+Vector DB:        data/qdrant
+Output format:    Ollama JSON schema (scratchpad, answer, citations keys)
+BM25 normalize:   normalize_for_lexical() — PDF spacing artifacts fixed
+Gen max tokens:   2048
+Judge max tokens: 1024
+Gen timeout:      600s
+Judge timeout:    300s
+Ollama retries:   3× on 5xx/timeout
+GPU management:   embed model offloaded before generation
+
+------------------------------------------------------------------------
+RUN 007 — v2 fixes, current baseline (full_pipeline, 60 questions)
+------------------------------------------------------------------------
+Folder:           007__baseline__2026-06-23_01-10-54_CDT
+Run time:         2026-06-23 01:10:54 CDT
+
+Chunk size:       256 words
+Chunk overlap:    50 words
+Top-k:            5
+Index chunks:     558
+Retriever:        hybrid (BGE dense + BM25, alpha=0.5 weighted merge)
+Embedding model:  BAAI/bge-small-en-v1.5
+Reranker:         bge (BAAI/bge-reranker-base)
+Rerank pool:      25
+Query transform:  none
+Prompt:           strict_context_json
+Context filter:   none (full chunk text restored)
+Generator:        qwen2.5:14b
+Judge:            qwen2.5:14b
+Vector DB:        data/qdrant
+Output format:    Ollama JSON schema + CRITICAL [Doc N] cite instruction
+Citation post:    normalize_citations() — [Document N], [N] → [Doc N]
+BM25 normalize:   normalize_for_lexical() (same as 006)
+Gen max tokens:   2048
+Judge max tokens: 1024
+Gen timeout:      600s
+Judge timeout:    300s
+Ollama retries:   3× on 5xx/timeout
+GPU management:   embed model offloaded before generation
+Note:             Canonical baseline in experiments/grid.json.
+
+------------------------------------------------------------------------
+4.1 CONFIGURATION SUMMARY TABLE (quick reference)
+------------------------------------------------------------------------
+
+Setting              000    001    002    003    004    005    006    007
+-------------------  -----  -----  -----  -----  -----  -----  -----  -----
+Mode                 full   retr   full   full   full   full   full   full
+Questions              60      2     60     60     60     60     60     60
+Chunk size (words)   120    512    256    256    256    256    256    256
+Overlap (words)       30     50     50     50     50     50     50     50
+Index chunks       1,273    253    558    558    558    558    558    558
+Top-k                  5      5      5      5      5      5      5      5
+Retriever            dense  dense  dense  dense  dense  dense  hybrid hybrid
+Embedding            bge-sm bge-sm bge-sm bge-sm bge-sm bge-sm bge-sm bge-sm
+Reranker             none   none   bge    bge    bge    bge    bge    bge
+Query transform      none   none   none   none   none   none   none   none
+Prompt               og     strict strict strict strict strict strict strict
+                     _strict _ctx  _ctx_  _ctx_  _ctx_  _ctx_  _json  _json
+                              with   with   with   with
+                              cites  cites  cites  cites
+Context filter       none   none   none   none   none   none   top5   none
+Generator            llama  —      llama  llama  llama  llama  qwen   qwen
+Judge                llama  —      llama  llama  llama  llama  qwen   qwen
+Qdrant path          qdrant qdrant qdrant qdrant qdrant qdrant qdrant qdrant
+                     _og
 
 Prompt semantics:
-  og_strict              — "I do not know" fallback; no [Doc X] cites.
-  strict_context         — Grounded answer + citation rules (001 only).
-  strict_context_with_   — XML <scratchpad>/<answer> (003–005).
-  citations
-  strict_context_json    — JSON schema output (006–007).
+  og_strict                    — "I do not know" fallback; no [Doc X] cites.
+  strict_context               — Grounded answer + citation rules (001 only).
+  strict_context_with_citations — XML <scratchpad>/<answer> (002–005).
+  strict_context_json          — JSON schema output (006–007).
 
 Scoring methodology: see section 3.
+
 
 ========================================================================
 5. RESULTS TABLE (60-QUESTION FULL PIPELINE RUNS)
