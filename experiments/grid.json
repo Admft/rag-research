@@ -3,17 +3,18 @@
     "name": "baseline",
     "chunk_size": 256,
     "chunk_overlap": 50,
-    "retriever": "dense",
+    "retriever": "hybrid",
     "embedding_model": "BAAI/bge-small-en-v1.5",
     "top_k": 5,
     "reranker": "bge",
     "query_transform": "none",
-    "prompt": "strict_context_with_citations",
-    "context_filter": "none",
-    "generator": "llama3.1:8b"
+    "prompt": "strict_context_json",
+    "context_filter": "top_sentences_5",
+    "generator": "qwen2.5:14b",
+    "judge": "qwen2.5:14b"
   },
   "runs": [
-    {"name": "baseline", "round": "baseline", "description": "Control group. Change one variable per round after this."},
+    {"name": "baseline", "round": "baseline", "description": "Upgraded baseline: hybrid retrieval, JSON output, qwen2.5:14b gen+judge, sentence filter."},
 
     {"name": "chunk_128", "round": "chunk_size", "overrides": {"chunk_size": 128}},
     {"name": "chunk_256", "round": "chunk_size", "overrides": {"chunk_size": 256}},
@@ -39,23 +40,36 @@
     {"name": "retriever_hyde", "round": "retriever", "overrides": {"retriever": "hyde"}},
     {"name": "retriever_hyde_hybrid", "round": "retriever", "overrides": {"retriever": "hyde_hybrid"}},
 
+    {"name": "embed_bge_small", "round": "embedding", "overrides": {"embedding_model": "BAAI/bge-small-en-v1.5"}},
+    {"name": "embed_bge_large", "round": "embedding", "overrides": {"embedding_model": "BAAI/bge-large-en-v1.5"}},
+    {"name": "embed_bge_m3", "round": "embedding", "overrides": {"embedding_model": "BAAI/bge-m3"}},
+
     {"name": "rerank_none", "round": "reranker", "overrides": {"reranker": "none"}},
     {"name": "rerank_bge", "round": "reranker", "overrides": {"reranker": "bge"}},
     {"name": "rerank_cross_encoder", "round": "reranker", "overrides": {"reranker": "cross_encoder"}},
 
+    {"name": "query_none", "round": "query_transform", "overrides": {"query_transform": "none"}},
+    {"name": "query_hyde", "round": "query_transform", "overrides": {"query_transform": "hyde"}},
+
+    {"name": "filter_none", "round": "context_filter", "overrides": {"context_filter": "none"}},
+    {"name": "filter_top5", "round": "context_filter", "overrides": {"context_filter": "top_sentences_5"}},
+
     {
       "name": "best_full_pipeline",
       "round": "final",
-      "description": "Update settings here after earlier rounds. Starting guess from research plan.",
+      "description": "Combined best guesses after individual rounds.",
       "overrides": {
         "chunk_size": 256,
         "chunk_overlap": 50,
         "top_k": 8,
-        "retriever": "hybrid",
+        "retriever": "hyde_hybrid",
+        "embedding_model": "BAAI/bge-large-en-v1.5",
         "reranker": "bge",
         "query_transform": "hyde",
-        "prompt": "strict_context_with_citations",
-        "context_filter": "top_sentences_5"
+        "prompt": "strict_context_json",
+        "context_filter": "top_sentences_5",
+        "generator": "qwen2.5:14b",
+        "judge": "qwen2.5:14b"
       }
     }
   ]

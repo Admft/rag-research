@@ -3,7 +3,7 @@ from copy import deepcopy
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 
-from config import PROJECT_ROOT
+from config import OLLAMA_JUDGE_MODEL, PROJECT_ROOT
 
 GRID_FILE = PROJECT_ROOT / "experiments" / "grid.json"
 
@@ -20,7 +20,8 @@ class ExperimentConfig:
     query_transform: str = "none"
     prompt: str = "strict_context"
     context_filter: str = "none"
-    generator: str = "llama3.1:8b"
+    generator: str = "qwen2.5:14b"
+    judge: str = OLLAMA_JUDGE_MODEL
     round: str = "baseline"
     description: str = ""
 

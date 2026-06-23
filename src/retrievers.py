@@ -1,7 +1,6 @@
 from config import COLLECTION_NAME
 from llm import call_ollama
 
-
 def reciprocal_rank_fusion(result_lists, top_k, k=60):
     scores = {}
 
@@ -158,8 +157,9 @@ class Retriever:
             return self.index.bm25_search(query, top_k)
 
         if retriever == "hybrid":
-            dense = self.dense_search(query, top_k * 2)
-            bm25 = self.index.bm25_search(query, top_k * 2)
+            pool = max(top_k * 2, 25)
+            dense = self.dense_search(query, pool)
+            bm25 = self.index.bm25_search(query, pool)
             return merge_weighted(dense, bm25, top_k)
 
         if retriever == "hyde":
@@ -168,8 +168,9 @@ class Retriever:
 
         if retriever == "hyde_hybrid":
             hyde_query = self._hyde_query(query)
-            dense = self.dense_search(hyde_query, top_k * 2)
-            bm25 = self.index.bm25_search(hyde_query, top_k * 2)
+            pool = max(top_k * 2, 25)
+            dense = self.dense_search(hyde_query, pool)
+            bm25 = self.index.bm25_search(hyde_query, pool)
             return merge_weighted(dense, bm25, top_k)
 
         raise ValueError(f"Unsupported retriever: {retriever}")
@@ -210,7 +211,7 @@ class Retriever:
     def retrieve(self, query):
         fetch_k = self.config.top_k
         if self.config.reranker != "none":
-            fetch_k = max(fetch_k * 2, 10)
+            fetch_k = max(fetch_k * 5, 25)
 
         queries = self.transform_query(query)
         result_lists = [self.retrieve_for_query(q, fetch_k) for q in queries]

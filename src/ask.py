@@ -3,9 +3,19 @@ import sys
 from qdrant_client import QdrantClient
 from sentence_transformers import SentenceTransformer
 
-from config import COLLECTION_NAME, EMBEDDING_MODEL_NAME, OLLAMA_GENERATION_MAX_TOKENS, OLLAMA_MODEL, QDRANT_PATH
+from config import (
+    COLLECTION_NAME,
+    EMBEDDING_MODEL_NAME,
+    OLLAMA_GENERATION_MAX_TOKENS,
+    OLLAMA_GENERATOR_MODEL,
+    QDRANT_PATH,
+)
 from llm import call_ollama
-from prompts import build_generation_prompt, extract_final_answer
+from prompts import (
+    GENERATION_RESPONSE_SCHEMA,
+    build_generation_prompt,
+    parse_generation_response,
+)
 from results import save_generation_results
 
 
@@ -42,16 +52,21 @@ def main():
 
     query = sys.argv[1]
     top_k = 5
-    prompt_style = "strict_context_with_citations"
+    prompt_style = "strict_context_json"
 
     print("Retrieving context...")
     retrieved_points = retrieve(query, top_k=top_k)
     retrieved = retrieved_to_rows(retrieved_points)
 
-    print(f"Generating answer with {OLLAMA_MODEL}...")
+    print(f"Generating answer with {OLLAMA_GENERATOR_MODEL}...")
     prompt = build_generation_prompt(query, retrieved, prompt_style)
-    raw_answer, _ = call_ollama(prompt, max_tokens=OLLAMA_GENERATION_MAX_TOKENS)
-    answer = extract_final_answer(raw_answer)
+    raw_answer, _ = call_ollama(
+        prompt,
+        model=OLLAMA_GENERATOR_MODEL,
+        json_schema=GENERATION_RESPONSE_SCHEMA,
+        max_tokens=OLLAMA_GENERATION_MAX_TOKENS,
+    )
+    answer, parsed, _ = parse_generation_response(raw_answer, prompt_style)
 
     print()
     print("=" * 80)
@@ -60,7 +75,7 @@ def main():
     if answer:
         print(answer)
     else:
-        print("(No <answer> block found — model may have stopped during scratchpad.)")
+        print("(Structured JSON parse failed.)")
         print()
         print("Raw output:")
         print(raw_answer[:1500])

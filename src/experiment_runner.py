@@ -26,6 +26,8 @@ def format_experiment_report(payload):
         f"Query transform:  {config['query_transform']}",
         f"Prompt:           {config['prompt']}",
         f"Context filter:   {config['context_filter']}",
+        f"Generator:        {config.get('generator', '—')}",
+        f"Judge:            {config.get('judge', '—')}",
         "",
         "SCORES",
         "-" * 40,
@@ -59,7 +61,7 @@ def format_experiment_report(payload):
         if "answer" in item:
             lines.append(f"  Final score: {item['metrics']['final_score']}")
             if not item.get("answer_parsed", True):
-                lines.append("  Warning: no <answer> block parsed (scratchpad leak or cutoff)")
+                lines.append("  Warning: structured output parse failed (JSON or <answer> missing)")
             display = item.get("answer") or item.get("raw_answer", "")
             lines.append(f"  Answer: {display[:300]}")
 

@@ -13,7 +13,10 @@ ROUND_ORDER = [
     "overlap",
     "top_k",
     "retriever",
+    "embedding",
     "reranker",
+    "query_transform",
+    "context_filter",
     "final",
 ]
 

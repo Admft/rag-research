@@ -6,7 +6,7 @@ from qdrant_client.models import Distance, PointStruct, VectorParams
 from rank_bm25 import BM25Okapi
 from sentence_transformers import SentenceTransformer
 
-from chunking import chunk_text
+from chunking import chunk_text, normalize_for_lexical
 from config import COLLECTION_NAME, PROCESSED_DIR, QDRANT_PATH
 from documents import load_raw_documents
 
@@ -18,7 +18,7 @@ class ExperimentIndex:
         self.embed_model = embed_model
         self.qdrant_client = qdrant_client
         self.chunk_texts = [chunk["text"] for chunk in chunks]
-        tokenized = [text.lower().split() for text in self.chunk_texts]
+        tokenized = [normalize_for_lexical(text).split() for text in self.chunk_texts]
         self.bm25 = BM25Okapi(tokenized)
 
     def close(self):
@@ -27,7 +27,7 @@ class ExperimentIndex:
             self.qdrant_client = None
 
     def bm25_search(self, query, top_k):
-        scores = self.bm25.get_scores(query.lower().split())
+        scores = self.bm25.get_scores(normalize_for_lexical(query).split())
         ranked = sorted(range(len(scores)), key=lambda i: scores[i], reverse=True)[:top_k]
         hits = []
         for idx in ranked:
@@ -117,3 +117,16 @@ def build_experiment_index(config, show_progress=False, qdrant_path=None):
         "skipped": skipped,
         "chunks_path": str(chunks_path),
     }
+
+
+def release_embed_gpu(index):
+    """Move the embedding model off GPU so Ollama has more VRAM for generation/judge."""
+    try:
+        import torch
+
+        if hasattr(index, "embed_model") and index.embed_model is not None:
+            index.embed_model.to("cpu")
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+    except Exception:
+        pass

@@ -1,5 +1,7 @@
 import re
 
+import requests
+
 from llm import call_ollama, parse_json_response
 from prompts import extract_final_answer, format_context
 
@@ -83,7 +85,7 @@ def fallback_metric_scores(question, expected_answer, answer, retrieved):
     }
 
 
-def judge_metrics(question, expected_answer, expected_source, answer, retrieved):
+def judge_metrics(question, expected_answer, expected_source, answer, retrieved, judge_model=None):
     answer_text = extract_final_answer(answer)
     context = format_context(retrieved)
 
@@ -120,25 +122,28 @@ Generated answer:
 {answer_text}
 """
 
-    raw, _ = call_ollama(judge_prompt, timeout=180, json_mode=True)
     try:
+        raw, _ = call_ollama(judge_prompt, json_mode=True, model=judge_model)
         return normalize_metric_scores(parse_json_response(raw))
-    except ValueError:
+    except (ValueError, requests.RequestException):
+        pass
+
+    try:
         retry_prompt = judge_prompt + "\nReminder: output JSON only, no explanation."
-        raw, _ = call_ollama(retry_prompt, timeout=180, json_mode=True)
-        try:
-            return normalize_metric_scores(parse_json_response(raw))
-        except ValueError:
-            return fallback_metric_scores(question, expected_answer, answer_text, retrieved)
+        raw, _ = call_ollama(retry_prompt, json_mode=True, model=judge_model)
+        return normalize_metric_scores(parse_json_response(raw))
+    except (ValueError, requests.RequestException):
+        return fallback_metric_scores(question, expected_answer, answer_text, retrieved)
 
 
-def score_answer(question, expected_answer, expected_source, answer, retrieved):
+def score_answer(question, expected_answer, expected_source, answer, retrieved, judge_model=None):
     metrics = judge_metrics(
         question=question,
         expected_answer=expected_answer,
         expected_source=expected_source,
         answer=answer,
         retrieved=retrieved,
+        judge_model=judge_model,
     )
     metrics["citation_accuracy"] = estimate_citation_accuracy(
         answer, retrieved, expected_source

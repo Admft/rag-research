@@ -41,16 +41,18 @@ Saved as **`000__og_baseline__...`** so it sorts before grid runs.
 
 ## Experiment grid baseline (runs 001+)
 
-Current grid baseline (runs 004/005): chunk 256, overlap 50, dense + BGE reranker, `strict_context_with_citations` prompt with `<scratchpad>` / `<answer>` tags.
+Current grid baseline: **hybrid retrieval**, chunk 256/50, BGE reranker, `strict_context_json` (Ollama JSON schema), `top_sentences_5` context filter, **qwen2.5:14b** for generation and judging.
 
 ```bash
+ollama pull qwen2.5:14b
 python src/run_experiments.py --list
 python src/run_experiments.py --run baseline --retrieval-only
 python src/run_experiments.py --run baseline   # full pipeline, needs Ollama
-python src/run_experiments.py --round chunk_size
+python src/run_experiments.py --round retriever
+python src/run_experiments.py --round embedding
 ```
 
-Requires Ollama with `llama3.1:8b` (or change `generator` in `experiments/grid.json`).
+Requires Ollama with `qwen2.5:14b` for the upgraded baseline (`ollama pull qwen2.5:14b`). Override `generator` / `judge` in `experiments/grid.json`.
 
 ## Ad-hoc scripts
 
@@ -83,15 +85,15 @@ Computed from `expected_source` in `data/eval/questions.jsonl` vs the top-k retr
 
 ### Full-pipeline metrics (runs 000, 002–005)
 
-Each question goes through **retrieve → generate → score**. Generation uses `llama3.1:8b`. Scoring uses the **same model as an LLM judge** (Ollama, `format: json`) plus a deterministic citation check.
+Each question goes through **retrieve → generate → score**. Generation defaults to `qwen2.5:14b` with JSON schema output; judging uses `config.judge` (also `qwen2.5:14b` by default), separate from the generator.
 
 **Step 1 — Parse the answer**
 
-For grid runs (003–005), only the `<answer>...</answer>` block is scored (`extract_final_answer()` in `src/prompts.py`). Scratchpad text is ignored. OG run 000 uses the full raw answer (no XML blocks).
+Grid runs use `strict_context_json`: Ollama enforces a JSON schema with `scratchpad` (≤400 chars) and `answer` keys. Legacy runs (003–005) used `<answer>` XML blocks (`extract_final_answer()`).
 
 **Step 2 — LLM judge (4 sub-scores, 0–100 each)**
 
-The judge receives the question, expected answer, expected source filename, retrieved context, and parsed generated answer. It must return JSON only:
+The judge uses `config.judge` (default `qwen2.5:14b`), separate from the generator, via Ollama JSON mode.
 
 ```json
 {

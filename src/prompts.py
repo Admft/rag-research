@@ -1,4 +1,24 @@
+import json
 import re
+
+from llm import parse_json_response
+
+GENERATION_RESPONSE_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "scratchpad": {
+            "type": "string",
+            "description": "Brief planning notes with [Doc X] mappings, max 400 characters.",
+        },
+        "answer": {
+            "type": "string",
+            "description": "Final grounded answer; every claim followed by [Doc X].",
+        },
+    },
+    "required": ["scratchpad", "answer"],
+}
+
+JSON_PROMPT_STYLES = {"strict_context_json"}
 
 PROMPT_TEMPLATES = {
     "basic": """Answer the question using the provided documents.
@@ -58,6 +78,22 @@ Begin.
 Question:
 {query}
 """,
+    "strict_context_json": """You are an expert analytical assistant. Answer using ONLY the provided documents.
+
+<documents>
+{context}
+</documents>
+
+Return a single JSON object with exactly two keys:
+- "scratchpad": 2-3 brief bullet points mapping facts to [Doc X] IDs. Hard limit: 400 characters total.
+- "answer": final answer only. Every factual claim MUST be followed by [Doc X]. No combined citations.
+
+If documents lack sufficient information, set answer to exactly:
+"The provided context does not contain the answer."
+
+Question:
+{query}
+""",
 }
 
 
@@ -78,9 +114,34 @@ def format_context(retrieved, style="xml"):
     return "\n\n".join(blocks)
 
 
+def uses_json_output(prompt_style):
+    return prompt_style in JSON_PROMPT_STYLES
+
+
+def parse_generation_response(raw, prompt_style):
+    if uses_json_output(prompt_style):
+        try:
+            data = parse_json_response(raw)
+            answer = str(data.get("answer", "")).strip()
+            scratchpad = str(data.get("scratchpad", "")).strip()
+            return answer, bool(answer), scratchpad
+        except (ValueError, json.JSONDecodeError, TypeError):
+            return "", False, ""
+
+    answer = extract_final_answer(raw)
+    return answer, bool(answer), ""
+
+
 def extract_final_answer(text):
     if not text:
         return ""
+
+    if uses_json_output_from_text(text):
+        try:
+            data = parse_json_response(text)
+            return str(data.get("answer", "")).strip()
+        except (ValueError, json.JSONDecodeError, TypeError):
+            pass
 
     closed = re.search(r"<answer>\s*(.*?)</answer>", text, re.DOTALL | re.IGNORECASE)
     if closed:
@@ -108,7 +169,15 @@ def extract_final_answer(text):
     return text.strip()
 
 
-def has_answer_block(text):
+def uses_json_output_from_text(text):
+    stripped = text.strip()
+    return stripped.startswith("{") and '"answer"' in stripped
+
+
+def has_answer_block(text, prompt_style=None):
+    if prompt_style and uses_json_output(prompt_style):
+        answer, parsed, _ = parse_generation_response(text, prompt_style)
+        return parsed
     return bool(re.search(r"<answer>", text, re.IGNORECASE))
 
 

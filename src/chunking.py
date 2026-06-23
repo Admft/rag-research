@@ -1,3 +1,14 @@
+import re
+
+
+def normalize_for_lexical(text):
+    """Collapse PDF artifacts like 'SELF - RAG' → 'self-rag' for BM25 matching."""
+    text = text.lower()
+    text = re.sub(r"\s*-\s*", "-", text)
+    text = re.sub(r"\s+", " ", text)
+    return text.strip()
+
+
 def chunk_text(text, chunk_size_words, overlap_words):
     words = text.split()
     chunks = []

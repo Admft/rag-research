@@ -3,9 +3,15 @@ import time
 
 from config import EVAL_FILE, OLLAMA_GENERATION_MAX_TOKENS
 from experiment_config import ExperimentConfig
-from indexing import build_experiment_index
+from indexing import build_experiment_index, release_embed_gpu
 from llm import call_ollama
-from prompts import build_generation_prompt, extract_final_answer, has_answer_block
+from prompts import (
+    GENERATION_RESPONSE_SCHEMA,
+    build_generation_prompt,
+    has_answer_block,
+    parse_generation_response,
+    uses_json_output,
+)
 from retrievers import Retriever
 from scoring import score_answer
 
@@ -39,10 +45,14 @@ def run_experiment(config, questions, index=None, retrieval_only=False, show_pro
     else:
         index_stats = {"chunks": len(index.chunks)}
 
+    if not retrieval_only:
+        release_embed_gpu(index)
+
     retriever = Retriever(index, config)
     per_question = []
     latencies = []
     prompt_token_estimates = []
+    json_output = uses_json_output(config.prompt)
 
     for item in questions:
         question = item["question"]
@@ -77,27 +87,42 @@ def run_experiment(config, questions, index=None, retrieval_only=False, show_pro
         prompt_token_estimates.append(len(prompt.split()))
 
         gen_start = time.perf_counter()
-        raw_answer, gen_latency = call_ollama(
-            prompt, model=config.generator, max_tokens=OLLAMA_GENERATION_MAX_TOKENS,
-        )
-        answer = extract_final_answer(raw_answer)
-        total_latency = retrieve_latency + gen_latency
-        latencies.append(total_latency)
+        if json_output:
+            raw_answer, gen_latency = call_ollama(
+                prompt,
+                model=config.generator,
+                json_schema=GENERATION_RESPONSE_SCHEMA,
+                max_tokens=OLLAMA_GENERATION_MAX_TOKENS,
+            )
+        else:
+            raw_answer, gen_latency = call_ollama(
+                prompt,
+                model=config.generator,
+                max_tokens=OLLAMA_GENERATION_MAX_TOKENS,
+            )
+        answer, answer_parsed, scratchpad = parse_generation_response(raw_answer, config.prompt)
 
+        score_start = time.perf_counter()
         metrics = score_answer(
             question=question,
             expected_answer=expected_answer,
             expected_source=expected_source,
             answer=raw_answer,
             retrieved=retrieved,
+            judge_model=config.judge,
         )
+        score_latency = time.perf_counter() - score_start
+        total_latency = retrieve_latency + gen_latency + score_latency
+        latencies.append(total_latency)
 
         row.update({
             "raw_answer": raw_answer,
             "answer": answer,
-            "answer_parsed": bool(answer),
-            "has_answer_block": has_answer_block(raw_answer),
+            "scratchpad": scratchpad,
+            "answer_parsed": answer_parsed,
+            "has_answer_block": has_answer_block(raw_answer, config.prompt),
             "generation_latency_s": round(gen_latency, 3),
+            "score_latency_s": round(score_latency, 3),
             "total_latency_s": round(total_latency, 3),
             "metrics": metrics,
         })

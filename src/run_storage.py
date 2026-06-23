@@ -41,7 +41,10 @@ ROUND_LABELS = {
     "overlap": "Overlap round",
     "top_k": "Top-k round",
     "retriever": "Retrieval method round",
+    "embedding": "Embedding model round",
     "reranker": "Reranker round",
+    "query_transform": "Query transform round",
+    "context_filter": "Context filter round",
     "final": "Final combined test",
 }
 

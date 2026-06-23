@@ -57,18 +57,18 @@ See the main **`README.md` → Scoring** section for the full methodology (`src/
 
 Recall@k / MRR@k are reported separately and are **not** part of `final_score`.
 
-## Current grid baseline (runs 004/005)
+## Current grid baseline (v2)
 
 | Setting | Value |
 |---------|-------|
 | Chunk size / overlap | 256 / 50 |
-| Retriever | dense |
+| Retriever | **hybrid** (dense + BM25) |
 | Reranker | bge |
 | Top-k | 5 |
-| Prompt | `strict_context_with_citations` (`<scratchpad>` + `<answer>`, `[Doc X]` cites) |
-| Generator | `llama3.1:8b` |
-| Recall@5 | 98.3% |
-| Final score | ~74 |
+| Prompt | `strict_context_json` (Ollama JSON schema) |
+| Context filter | `top_sentences_5` |
+| Generator | `qwen2.5:14b` |
+| Judge | `qwen2.5:14b` (separate from generator) |
 
 Retrieval saturated at 98.3% Recall@5 by run 002; later gains came from prompt/output structure (see `000-005_FULL_REPORT.txt`).
 
