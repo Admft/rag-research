@@ -28,6 +28,17 @@ Question:
 
 Answer:
 """,
+    "og_strict": """Answer the question using ONLY the provided context below.
+If the context does not contain enough information to answer, say exactly: "I do not know."
+
+Context:
+{context}
+
+Question:
+{query}
+
+Answer:
+""",
     "strict_context_with_citations": """You are an expert analytical assistant. Your task is to answer the user's question accurately, strictly using ONLY the provided documents.
 
 <documents>
@@ -50,14 +61,20 @@ Question:
 }
 
 
-def format_context(retrieved):
+def format_context(retrieved, style="xml"):
     blocks = []
     for i, item in enumerate(retrieved, start=1):
-        blocks.append(
-            f'<Document ID="{i}" source="{item["source"]}" chunk="{item["chunk_index"]}">\n'
-            f"{item['text']}\n"
-            f"</Document>"
-        )
+        if style == "simple":
+            blocks.append(
+                f"[{i}] ({item['source']}, chunk {item['chunk_index']})\n"
+                f"{item['text']}"
+            )
+        else:
+            blocks.append(
+                f'<Document ID="{i}" source="{item["source"]}" chunk="{item["chunk_index"]}">\n'
+                f"{item['text']}\n"
+                f"</Document>"
+            )
     return "\n\n".join(blocks)
 
 
@@ -97,7 +114,8 @@ def has_answer_block(text):
 
 def build_generation_prompt(query, retrieved, prompt_style):
     template = PROMPT_TEMPLATES[prompt_style]
+    context_style = "simple" if prompt_style == "og_strict" else "xml"
     return template.format(
-        context=format_context(retrieved),
+        context=format_context(retrieved, style=context_style),
         query=query,
     )

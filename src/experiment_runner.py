@@ -98,7 +98,14 @@ def experiment_summary_row(summary, run_mode):
     return row
 
 
-def save_experiment_result(config, payload, run_mode="full_pipeline"):
+def save_experiment_result(
+    config,
+    payload,
+    run_mode="full_pipeline",
+    run_kind="experiment",
+    run_number=None,
+    report_builder=None,
+):
     data = {
         "run_mode": run_mode,
         "summary": payload["summary"],
@@ -106,11 +113,12 @@ def save_experiment_result(config, payload, run_mode="full_pipeline"):
     }
     return save_run_folder(
         run_name=config.name,
-        run_kind="experiment",
+        run_kind=run_kind,
         data=data,
-        report_builder=format_experiment_report,
+        report_builder=report_builder or format_experiment_report,
         questions=payload["questions"],
         summary_row=experiment_summary_row(payload["summary"], run_mode),
+        run_number=run_number,
     )
 
 

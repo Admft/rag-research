@@ -64,7 +64,7 @@ def close_cached_indices(index_cache):
     index_cache.clear()
 
 
-def build_experiment_index(config, show_progress=False):
+def build_experiment_index(config, show_progress=False, qdrant_path=None):
     documents, skipped = load_raw_documents()
     if not documents:
         raise RuntimeError("No readable documents found in data/raw")
@@ -87,7 +87,7 @@ def build_experiment_index(config, show_progress=False):
         show_progress_bar=show_progress,
     )
 
-    client = QdrantClient(path=str(QDRANT_PATH))
+    client = QdrantClient(path=str(qdrant_path or QDRANT_PATH))
     if client.collection_exists(COLLECTION_NAME):
         client.delete_collection(COLLECTION_NAME)
 

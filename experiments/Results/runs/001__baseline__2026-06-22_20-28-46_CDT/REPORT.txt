@@ -36,3 +36,37 @@ PER-QUESTION
   Recall hit: yes (rank 1)
 
 ========================================================================
+CHANGELOG (runs 001–004)
+========================================================================
+
+This run (001): Retrieval-only smoke test on 2 questions before enabling
+generation and scoring. Chunk size 512, no reranker, strict_context prompt.
+
+001 → 002
+  - Mode: retrieval_only (2 questions) → full_pipeline (60 questions)
+  - Chunk size: 512 → 256 (253 → 558 index chunks)
+  - Reranker: none → bge
+  - Prompt: strict_context → strict_context_with_citations
+    (chain-of-thought planning + mandatory [Doc X] citations)
+  - Added LLM generation, Ollama-as-judge scoring, and citation scoring
+  - Result: final score 66.04, citation accuracy 38.67%
+  - Issue: planning/reasoning text leaked into scored answers
+
+002 → 003
+  - Prompt: required <scratchpad> / <answer> XML blocks (replaced free-form
+    planning); scratchpad holds reasoning, answer holds final output only
+  - Pipeline: extract_final_answer() parses <answer> for display/scoring;
+    raw_answer stored separately; new answer_parse_rate metric
+  - Retrieval config unchanged (Recall@5 98.3%, MRR@5 94.7%)
+  - Result: final score 70.53 (+4.49), citation accuracy 94.17% (+55.5 pp)
+  - Issue: 1/60 parse failure (enhancingrag_q1) — scratchpad hit
+    num_predict=2048 limit before <answer> block
+
+003 → 004
+  - Generation: num_predict 2048 → 2560 (OLLAMA_GENERATION_MAX_TOKENS)
+  - Prompt: scratchpad limited to "3–4 short bullet points maximum"
+  - Judge calls: separate OLLAMA_JUDGE_MAX_TOKENS = 1024
+  - Result: final score 74.39 (+3.86), avg latency 3.607s → 2.79s
+  - Parse rate regressed to 96.7% (2 failures: crag_q3, enhancingrag_q1)
+
+========================================================================

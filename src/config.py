@@ -7,6 +7,11 @@ RAW_DIR = PROJECT_ROOT / "data" / "raw"
 PROCESSED_DIR = PROJECT_ROOT / "data" / "processed"
 EVAL_FILE = PROJECT_ROOT / "data" / "eval" / "questions.jsonl"
 QDRANT_PATH = PROJECT_ROOT / "data" / "qdrant"
+OG_QDRANT_PATH = PROJECT_ROOT / "data" / "qdrant_og"
+
+# Original first-dev baseline (see src/run_og_baseline.py)
+OG_CHUNK_SIZE_WORDS = 120
+OG_OVERLAP_WORDS = 30
 
 RESULT_TIMEZONE = ZoneInfo("America/Chicago")
 

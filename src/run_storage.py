@@ -35,6 +35,7 @@ SUMMARY_COLUMNS = [
 ]
 
 ROUND_LABELS = {
+    "og_baseline": "Original baseline (pre-grid)",
     "baseline": "Baseline test",
     "chunk_size": "Chunk size round",
     "overlap": "Overlap round",
@@ -45,6 +46,7 @@ ROUND_LABELS = {
 }
 
 KIND_LABELS = {
+    "og_baseline": "Original baseline run",
     "experiment": "Experiment grid run",
     "build_index": "Index build",
     "evaluate_retrieval": "Retrieval evaluation",
@@ -72,8 +74,9 @@ def next_run_number():
     return max(numbers, default=0) + 1
 
 
-def make_run_folder(run_name, central_dt):
-    run_number = next_run_number()
+def make_run_folder(run_name, central_dt, run_number=None):
+    if run_number is None:
+        run_number = next_run_number()
     stamp = central_dt.strftime("%Y-%m-%d_%H-%M-%S_%Z")
     safe_name = run_name.replace("/", "-")
     folder_name = f"{run_number:03d}__{safe_name}__{stamp}"
@@ -101,9 +104,17 @@ def append_summary_row(row):
         writer.writerow(row)
 
 
-def save_run_folder(run_name, run_kind, data, report_builder, summary_row=None, questions=None):
+def save_run_folder(
+    run_name,
+    run_kind,
+    data,
+    report_builder,
+    summary_row=None,
+    questions=None,
+    run_number=None,
+):
     utc_now, central_dt = get_run_times()
-    run_dir, folder_name, run_number = make_run_folder(run_name, central_dt)
+    run_dir, folder_name, run_number = make_run_folder(run_name, central_dt, run_number=run_number)
     run_time_central = central_dt.strftime("%Y-%m-%d %H:%M:%S %Z")
 
     payload = {

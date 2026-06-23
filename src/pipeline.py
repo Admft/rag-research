@@ -31,9 +31,11 @@ def average(values):
     return sum(values) / len(values) if values else 0.0
 
 
-def run_experiment(config, questions, index=None, retrieval_only=False, show_progress=False):
+def run_experiment(config, questions, index=None, retrieval_only=False, show_progress=False, qdrant_path=None):
     if index is None:
-        index, index_stats = build_experiment_index(config, show_progress=show_progress)
+        index, index_stats = build_experiment_index(
+            config, show_progress=show_progress, qdrant_path=qdrant_path,
+        )
     else:
         index_stats = {"chunks": len(index.chunks)}
 
