@@ -9,7 +9,7 @@ STRUCTURE
 experiments/Results/
   MASTER_LOG.txt           Start here. Compares ALL runs.
   summary.csv              Spreadsheet-friendly table of all runs.
-  000-005_FULL_REPORT.txt  Baseline progression report (research write-up).
+  000-007_FULL_REPORT.txt  Baseline progression report (research write-up).
   runs/
     000__og_baseline__2026-06-22_.../
     001__baseline__2026-06-22_.../
@@ -54,7 +54,7 @@ SCORES
   Full pipeline   → higher final_score is better (0-100)
 
   Full methodology: README.md (Scoring section) and
-  000-005_FULL_REPORT.txt (section 3).
+  000-007_FULL_REPORT.txt (section 3).
 
   Retrieval (no LLM):
     Recall@k  — expected PDF in top-k? (binary per question, averaged)
@@ -71,17 +71,19 @@ SCORES
   Also reported: answer_parse_rate, avg latency.
   Recall@k and MRR@k are NOT included in final_score.
 
-BASELINE PROGRESSION (000–005)
-------------------------------
+BASELINE PROGRESSION (000–007)
+-------------------------------
 
   000  OG baseline — chunk 120/30, no reranker, og_strict prompt
   001  Grid smoke test — retrieval-only, 2 questions
   002  First full grid baseline — chunk 256, BGE reranker, citation prompt
   003  Scratchpad/answer XML tags — citation accuracy 38% → 94%
-  004  Token budget + scratchpad brevity — best final score (74.39)
+  004  Token budget + scratchpad brevity — best llama era (74.39)
   005  Re-run of 004 config — confirms ~74 final score
+  006  v2 stack — hybrid, JSON, qwen2.5:14b, top_sentences_5 (67.08)
+  007  v2 fixes — full context + citation norm — best overall (83.22)
 
-  Details: 000-005_FULL_REPORT.txt
+  Details: 000-007_FULL_REPORT.txt
 
 REGENERATE MASTER LOG
 ---------------------

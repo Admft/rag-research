@@ -1,10 +1,10 @@
 ========================================================================
-RAG RESEARCH LAB — FULL PROGRESSION REPORT (RUNS 000–005)
+RAG RESEARCH LAB — FULL PROGRESSION REPORT (RUNS 000–007)
 ========================================================================
-Generated:  2026-06-22
+Generated:  2026-06-23
 Corpus:     12 RAG research PDFs in data/raw/
 Eval set:   60 hand-written questions (5 per paper) in data/eval/questions.jsonl
-Generator:  llama3.1:8b via Ollama (local)
+Generator:  llama3.1:8b (000–005) or qwen2.5:14b (006–007) via Ollama
 Scoring:    See section 3 (retrieval metrics + LLM judge + citation parser)
 Timezone:   All run timestamps in Central Time (America/Chicago)
 
@@ -14,24 +14,22 @@ Timezone:   All run timestamps in Central Time (America/Chicago)
 
 This report documents the complete evolution of the local RAG research
 pipeline from the original first-development baseline (run 000) through
-five iterations of the experiment-grid baseline (runs 001–005).
+seven baseline iterations (runs 001–007).
 
-The central finding is that retrieval settings stabilized early (98.3%
-Recall@5 across all full 60-question runs), while end-to-end quality was
-dominated by generation and output-structure changes—not retrieval tuning.
+Runs 000–005 established the llama3.1:8b grid with XML scratchpad/answer
+tags (best: 004/005 at ~74 final score). Runs 006–007 introduced the v2
+stack: hybrid retrieval, JSON schema output, and qwen2.5:14b.
 
-The largest single improvement was introducing <scratchpad>/<answer> XML
-tags (002 → 003), which raised citation accuracy from 38.7% to 94.2% and
-pushed the weighted final score above 70 for the first time.
+The largest llama-era gain was <scratchpad>/<answer> isolation (002→003):
+citation accuracy 38.7% → 94.2%, final score above 70.
 
-The best full-pipeline result to date is run 004 (final score 74.39).
-Run 005 was an identical-config re-run confirming that score is stable
-within ~0.4 points of run-to-run LLM variance.
+The largest overall gain was run 007 (final score 83.22), fixing two
+regressions introduced in run 006: disabled top_sentences_5 filter and
+pinned [Doc N] citation format in the JSON schema + normalizer.
 
-Run 000 (OG baseline) scores 57.48—lower than the grid baselines—not
-because retrieval failed, but because it uses a simpler prompt with no
-citation format, no reranker, and smaller chunks that trade rank precision
-for index granularity.
+Run 007 achieves 100% Recall@5 (selfrag_q1 fixed via hybrid + BM25
+normalization), 100% answer parse rate (JSON schema), and beats the
+previous ceiling (004: 74.39) by +8.83 points.
 
 ========================================================================
 2. RUN INDEX
@@ -45,6 +43,8 @@ Run   Folder                                      Mode            N    Notes
 003   003__baseline__2026-06-22_22-43-46_CDT      full_pipeline   60   Scratchpad/answer tags
 004   004__baseline__2026-06-22_22-51-27_CDT      full_pipeline   60   Token budget + brevity fix
 005   005__baseline__2026-06-22_23-04-09_CDT      full_pipeline   60   Re-run of 004 config
+006   006__baseline__2026-06-23_00-38-23_CDT      full_pipeline   60   v2 stack (3 changes at once)
+007   007__baseline__2026-06-23_01-10-54_CDT      full_pipeline   60   v2 fixes — best run
 
 (A partial 000 retrieval-only smoke test on 2 questions also exists:
  000__og_baseline__2026-06-22_23-19-35_CDT — excluded from score tables.)
@@ -55,8 +55,9 @@ Run   Folder                                      Mode            N    Notes
 
 Source code: src/scoring.py, src/pipeline.py, src/prompts.py
 
-All full-pipeline runs (000, 002–005) use the same scoring pipeline unless
-noted. Run 001 is retrieval-only and has no final_score.
+All full-pipeline runs use the same scoring pipeline unless noted.
+Runs 006–007 use qwen2.5:14b for both generation and judging.
+Run 001 is retrieval-only and has no final_score.
 
 ------------------------------------------------------------------------
 3.1 Retrieval metrics (Recall@k, MRR@k)
@@ -85,7 +86,7 @@ NOT weighted into it. A run can have excellent retrieval and poor generation.
 ------------------------------------------------------------------------
 
   1. Retrieve top-k chunks
-  2. Generate answer (llama3.1:8b via Ollama)
+  2. Generate answer (llama3.1:8b or qwen2.5:14b via Ollama)
   3. Parse answer text for scoring
   4. LLM judge → four sub-scores (0–100 each)
   5. Citation parser → citation_accuracy (0–100)
@@ -96,6 +97,12 @@ Latency in REPORT.txt is retrieve + generate + judge wall-clock time.
 ------------------------------------------------------------------------
 3.3 Answer parsing (before scoring)
 ------------------------------------------------------------------------
+
+Runs 006–007 (strict_context_json):
+  • Ollama JSON schema enforces scratchpad + answer + citations keys
+  • parse_generation_response() extracts answer; normalize_citations()
+    rewrites [Document N], [N] → [Doc N]
+  • answer_parse_rate = 100% in both runs (no token-budget cutoffs)
 
 Runs 003–005 (strict_context_with_citations):
   • Only text inside <answer>...</answer> is scored
@@ -114,8 +121,8 @@ Run 002:
 3.4 LLM judge (four metrics, 0–100 each)
 ------------------------------------------------------------------------
 
-Model: same as generation (llama3.1:8b), Ollama API with format: json.
-Token budget: OLLAMA_JUDGE_MAX_TOKENS = 1024 (src/config.py).
+Model: llama3.1:8b (000, 002–005) or qwen2.5:14b (006–007), Ollama JSON mode.
+Runs 006+ use config.judge (separate from generator).
 
 The judge prompt includes:
   • question, expected_answer, expected_source
@@ -194,7 +201,7 @@ Weights (SCORE_WEIGHTS in src/scoring.py):
   Context recall       — judge: chunks contain needed information
   Context precision    — judge: chunks are on-topic
   Citation accuracy    — parser: [Doc X] format and source alignment
-  Answer parse rate    — pipeline: <answer> block extracted (003–005)
+  Answer parse rate    — pipeline: <answer> block (003–005) or JSON parse (006–007)
   Recall@5 / MRR@5    — retrieval only (see 3.1)
   Avg latency          — seconds per question (retrieve+generate+judge)
 
@@ -202,29 +209,33 @@ Weights (SCORE_WEIGHTS in src/scoring.py):
 4. CONFIGURATION COMPARISON
 ========================================================================
 
-Setting              000 OG        001           002–005 Grid
--------------------  ------------  ------------  ---------------------------
-Chunk size (words)   120           512           256
-Overlap (words)      30            50            50
-Index chunks         1,273         253*          558
-Top-k                5             5             5
-Retriever            dense         dense         dense
-Embedding            bge-small     bge-small     bge-small
-Reranker             none          none          bge
-Query transform      none          none          none
-Prompt               og_strict     strict_ctx    strict_ctx_with_citations
-Context filter       none          none          none
-Qdrant path          qdrant_og     qdrant        qdrant
-Generator            llama3.1:8b   —             llama3.1:8b
+Setting              000 OG   001      002–005        006–007 v2
+-------------------  -------  -------  -------------  ------------------
+Chunk size (words)   120      512      256            256
+Overlap (words)      30       50       50             50
+Index chunks         1,273    253*     558            558
+Top-k                5        5        5              5
+Retriever            dense    dense    dense          hybrid
+Embedding            bge-sm   bge-sm   bge-sm         bge-sm
+Reranker             none     none     bge            bge
+Query transform      none     none     none           none
+Prompt               og       strict   strict_ctx_    strict_context_json
+                              _ctx     with_citations
+Context filter       none     none     none           top_sent_5 → none†
+Qdrant path          qdrant_og qdrant  qdrant         qdrant
+Generator            llama8b  —        llama8b        qwen2.5:14b
+Judge                —        —        llama8b        qwen2.5:14b
+
+† Run 006 used top_sentences_5; run 007 disabled it (context_filter: none).
 
 * 001 used chunk 512 but only 2 questions; index size not representative.
 
 Prompt semantics:
-  og_strict           — "Answer using ONLY the provided context. Say
-                        'I do not know' if insufficient." No [Doc X] cites.
-  strict_context      — Grounded answer + citation rules (001 config only).
-  strict_context_     — CoT planning (002) then <scratchpad>/<answer>
-  with_citations        blocks (003–005); mandatory [Doc X] per claim.
+  og_strict              — "I do not know" fallback; no [Doc X] cites.
+  strict_context         — Grounded answer + citation rules (001 only).
+  strict_context_with_   — XML <scratchpad>/<answer> (003–005).
+  citations
+  strict_context_json    — JSON schema output (006–007).
 
 Scoring methodology: see section 3.
 
@@ -232,18 +243,18 @@ Scoring methodology: see section 3.
 5. RESULTS TABLE (60-QUESTION FULL PIPELINE RUNS)
 ========================================================================
 
-Metric                  000      002      003      004      005     Best
-----------------------  -------  -------  -------  -------  -------  ----
-Final score              57.48   66.04   70.53   74.39   74.03   004
-Answer correctness       55.33   69.75   64.95   70.08   71.65   005
-Faithfulness             64.17   66.53   68.83   76.55   69.55   004
-Context recall           77.42   69.80   71.63   72.17   74.28   000
-Context precision        65.88   71.63   68.43   69.70   72.58   005
-Citation accuracy         0.00   38.67   94.17   93.17   94.50   005
-Answer parse rate       100.0%      —    98.3%   96.7%   98.3%   000
-Recall@5                 98.3%   98.3%   98.3%   98.3%   98.3%   tie
-MRR@5                    90.6%   94.7%   94.7%   94.7%   94.7%   002–005
-Avg latency (s)           1.47    3.76    3.61    2.79    3.11    004
+Metric                  000    002    003    004    005    006    007   Best
+----------------------  -----  -----  -----  -----  -----  -----  -----  ----
+Final score              57.48  66.04  70.53  74.39  74.03  67.08  83.22  007
+Answer correctness       55.33  69.75  64.95  70.08  71.65  64.50  80.08  007
+Faithfulness             64.17  66.53  68.83  76.55  69.55  73.33  84.25  007
+Context recall           77.42  69.80  71.63  72.17  74.28  63.25  87.67  007
+Context precision        65.88  71.63  68.43  69.70  72.58  68.92  74.67  007
+Citation accuracy         0.00  38.67  94.17  93.17  94.50  66.33  91.33  005
+Answer parse rate       100.0%    —   98.3%  96.7%  98.3%  100.0% 100.0% 006/007
+Recall@5                 98.3%  98.3%  98.3%  98.3%  98.3%  100.0% 100.0% 006/007
+MRR@5                    90.6%  94.7%  94.7%  94.7%  94.7%  94.9%  94.9%  006/007
+Avg latency (s)           1.47   3.76   3.61   2.79   3.11   7.48  12.03  000
 
 Retrieval-only reference (001, 2 questions, chunk 512):
   Recall@5 100.0% | MRR@5 100.0% | latency 0.014s
@@ -333,7 +344,7 @@ Code/prompt changes:
   • No retrieval or reranker changes
 
 What went UP:
-  • Final score:        70.53 → 74.39  (+3.86)  — best run to date
+  • Final score:        70.53 → 74.39  (+3.86)  — best llama-era run
   • Answer correctness: 64.95 → 70.08  (+5.13)
   • Faithfulness:       68.83 → 76.55  (+7.72)
   • Latency:             3.61s → 2.79s  (−23%)
@@ -370,24 +381,90 @@ Parse failure (1/60): rgb_q4 — scratchpad without closing tag or answer block.
 
 Conclusion: runs 004 and 005 are statistically tied at ~74 final score.
 Neither parse-rate nor faithfulness is stable enough to declare a winner;
-both configs are the same.
+both configs are the same. This ~74 ceiling held until run 007.
+
+------------------------------------------------------------------------
+005 → 006  (v2 stack: hybrid + JSON + qwen2.5:14b + sentence filter)
+------------------------------------------------------------------------
+
+Code/config changes (stacked — three major upgrades at once):
+  • Retriever: dense → hybrid (BGE dense + BM25 with lexical normalization)
+  • Prompt: strict_context_with_citations (XML) → strict_context_json
+    (Ollama JSON schema: scratchpad, answer, citations keys)
+  • Context filter: none → top_sentences_5 (first 5 sentences per chunk)
+  • Generator + judge: llama3.1:8b → qwen2.5:14b (separate judge field)
+  • Retrieval: rerank pool 10 → 25; normalize_for_lexical() for PDF spacing
+  • Reliability: Ollama 3× retry; embed GPU offload; 600s/300s timeouts
+
+What went UP (005 → 006):
+  • Faithfulness:       69.55 → 73.33  (+3.78)
+  • Answer parse rate:  98.3% → 100.0%  (+1.7 pp)  — JSON schema
+  • Recall@5:           98.3% → 100.0%  (+1.7 pp)  — selfrag_q1 fixed
+  • MRR@5:              94.7% → 94.9%   (+0.2 pp)
+
+What went DOWN (005 → 006):
+  • Final score:        74.03 → 67.08  (−6.95)
+  • Answer correctness: 71.65 → 64.50  (−7.15)
+  • Context recall:     74.28 → 63.25  (−11.03)  — sentence filter
+  • Citation accuracy:  94.50 → 66.33  (−28.17)  — JSON cite variants
+  • Latency:             3.11s → 7.48s   (+141%)  — 14B model
+
+Diagnosis: retrieval improved (100% Recall@5) but end-to-end score dropped
+because (1) top_sentences_5 stripped context before judge (~506 vs ~1471
+avg words), hurting context recall; (2) qwen JSON output used "[Document N]"
+variants the citation parser missed — 19/60 questions at 0% citation vs 1/60
+in 005.
+
+------------------------------------------------------------------------
+006 → 007  (v2 fixes: full context + citation format lock-in)
+------------------------------------------------------------------------
+
+Code/config changes (targeted fixes for 006 regressions):
+  • Context filter: top_sentences_5 → none (full chunk text to gen + judge)
+  • JSON schema: explicit citations array; CRITICAL [Doc N] instruction
+  • Post-process: normalize_citations() rewrites [Document N], [N] → [Doc N]
+  • grid.json baseline updated to match run 007 stack
+
+What went UP (006 → 007):
+  • Final score:        67.08 → 83.22  (+16.14)  — best run overall
+  • Answer correctness: 64.50 → 80.08  (+15.58)
+  • Faithfulness:       73.33 → 84.25  (+10.92)
+  • Context recall:     63.25 → 87.67  (+24.42)  — full context restored
+  • Context precision:  68.92 → 74.67  (+5.75)
+  • Citation accuracy:  66.33 → 91.33  (+25.00)  — 19→4 zero-cite Qs
+  • Recall@5:           100.0% (held)
+  • Answer parse rate:  100.0% (held)
+
+What went DOWN (006 → 007):
+  • Latency:             7.48s → 12.03s  (+61%)  — longer answers + context
+
+Conclusion: run 007 proves the v2 stack (hybrid + JSON + qwen2.5:14b) beats
+the llama3.1 XML baseline by +9.2 final score vs run 004, once context
+filtering and citation normalization are corrected. Hybrid retrieval and
+BM25 normalization remain; selfrag_q1 stays at rank 1.
 
 ========================================================================
 7. RETRIEVAL STABILITY
 ========================================================================
 
-Across all 60-question runs (000, 002–005), Recall@5 is identical at
-98.3% (59/60 hits). The sole consistent miss is selfrag_q1 on every run—
-a fixed retrieval failure independent of chunk size, reranker, or prompt.
+Runs 000–005: Recall@5 locked at 98.3% (59/60). The sole miss was
+selfrag_q1 on every run — dense-only retrieval could not surface the
+correct chunk despite 1,273 OG chunks or 558 grid chunks.
 
-MRR@5 splits into two bands:
+Runs 006–007: Recall@5 100.0% (60/60). Hybrid retrieval + BM25 lexical
+normalization (normalize_for_lexical: "SELF - RAG" → "self-rag") fixed
+selfrag_q1 at rank 1 without changing chunk size or top_k.
+
+MRR@5 bands:
   • 000 OG (chunk 120, no reranker): 90.6%
-  • Grid baselines (chunk 256, BGE reranker): 94.7%
+  • Grid llama runs (chunk 256, BGE reranker, dense): 94.7%
+  • v2 hybrid runs (006–007): 94.9%
 
 The OG baseline's smaller chunks create a larger index (1,273 vs 558
 chunks) but without reranking the correct source ranks lower on average.
 Adding the BGE reranker in run 002 recovered ~4 percentage points of MRR
-without changing Recall@5—reranking improves rank position, not recall.
+without changing Recall@5. Hybrid retrieval in 006 added the final 1.7 pp
+of recall without further MRR gain.
 
 ========================================================================
 8. CITATION ACCURACY AS A DIAGNOSTIC
@@ -395,16 +472,18 @@ without changing Recall@5—reranking improves rank position, not recall.
 
 Citation accuracy reveals prompt-structure quality more than retrieval:
 
-  000:   0.0%   — og_strict has no [Doc X] requirement; metric is
-                  structurally zero regardless of answer quality
+  000:   0.0%   — og_strict has no [Doc X] requirement
   002:  38.7%   — citation rules present but CoT leaks into output
   003:  94.2%   — scratchpad/answer isolation fixes format compliance
   004:  93.2%   — stable post-fix
-  005:  94.5%   — stable post-fix
+  005:  94.5%   — stable post-fix (llama XML era peak)
+  006:  66.3%   — JSON cite variants ([Document N]) not parsed
+  007:  91.3%   — normalize_citations() + schema fix
 
-This metric is 10% of the final score. The 002→003 jump alone contributed
-roughly +5.5 points to the weighted final score—matching the observed +4.5
-overall improvement once other metrics moved in mixed directions.
+The 002→003 jump contributed ~+5.5 weighted final-score points. The
+006→007 citation recovery (+25 pp, 19→4 zero-cite questions) contributed
+~+2.5 points; context recall recovery (+24 pp) contributed ~+3.6 points.
+Together these drove the +16.1 final-score jump from 006 to 007.
 
 ========================================================================
 9. LATENCY
@@ -412,15 +491,17 @@ overall improvement once other metrics moved in mixed directions.
 
 Per-question average latency (retrieve + generate + judge):
 
-  000:  1.47s   — no reranker; simpler prompt; no scratchpad overhead
+  000:  1.47s   — no reranker; simpler prompt
   002:  3.76s   — reranker + citation CoT + judge
   003:  3.61s
-  004:  2.79s   — fastest grid run (shorter generations from brevity rule)
+  004:  2.79s   — fastest llama grid run
   005:  3.11s
+  006:  7.48s   — qwen2.5:14b + hybrid fetch pool
+  007: 12.03s   — full chunks + longer qwen answers
 
-OG baseline is ~2× faster than grid baselines because it skips cross-
-encoder reranking and uses a shorter generation prompt. Quality trade-off
-is substantial (−17 points final score vs run 004).
+OG baseline is ~8× faster than run 007 but scores 25.7 points lower.
+The v2 stack trades latency for quality: hybrid retrieval, 14B generation,
+and full-context judging roughly triple grid latency vs llama3.1:8b.
 
 ========================================================================
 10. CODEBASE EVOLUTION (WHAT CHANGED IN SOFTWARE)
@@ -450,73 +531,97 @@ Phase 3 — Generation reliability (runs 004–005):
   • OLLAMA_JUDGE_MAX_TOKENS = 1024
   • Scratchpad brevity constraint (3–4 bullets)
 
+Phase 4 — v2 stack (run 006):
+  • Hybrid retrieval (dense + BM25) in retrievers.py / indexing.py
+  • strict_context_json prompt + GENERATION_RESPONSE_SCHEMA in prompts.py
+  • qwen2.5:14b generator and judge (config.py, experiment_config.judge)
+  • top_sentences_5 context filter
+  • normalize_for_lexical() in chunking.py for BM25 PDF artifacts
+  • Larger rerank pool, Ollama retries, GPU embed offload, extended timeouts
+
+Phase 5 — v2 fixes (run 007):
+  • context_filter: none in grid.json (full chunk context)
+  • Citations array in JSON schema; normalize_citations() post-processor
+  • parse_generation_response() for structured JSON extraction
+  • filter_top10 added to grid for future ablation
+
 ========================================================================
 11. KNOWN FAILURE MODES
 ========================================================================
 
-Retrieval (all runs):
-  • selfrag_q1 — expected source never in top 5 (1/60 fixed miss)
+Retrieval:
+  • selfrag_q1 — missed in runs 000–005; fixed in 006+ via hybrid + BM25 norm
 
-Parse failures (scratchpad/answer runs only):
+Parse failures (XML scratchpad runs 003–005):
   • 003: enhancingrag_q1
   • 004: crag_q3, enhancingrag_q1
   • 005: rgb_q4
 
-Pattern: complex multi-factor questions trigger verbose scratchpads that
-consume the generation token budget before the <answer> block is written.
-Mitigations attempted (003→004): +512 tokens, brevity rule. Partially
-effective (005 parse rate recovered to 98.3%) but not eliminated.
+Runs 006–007: 100% parse rate (JSON schema eliminates token-budget cutoffs).
 
-Judge reliability:
-  • OG full run initially hit Ollama HTTP 500 during judge calls when GPU
-    was contended (embedding model + llama3.1:8b). Retry succeeded.
-  • Faithfulness swings ±7 points between 004 and 005 with identical config.
+Context filtering (run 006 only):
+  • top_sentences_5 reduced judge-visible context ~⅔, crushing context recall
+
+Citation format (run 006):
+  • qwen JSON used "[Document N]" variants; parser expected "[Doc N]" only
+  • Fixed in 007 via schema instruction + normalize_citations()
+
+Judge / infra reliability:
+  • OG run 000 hit Ollama HTTP 500 under GPU contention; retries added in v2
+  • Faithfulness swings ±7 points between 004 and 005 (identical config)
+  • qwen2.5:14b needs 600s generation timeout on complex questions
 
 ========================================================================
 12. RECOMMENDATIONS FOR THE RESEARCH PAPER
 ========================================================================
 
-1. Report run 004 (or the 004/005 average) as the current grid baseline:
-   final score ~74.2, Recall@5 98.3%, citation accuracy ~94%.
+1. Report run 007 as the current best baseline:
+   final score 83.22, Recall@5 100%, citation accuracy 91.3%.
 
-2. Report run 000 as the "naive baseline" anchor: documents the cost of
-   skipping reranking and structured citation output (−17 final score).
+2. Report run 004/005 (~74) as the llama3.1:8b XML-era ceiling for
+   ablation comparison when isolating retrieval changes.
 
-3. Treat run 001 as infrastructure validation, not a scored experiment.
+3. Report run 000 as the "naive baseline" anchor: documents the cost of
+   skipping reranking and structured citation output (−25.7 vs 007).
 
-4. Emphasize the 002→003 ablation in the paper's main contribution table:
-   same retrieval, +55 pp citation accuracy, +4.5 final score—purely from
-   output-structure engineering.
+4. Treat run 001 as infrastructure validation, not a scored experiment.
 
-5. Note that retrieval saturated at 98.3% Recall@5 before generation
-   tuning began; further gains require generation/prompt work or fixing
-   the selfrag_q1 retrieval miss.
+5. Emphasize two ablations in the paper:
+   • 002→003: output-structure engineering (+55 pp citation, +4.5 score)
+   • 006→007: context filter + citation normalization (+16.1 score)
 
-6. For reproducibility, cite exact folders:
-   • OG:  000__og_baseline__2026-06-22_23-40-42_CDT
-   • Best grid: 004__baseline__2026-06-22_22-51-27_CDT
+6. Note retrieval evolution: 98.3% Recall@5 (dense) → 100% (hybrid);
+   selfrag_q1 fixed without chunk-size changes.
+
+7. For reproducibility, cite exact folders:
+   • OG:     000__og_baseline__2026-06-22_23-40-42_CDT
+   • Best:   007__baseline__2026-06-23_01-10-54_CDT
+   • Llama:  004__baseline__2026-06-22_22-51-27_CDT
 
 ========================================================================
 13. CONCLUSION
 ========================================================================
 
-Over six recorded runs (000–005), the pipeline evolved from a minimal
-local RAG prototype to a structured evaluation harness with isolated
-reasoning, mandatory citations, and reproducible reporting.
+Over eight recorded runs (000–007), the pipeline evolved from a minimal
+local RAG prototype to a hybrid-retrieval evaluation harness with JSON-
+structured generation, mandatory citations, and reproducible reporting.
 
-Retrieval configuration (chunk 256, overlap 50, dense + BGE reranker,
-top_k 5, bge-small-en-v1.5) locked in by run 002 and did not need further
-tuning for this corpus. The research leverage shifted entirely to generation
-prompt design and output parsing.
+The llama3.1:8b era (002–005) locked retrieval at 98.3% Recall@5 with
+chunk 256 + BGE reranker + dense search, then pushed the final score from
+66.04 → ~74 via XML scratchpad isolation and token-budget tuning.
 
-The weighted final score improved 57.48 (OG) → 66.04 (002) → 70.53 (003)
-→ 74.39 (004), a +16.9 point total gain. The single largest step was not
-chunking or reranking—it was separating the LLM's reasoning scratchpad from
-its scored answer block.
+The v2 era (006–007) swapped in hybrid retrieval, qwen2.5:14b, and JSON
+schema output. Run 006 regressed to 67.08 when stacked with top_sentences_5
+and loose citation formatting. Run 007 recovered and surpassed the llama
+ceiling at 83.22 by restoring full context and normalizing [Doc N] cites.
 
-Next experiments (per grid.json) should vary one retrieval variable at a
-time against the run 004/005 baseline, now that generation output structure
-is stable enough to attribute retrieval changes cleanly.
+Total gain OG → best: 57.48 → 83.22 (+25.7 points). The two largest steps:
+(1) 002→003 output isolation (+4.5), (2) 006→007 context + citation fixes
+(+16.1). Hybrid retrieval fixed the last retrieval miss without MRR loss.
+
+Next experiments (per grid.json) should vary one variable at a time against
+the run 007 baseline: query_transform (HyDE), embedding (bge-large), or
+context_filter ablations (filter_top10). Do not stack changes.
 
 ========================================================================
 END OF REPORT

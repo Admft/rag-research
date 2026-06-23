@@ -30,7 +30,7 @@ python src/run_experiments.py --round chunk_size
 |---------------|------------|
 | `MASTER_LOG.txt` | Compare all runs — **start here** |
 | `summary.csv` | One row per run for spreadsheets |
-| `000-005_FULL_REPORT.txt` | Research report on baseline progression |
+| `000-007_FULL_REPORT.txt` | Research report on baseline progression |
 | `runs/000__og_baseline__.../` | OG baseline run |
 | `runs/001__baseline__.../` | Grid runs |
 | `runs/.../REPORT.txt` | Human-readable report for that run |
@@ -70,7 +70,7 @@ Recall@k / MRR@k are reported separately and are **not** part of `final_score`.
 | Generator | `qwen2.5:14b` |
 | Judge | `qwen2.5:14b` (separate from generator) |
 
-Retrieval saturated at 98.3% Recall@5 by run 002; later gains came from prompt/output structure (see `000-005_FULL_REPORT.txt`).
+Retrieval reached 100% Recall@5 by run 006 (hybrid); end-to-end gains came from prompt/output structure and context filtering (see `000-007_FULL_REPORT.txt`).
 
 ## Config
 

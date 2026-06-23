@@ -397,3 +397,78 @@ PER-QUESTION
   Answer: The knowledge base used in the RAG experiments is Wikipedia Vital Articles, which includes articles in French and German for multilingual settings [Doc 3].
 
 ========================================================================
+RUN 007 NOTES (vs run 006)
+========================================================================
+
+This run (007): Targeted fixes for the two regressions introduced in run
+006. Same 60 questions; v2 stack retained (hybrid, JSON, qwen2.5:14b).
+
+STACK (what changed from 006)
+----------------------------------------
+  Context filter:   top_sentences_5 → none (full chunk text to gen + judge)
+  JSON schema:      added citations array; CRITICAL [Doc N] instruction in
+                    strict_context_json prompt (src/prompts.py)
+  Post-process:     normalize_citations() rewrites [Document N], [N],
+                    bare numbers → [Doc N] before scoring
+  grid.json:        baseline + best_full_pipeline updated to match 007
+  Unchanged:        hybrid retrieval, BM25 normalization, chunk 256/50,
+                    top_k 5, BGE reranker, qwen2.5:14b gen + judge
+
+SCORES: 007 vs 006
+----------------------------------------
+  Final score:          67.08 → 83.22  (+16.14)  ← best run overall
+  Answer correctness:   64.50 → 80.08  (+15.58)
+  Faithfulness:         73.33 → 84.25  (+10.92)
+  Context recall:       63.25 → 87.67  (+24.42)
+  Context precision:    68.92 → 74.67  (+5.75)
+  Citation accuracy:    66.33 → 91.33  (+25.00)
+  Answer parse rate:    100.0% → 100.0%  (held)
+  Recall@5:             100.0% → 100.0%  (held)
+  MRR@5:                94.9% → 94.9%   (held)
+  Avg latency:           7.48s → 12.03s  (+4.55s)
+
+SCORES: 007 vs 005 (llama XML ceiling)
+----------------------------------------
+  Final score:          74.03 → 83.22  (+9.19)
+  Answer correctness:   71.65 → 80.08  (+8.43)
+  Faithfulness:         69.55 → 84.25  (+14.70)
+  Context recall:       74.28 → 87.67  (+13.39)
+  Citation accuracy:    94.50 → 91.33  (−3.17)
+  Recall@5:             98.3% → 100.0%  (+1.7 pp)
+  Avg latency:           3.11s → 12.03s  (+8.92s)
+
+WHY IT SCORED HIGHER (vs 006)
+----------------------------------------
+1. Context recall (+24 pp) — disabling top_sentences_5 restored full
+   retrieved chunks to both generator and judge. Run 006 averaged ~506
+   judge-visible words; run 007 sees ~1471 again. The judge no longer
+   penalizes "insufficient context" when the answer was in sentences 6+.
+
+2. Citation accuracy (+25 pp) — zero-cite questions dropped 19/60 → 4/60.
+   normalize_citations() plus explicit JSON schema instructions fixed
+   "[Document N]" and "[N]" variants that the parser missed in 006.
+
+3. Answer correctness (+16 pp) — fuller context lets qwen2.5:14b produce
+   answers closer to hand-written expected answers. Biggest recoveries:
+   enhancingrag_q5, rgb_q3, queryrewrite_q1 (all were large drops in 006).
+
+4. Retrieval held — Recall@5 and MRR unchanged at 100% / 94.9%. selfrag_q1
+   remains rank 1 from hybrid + BM25 normalization introduced in 006.
+
+WHAT COST LATENCY
+----------------------------------------
+  • Full chunks (~3× more context tokens per question vs 006 filter)
+  • Longer qwen answers with inline [Doc N] citations
+  • Same 14B model; no retrieval or reranker changes
+
+CURRENT BASELINE
+----------------------------------------
+  Run 007 is the canonical baseline in experiments/grid.json.
+  Reproduce: python src/run_experiments.py --run baseline
+
+  Next ablations (one variable at a time vs 007):
+    --round query_transform   (HyDE)
+    --round embedding         (bge-large)
+    context_filter: filter_top10  (already in grid for future runs)
+
+========================================================================

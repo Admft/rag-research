@@ -16,7 +16,7 @@ All run output lives in **`experiments/Results/`**:
 experiments/Results/
   MASTER_LOG.txt              ← compare all runs
   summary.csv                 ← spreadsheet table
-  000-005_FULL_REPORT.txt     ← progression report (runs 000–005)
+  000-007_FULL_REPORT.txt     ← progression report (runs 000–007)
   runs/
     000__og_baseline__.../      ← original first-dev baseline
     001__baseline__.../        ← grid smoke test (retrieval-only)
@@ -145,7 +145,7 @@ Reported as 0–100, rounded to two decimal places. Per-question `final_score` v
 
 Retrieval Recall@k and MRR@k are reported separately. They are **not** folded into `final_score` — you can have 98.3% Recall@5 and a low final score if generation or citations fail.
 
-## Baseline progression (runs 000–005)
+## Baseline progression (runs 000–007)
 
 | Run | What changed | Final score |
 |-----|--------------|-------------|
@@ -153,10 +153,12 @@ Retrieval Recall@k and MRR@k are reported separately. They are **not** folded in
 | 001 | Grid smoke test, retrieval-only, 2 questions | — |
 | 002 | First full grid baseline (256, BGE reranker, citation prompt) | 66.04 |
 | 003 | `<scratchpad>` / `<answer>` output isolation | 70.53 |
-| 004 | Token budget + scratchpad brevity (**best**) | **74.39** |
+| 004 | Token budget + scratchpad brevity (best llama era) | 74.39 |
 | 005 | Identical re-run of 004 config | 74.03 |
+| 006 | v2 stack: hybrid, JSON, qwen2.5:14b, `top_sentences_5` | 67.08 |
+| 007 | v2 fixes: full context + citation normalization (**best**) | **83.22** |
 
-Full analysis: `experiments/Results/000-005_FULL_REPORT.txt`
+Full analysis: `experiments/Results/000-007_FULL_REPORT.txt`
 
 ## Failure case notes
 
