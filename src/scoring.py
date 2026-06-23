@@ -2,6 +2,8 @@ import re
 
 from llm import call_ollama, parse_json_response
 from prompts import extract_final_answer, format_context
+
+SCORE_WEIGHTS = {
     "answer_correctness": 0.35,
     "faithfulness": 0.25,
     "context_recall": 0.20,
