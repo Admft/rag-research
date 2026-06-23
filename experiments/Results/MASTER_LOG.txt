@@ -1,7 +1,7 @@
 ========================================================================
 RAG RESEARCH — MASTER LOG
 All times: Central Time (America/Chicago)
-Last updated: 2026-06-22 23:19:35 CDT
+Last updated: 2026-06-22 23:40:42 CDT
 ========================================================================
 
 WHERE THINGS LIVE
@@ -32,7 +32,18 @@ EXPERIMENT LEADERBOARDS
 ALL RUNS (newest first)
 ========================================================================
 
-#1  000__og_baseline__2026-06-22_23-19-35_CDT
+#1  000__og_baseline__2026-06-22_23-40-42_CDT
+     Name:   og_baseline
+     Type:   Original baseline run
+     Round:  Original baseline (pre-grid)
+     Mode:   Full pipeline (retrieve + generate + score)
+     Ran:    2026-06-22 23:40:42 CDT
+     Settings: chunk 120 | overlap 30 | top_k 5 | dense | reranker none
+     Scores: final 57.48 | correctness 55.33 | faithfulness 64.17 | context recall 77.42
+     Retrieval: Recall@5 98.33% | MRR@5 90.61%
+     Folder: experiments/Results/runs/000__og_baseline__2026-06-22_23-40-42_CDT/
+
+#2  000__og_baseline__2026-06-22_23-19-35_CDT
      Name:   og_baseline
      Type:   Original baseline run
      Round:  Original baseline (pre-grid)
@@ -42,7 +53,7 @@ ALL RUNS (newest first)
      Retrieval: Recall@5 100.00% | MRR@5 100.00%
      Folder: experiments/Results/runs/000__og_baseline__2026-06-22_23-19-35_CDT/
 
-#2  005__baseline__2026-06-22_23-04-09_CDT
+#3  005__baseline__2026-06-22_23-04-09_CDT
      Name:   baseline
      Type:   Experiment grid run
      Round:  Baseline test
@@ -53,7 +64,7 @@ ALL RUNS (newest first)
      Retrieval: Recall@5 98.33% | MRR@5 94.72%
      Folder: experiments/Results/runs/005__baseline__2026-06-22_23-04-09_CDT/
 
-#3  004__baseline__2026-06-22_22-51-27_CDT
+#4  004__baseline__2026-06-22_22-51-27_CDT
      Name:   baseline
      Type:   Experiment grid run
      Round:  Baseline test
@@ -64,7 +75,7 @@ ALL RUNS (newest first)
      Retrieval: Recall@5 98.33% | MRR@5 94.72%
      Folder: experiments/Results/runs/004__baseline__2026-06-22_22-51-27_CDT/
 
-#4  003__baseline__2026-06-22_22-43-46_CDT
+#5  003__baseline__2026-06-22_22-43-46_CDT
      Name:   baseline
      Type:   Experiment grid run
      Round:  Baseline test
@@ -75,7 +86,7 @@ ALL RUNS (newest first)
      Retrieval: Recall@5 98.33% | MRR@5 94.72%
      Folder: experiments/Results/runs/003__baseline__2026-06-22_22-43-46_CDT/
 
-#5  002__baseline__2026-06-22_20-51-37_CDT
+#6  002__baseline__2026-06-22_20-51-37_CDT
      Name:   baseline
      Type:   Experiment grid run
      Round:  Baseline test
@@ -86,7 +97,7 @@ ALL RUNS (newest first)
      Retrieval: Recall@5 98.33% | MRR@5 94.72%
      Folder: experiments/Results/runs/002__baseline__2026-06-22_20-51-37_CDT/
 
-#6  001__baseline__2026-06-22_20-28-46_CDT
+#7  001__baseline__2026-06-22_20-28-46_CDT
      Name:   baseline
      Type:   Experiment grid run
      Round:  Baseline test

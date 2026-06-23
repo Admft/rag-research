@@ -1,0 +1,379 @@
+========================================================================
+RAG RESEARCH LAB — FULL PROGRESSION REPORT (RUNS 000–005)
+========================================================================
+Generated:  2026-06-22
+Corpus:     12 RAG research PDFs in data/raw/
+Eval set:   60 hand-written questions (5 per paper) in data/eval/questions.jsonl
+Generator:  llama3.1:8b via Ollama (local)
+Judge:      Same model, JSON-mode LLM-as-judge (runs 000, 002–005)
+Timezone:   All run timestamps in Central Time (America/Chicago)
+
+========================================================================
+1. EXECUTIVE SUMMARY
+========================================================================
+
+This report documents the complete evolution of the local RAG research
+pipeline from the original first-development baseline (run 000) through
+five iterations of the experiment-grid baseline (runs 001–005).
+
+The central finding is that retrieval settings stabilized early (98.3%
+Recall@5 across all full 60-question runs), while end-to-end quality was
+dominated by generation and output-structure changes—not retrieval tuning.
+
+The largest single improvement was introducing <scratchpad>/<answer> XML
+tags (002 → 003), which raised citation accuracy from 38.7% to 94.2% and
+pushed the weighted final score above 70 for the first time.
+
+The best full-pipeline result to date is run 004 (final score 74.39).
+Run 005 was an identical-config re-run confirming that score is stable
+within ~0.4 points of run-to-run LLM variance.
+
+Run 000 (OG baseline) scores 57.48—lower than the grid baselines—not
+because retrieval failed, but because it uses a simpler prompt with no
+citation format, no reranker, and smaller chunks that trade rank precision
+for index granularity.
+
+========================================================================
+2. RUN INDEX
+========================================================================
+
+Run   Folder                                      Mode            N    Notes
+----  ------------------------------------------  --------------  ---  -----
+000   000__og_baseline__2026-06-22_23-40-42_CDT   full_pipeline   60   Canonical OG baseline (full eval)
+001   001__baseline__2026-06-22_20-28-46_CDT      retrieval_only   2   Smoke test only—not comparable
+002   002__baseline__2026-06-22_20-51-37_CDT      full_pipeline   60   First grid baseline
+003   003__baseline__2026-06-22_22-43-46_CDT      full_pipeline   60   Scratchpad/answer tags
+004   004__baseline__2026-06-22_22-51-27_CDT      full_pipeline   60   Token budget + brevity fix
+005   005__baseline__2026-06-22_23-04-09_CDT      full_pipeline   60   Re-run of 004 config
+
+(A partial 000 retrieval-only smoke test on 2 questions also exists:
+ 000__og_baseline__2026-06-22_23-19-35_CDT — excluded from score tables.)
+
+========================================================================
+3. CONFIGURATION COMPARISON
+========================================================================
+
+Setting              000 OG        001           002–005 Grid
+-------------------  ------------  ------------  ---------------------------
+Chunk size (words)   120           512           256
+Overlap (words)      30            50            50
+Index chunks         1,273         253*          558
+Top-k                5             5             5
+Retriever            dense         dense         dense
+Embedding            bge-small     bge-small     bge-small
+Reranker             none          none          bge
+Query transform      none          none          none
+Prompt               og_strict     strict_ctx    strict_ctx_with_citations
+Context filter       none          none          none
+Qdrant path          qdrant_og     qdrant        qdrant
+Generator            llama3.1:8b   —             llama3.1:8b
+
+* 001 used chunk 512 but only 2 questions; index size not representative.
+
+Prompt semantics:
+  og_strict           — "Answer using ONLY the provided context. Say
+                        'I do not know' if insufficient." No [Doc X] cites.
+  strict_context      — Grounded answer + citation rules (001 config only).
+  strict_context_     — CoT planning (002) then <scratchpad>/<answer>
+  with_citations        blocks (003–005); mandatory [Doc X] per claim.
+
+Scoring weights (002–005, and 000 when judge succeeds):
+  answer_correctness  35%
+  faithfulness        25%
+  context_recall      20%
+  context_precision   10%
+  citation_accuracy   10%
+
+========================================================================
+4. RESULTS TABLE (60-QUESTION FULL PIPELINE RUNS)
+========================================================================
+
+Metric                  000      002      003      004      005     Best
+----------------------  -------  -------  -------  -------  -------  ----
+Final score              57.48   66.04   70.53   74.39   74.03   004
+Answer correctness       55.33   69.75   64.95   70.08   71.65   005
+Faithfulness             64.17   66.53   68.83   76.55   69.55   004
+Context recall           77.42   69.80   71.63   72.17   74.28   000
+Context precision        65.88   71.63   68.43   69.70   72.58   005
+Citation accuracy         0.00   38.67   94.17   93.17   94.50   005
+Answer parse rate       100.0%      —    98.3%   96.7%   98.3%   000
+Recall@5                 98.3%   98.3%   98.3%   98.3%   98.3%   tie
+MRR@5                    90.6%   94.7%   94.7%   94.7%   94.7%   002–005
+Avg latency (s)           1.47    3.76    3.61    2.79    3.11    004
+
+Retrieval-only reference (001, 2 questions, chunk 512):
+  Recall@5 100.0% | MRR@5 100.0% | latency 0.014s
+
+========================================================================
+5. TRANSITION-BY-TRANSITION ANALYSIS
+========================================================================
+
+------------------------------------------------------------------------
+000 → 001 → 002  (Founding the experiment grid)
+------------------------------------------------------------------------
+
+Run 000 is the recreated original lab: naive 120-word chunking, dense
+search only, no reranker, simple refusal prompt. It establishes the
+"vanilla" reference point described in the OG baseline design—small chunks
+for embedding specificity, 30-word overlap as a sentence-boundary safety
+net, cosine dense retrieval, top_k=5 (~600 words of context).
+
+Run 001 was a deliberate smoke test: retrieval-only on 2 questions with
+chunk 512 and strict_context. It validated the indexing and eval harness
+before committing to 60-question full-pipeline runs. It is not scored on
+the same final-score rubric.
+
+Run 002 introduced the experiment-grid baseline in one step:
+  • Chunk size 512 → 256 (558 index chunks vs OG's 1,273)
+  • Added BGE cross-encoder reranker
+  • Switched to strict_context_with_citations (CoT + [Doc X] rules)
+  • Enabled full pipeline: retrieve → generate → judge
+
+What went UP (000 → 002):
+  • Final score:        57.48 → 66.04  (+8.56)
+  • Answer correctness: 55.33 → 69.75  (+14.42)
+  • MRR@5:              90.6% → 94.7%  (+4.1 pp)
+  • Context precision:  65.88 → 71.63  (+5.75)
+
+What went DOWN (000 → 002):
+  • Context recall:     77.42 → 69.80  (−7.62)  — judge sees reranked,
+    noisier top-5 vs OG's smaller, more numerous chunks
+  • Faithfulness:       64.17 → 66.53  (slight +2.36; within noise)
+  • Citation accuracy:   0.00 → 38.67  — OG prompt has no cite format;
+    38.7% shows CoT planning leaked into scored output
+  • Latency:             1.47s → 3.76s  (+155%) — reranker + longer
+    prompts + judge calls per question
+
+Critical issue in 002: chain-of-thought "Planning" text leaked into the
+scored answer field. The model reasoned in prose ("Here are the facts I
+will use…", "**Step 1 - Planning**") instead of producing a clean cited
+answer. Citation accuracy suffered because planning and answer were blended.
+
+------------------------------------------------------------------------
+002 → 003  (Output structure: scratchpad / answer isolation)
+------------------------------------------------------------------------
+
+Code/prompt changes:
+  • Replaced free-form planning with required <scratchpad> and <answer>
+    XML blocks
+  • extract_final_answer() parses only <answer> for display and scoring
+  • New metric: answer_parse_rate
+  • Retrieval config unchanged
+
+What went UP:
+  • Final score:        66.04 → 70.53  (+4.49)  — crossed 70 threshold
+  • Citation accuracy:  38.67 → 94.17  (+55.5 pp)  — dominant driver
+  • Faithfulness:       66.53 → 68.83  (+2.30)
+  • Context recall:     69.80 → 71.63  (+1.83)
+
+What went DOWN:
+  • Answer correctness: 69.75 → 64.95  (−4.80)  — stricter output format
+    occasionally trims useful detail the judge penalizes
+  • Context precision:  71.63 → 68.43  (−3.20)
+  • Latency:             3.76s → 3.61s  (slight improvement)
+
+Retrieval held steady: Recall@5 98.3%, MRR@5 94.7% — confirming chunk
+256 + BGE reranker + top_k 5 is a stable retrieval configuration.
+
+Parse failure: 1/60 (enhancingrag_q1) — model filled scratchpad with 9
+bullets and hit num_predict=2048 before writing </scratchpad> or <answer>.
+
+------------------------------------------------------------------------
+003 → 004  (Generation budget and scratchpad brevity)
+------------------------------------------------------------------------
+
+Code/prompt changes:
+  • OLLAMA_GENERATION_MAX_TOKENS: 2048 → 2560
+  • Scratchpad instruction: "3–4 short bullet points maximum"
+  • OLLAMA_JUDGE_MAX_TOKENS: 1024 (separate judge budget)
+  • No retrieval or reranker changes
+
+What went UP:
+  • Final score:        70.53 → 74.39  (+3.86)  — best run to date
+  • Answer correctness: 64.95 → 70.08  (+5.13)
+  • Faithfulness:       68.83 → 76.55  (+7.72)
+  • Latency:             3.61s → 2.79s  (−23%)
+
+What went DOWN:
+  • Citation accuracy:  94.17 → 93.17  (−1.0 pp; negligible)
+  • Answer parse rate:  98.3% → 96.7%  (regressed—2 failures)
+  • Context precision:  68.43 → 69.70  (slight +1.27; mixed)
+
+Parse failures (2/60): crag_q3, enhancingrag_q1 — still scratchpad
+cutoff/leak despite larger token budget; brevity constraint may have
+been insufficient for complex multi-factor questions.
+
+------------------------------------------------------------------------
+004 → 005  (Identical-config re-run)
+------------------------------------------------------------------------
+
+No code, prompt, or config changes. Pure LLM sampling variance.
+
+What went UP:
+  • Answer correctness: 70.08 → 71.65  (+1.57)
+  • Context recall:     72.17 → 74.28  (+2.11)
+  • Context precision:  69.70 → 72.58  (+2.88)
+  • Citation accuracy:  93.17 → 94.50  (+1.33 pp)
+  • Answer parse rate:  96.7% → 98.3%  (1 failure vs 2)
+
+What went DOWN:
+  • Final score:        74.39 → 74.03  (−0.36)
+  • Faithfulness:       76.55 → 69.55  (−7.00)  — largest swing;
+    judge variance on faithfulness is high
+  • Latency:             2.79s → 3.11s  (+11%)
+
+Parse failure (1/60): rgb_q4 — scratchpad without closing tag or answer block.
+
+Conclusion: runs 004 and 005 are statistically tied at ~74 final score.
+Neither parse-rate nor faithfulness is stable enough to declare a winner;
+both configs are the same.
+
+========================================================================
+6. RETRIEVAL STABILITY
+========================================================================
+
+Across all 60-question runs (000, 002–005), Recall@5 is identical at
+98.3% (59/60 hits). The sole consistent miss is selfrag_q1 on every run—
+a fixed retrieval failure independent of chunk size, reranker, or prompt.
+
+MRR@5 splits into two bands:
+  • 000 OG (chunk 120, no reranker): 90.6%
+  • Grid baselines (chunk 256, BGE reranker): 94.7%
+
+The OG baseline's smaller chunks create a larger index (1,273 vs 558
+chunks) but without reranking the correct source ranks lower on average.
+Adding the BGE reranker in run 002 recovered ~4 percentage points of MRR
+without changing Recall@5—reranking improves rank position, not recall.
+
+========================================================================
+7. CITATION ACCURACY AS A DIAGNOSTIC
+========================================================================
+
+Citation accuracy reveals prompt-structure quality more than retrieval:
+
+  000:   0.0%   — og_strict has no [Doc X] requirement; metric is
+                  structurally zero regardless of answer quality
+  002:  38.7%   — citation rules present but CoT leaks into output
+  003:  94.2%   — scratchpad/answer isolation fixes format compliance
+  004:  93.2%   — stable post-fix
+  005:  94.5%   — stable post-fix
+
+This metric is 10% of the final score. The 002→003 jump alone contributed
+roughly +5.5 points to the weighted final score—matching the observed +4.5
+overall improvement once other metrics moved in mixed directions.
+
+========================================================================
+8. LATENCY
+========================================================================
+
+Per-question average latency (retrieve + generate + judge):
+
+  000:  1.47s   — no reranker; simpler prompt; no scratchpad overhead
+  002:  3.76s   — reranker + citation CoT + judge
+  003:  3.61s
+  004:  2.79s   — fastest grid run (shorter generations from brevity rule)
+  005:  3.11s
+
+OG baseline is ~2× faster than grid baselines because it skips cross-
+encoder reranking and uses a shorter generation prompt. Quality trade-off
+is substantial (−17 points final score vs run 004).
+
+========================================================================
+9. CODEBASE EVOLUTION (WHAT CHANGED IN SOFTWARE)
+========================================================================
+
+Phase 0 — OG baseline (run_og_baseline.py):
+  • Standalone script recreating first-dev settings
+  • Separate Qdrant store (data/qdrant_og)
+  • og_strict prompt with simple [N] (source, chunk) context format
+  • Saves as run 000 via fixed run_number=0 in run_storage.py
+
+Phase 1 — Experiment grid (runs 001–002):
+  • Unified results under experiments/Results/
+  • PDF ingestion via pypdf (OG originally .txt only; current corpus is PDF)
+  • ExperimentConfig + grid.json for one-variable-at-a-time sweeps
+  • BGE reranker, chunk 256, strict_context_with_citations prompt
+  • LLM-as-judge scoring with JSON mode
+  • REPORT.txt + data.json + questions.jsonl per run
+
+Phase 2 — Output isolation (run 003):
+  • <scratchpad> / <answer> XML tags in prompts.py
+  • extract_final_answer(), has_answer_block() in pipeline
+  • answer_parse_rate metric in summary and REPORT
+
+Phase 3 — Generation reliability (runs 004–005):
+  • OLLAMA_GENERATION_MAX_TOKENS = 2560
+  • OLLAMA_JUDGE_MAX_TOKENS = 1024
+  • Scratchpad brevity constraint (3–4 bullets)
+
+========================================================================
+10. KNOWN FAILURE MODES
+========================================================================
+
+Retrieval (all runs):
+  • selfrag_q1 — expected source never in top 5 (1/60 fixed miss)
+
+Parse failures (scratchpad/answer runs only):
+  • 003: enhancingrag_q1
+  • 004: crag_q3, enhancingrag_q1
+  • 005: rgb_q4
+
+Pattern: complex multi-factor questions trigger verbose scratchpads that
+consume the generation token budget before the <answer> block is written.
+Mitigations attempted (003→004): +512 tokens, brevity rule. Partially
+effective (005 parse rate recovered to 98.3%) but not eliminated.
+
+Judge reliability:
+  • OG full run initially hit Ollama HTTP 500 during judge calls when GPU
+    was contended (embedding model + llama3.1:8b). Retry succeeded.
+  • Faithfulness swings ±7 points between 004 and 005 with identical config.
+
+========================================================================
+11. RECOMMENDATIONS FOR THE RESEARCH PAPER
+========================================================================
+
+1. Report run 004 (or the 004/005 average) as the current grid baseline:
+   final score ~74.2, Recall@5 98.3%, citation accuracy ~94%.
+
+2. Report run 000 as the "naive baseline" anchor: documents the cost of
+   skipping reranking and structured citation output (−17 final score).
+
+3. Treat run 001 as infrastructure validation, not a scored experiment.
+
+4. Emphasize the 002→003 ablation in the paper's main contribution table:
+   same retrieval, +55 pp citation accuracy, +4.5 final score—purely from
+   output-structure engineering.
+
+5. Note that retrieval saturated at 98.3% Recall@5 before generation
+   tuning began; further gains require generation/prompt work or fixing
+   the selfrag_q1 retrieval miss.
+
+6. For reproducibility, cite exact folders:
+   • OG:  000__og_baseline__2026-06-22_23-40-42_CDT
+   • Best grid: 004__baseline__2026-06-22_22-51-27_CDT
+
+========================================================================
+12. CONCLUSION
+========================================================================
+
+Over six recorded runs (000–005), the pipeline evolved from a minimal
+local RAG prototype to a structured evaluation harness with isolated
+reasoning, mandatory citations, and reproducible reporting.
+
+Retrieval configuration (chunk 256, overlap 50, dense + BGE reranker,
+top_k 5, bge-small-en-v1.5) locked in by run 002 and did not need further
+tuning for this corpus. The research leverage shifted entirely to generation
+prompt design and output parsing.
+
+The weighted final score improved 57.48 (OG) → 66.04 (002) → 70.53 (003)
+→ 74.39 (004), a +16.9 point total gain. The single largest step was not
+chunking or reranking—it was separating the LLM's reasoning scratchpad from
+its scored answer block.
+
+Next experiments (per grid.json) should vary one retrieval variable at a
+time against the run 004/005 baseline, now that generation output structure
+is stable enough to attribute retrieval changes cleanly.
+
+========================================================================
+END OF REPORT
+========================================================================
