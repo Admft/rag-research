@@ -5,7 +5,7 @@ from config import EVAL_FILE
 from experiment_config import ExperimentConfig
 from indexing import build_experiment_index
 from llm import call_ollama
-from prompts import build_generation_prompt
+from prompts import build_generation_prompt, extract_final_answer, has_answer_block
 from retrievers import Retriever
 from scoring import score_answer
 
@@ -75,7 +75,8 @@ def run_experiment(config, questions, index=None, retrieval_only=False, show_pro
         prompt_token_estimates.append(len(prompt.split()))
 
         gen_start = time.perf_counter()
-        answer, gen_latency = call_ollama(prompt, model=config.generator)
+        raw_answer, gen_latency = call_ollama(prompt, model=config.generator)
+        answer = extract_final_answer(raw_answer)
         total_latency = retrieve_latency + gen_latency
         latencies.append(total_latency)
 
@@ -83,12 +84,15 @@ def run_experiment(config, questions, index=None, retrieval_only=False, show_pro
             question=question,
             expected_answer=expected_answer,
             expected_source=expected_source,
-            answer=answer,
+            answer=raw_answer,
             retrieved=retrieved,
         )
 
         row.update({
+            "raw_answer": raw_answer,
             "answer": answer,
+            "answer_parsed": bool(answer),
+            "has_answer_block": has_answer_block(raw_answer),
             "generation_latency_s": round(gen_latency, 3),
             "total_latency_s": round(total_latency, 3),
             "metrics": metrics,
@@ -115,6 +119,7 @@ def run_experiment(config, questions, index=None, retrieval_only=False, show_pro
             "context_recall": round(average([row["metrics"]["context_recall"] for row in per_question]), 2),
             "context_precision": round(average([row["metrics"]["context_precision"] for row in per_question]), 2),
             "citation_accuracy": round(average([row["metrics"]["citation_accuracy"] for row in per_question]), 2),
+            "answer_parse_rate": round(average([1.0 if row.get("answer_parsed") else 0.0 for row in per_question]), 3),
             "avg_prompt_tokens_est": round(average(prompt_token_estimates), 0),
         })
 

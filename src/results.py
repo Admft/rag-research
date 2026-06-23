@@ -1,59 +1,24 @@
 import json
-from datetime import datetime, timezone
 
 from config import (
     CHUNK_SIZE_WORDS,
     DATASET_STAGE,
+    EVAL_TOP_KS,
     OVERLAP_WORDS,
-    RESULTS_DIR,
-    RESULT_TIMEZONE,
     TARGET_DOC_COUNT_MAX,
     TARGET_DOC_COUNT_MIN,
     TARGET_QUESTION_COUNT,
 )
-
-
-RUN_CATEGORIES = {
-    "build_index": {
-        "label": "build",
-        "category": "baseline",
-        "subcategory": "retrieval",
-        "title": "Baseline retrieval",
-    },
-    "evaluate_retrieval": {
-        "label": "eval",
-        "category": "baseline",
-        "subcategory": "evaluation",
-        "title": "Baseline evaluation",
-    },
-    "generation": {
-        "label": "gen",
-        "category": "baseline",
-        "subcategory": "generation",
-        "title": "Baseline generation",
-    },
-}
-
-
-def run_results_dir(run_type):
-    info = RUN_CATEGORIES[run_type]
-    return RESULTS_DIR / info["category"] / info["subcategory"]
-
-
-def latest_result_path(run_type, extension="json"):
-    return run_results_dir(run_type) / f"latest.{extension}"
+from run_storage import get_run_times, load_latest_build_run, save_run_folder
 
 
 def build_config_snapshot():
     from config import (
         COLLECTION_NAME,
-        DATASET_STAGE,
         DISTANCE,
         EMBEDDING_MODEL_NAME,
-        EVAL_TOP_KS,
         OLLAMA_MODEL,
         QDRANT_PATH,
-        TARGET_QUESTION_COUNT,
     )
 
     step_words = CHUNK_SIZE_WORDS - OVERLAP_WORDS
@@ -71,48 +36,6 @@ def build_config_snapshot():
         "qdrant_path": str(QDRANT_PATH),
         "eval_top_ks": EVAL_TOP_KS,
     }
-
-
-def get_run_times():
-    utc_now = datetime.now(timezone.utc)
-    central_dt = utc_now.astimezone(RESULT_TIMEZONE)
-    return utc_now, central_dt
-
-
-def config_slug(settings=None):
-    settings = settings or build_config_snapshot()
-    return f"chunk{settings['chunk_size_words']}-overlap{settings['overlap_words']}"
-
-
-def format_central_timestamp(central_dt):
-    tz_abbr = central_dt.tzname() or "CT"
-    return central_dt.strftime(f"%Y-%m-%d_%H-%M-%S_{tz_abbr}")
-
-
-def build_run_basename(run_type, central_dt, settings=None, metrics=None):
-    label = RUN_CATEGORIES[run_type]["label"]
-    parts = [
-        label,
-        config_slug(settings),
-    ]
-
-    if run_type == "evaluate_retrieval" and metrics:
-        recall_1 = metrics.get("1", {}).get("recall")
-        mrr_1 = metrics.get("1", {}).get("mrr")
-        if recall_1 is not None and mrr_1 is not None:
-            parts.append(f"r1-{recall_1:.3f}_mrr1-{mrr_1:.3f}")
-
-    parts.append(format_central_timestamp(central_dt))
-    return "__".join(parts)
-
-
-def load_latest_build_run():
-    latest_path = latest_result_path("build_index")
-    if not latest_path.exists():
-        return None
-
-    with latest_path.open("r", encoding="utf-8") as f:
-        return json.load(f)
 
 
 def format_settings_block(settings):
@@ -141,9 +64,10 @@ def format_build_report(payload):
     stats = payload["build_stats"]
     lines = [
         "=" * 72,
-        "INDEX BUILD RESULTS",
+        "INDEX BUILD",
         "=" * 72,
-        f"Run time: {payload['run_time_central']}",
+        f"Run folder: {payload['run_folder']}",
+        f"Run time:   {payload['run_time_central']}",
         "",
         format_settings_block(settings),
         "",
@@ -164,34 +88,21 @@ def format_build_report(payload):
             f"(avg {source['avg_words']:.1f} words)"
         )
 
-    lines.extend([
-        "",
-        "CHUNKS CREATED",
-        "-" * 40,
-    ])
-
+    lines.extend(["", "CHUNKS CREATED", "-" * 40])
     for chunk in stats["chunks"]:
-        preview = chunk["preview"]
         lines.append(
             f"  [{chunk['chunk_index']}] {chunk['source']} "
-            f"({chunk['word_count']} words): \"{preview}\""
+            f"({chunk['word_count']} words): \"{chunk['preview']}\""
         )
 
     lines.extend([
         "",
         "OUTPUT PATHS",
         "-" * 40,
-        f"Chunks file:  {payload['outputs']['chunks_path']}",
-        f"Qdrant path:  {payload['outputs']['qdrant_path']}",
-        "",
-        "NEXT STEP",
-        "-" * 40,
-        "Run evaluate_retrieval.py for baseline evaluation.",
-        "Run milestone_status.py to track Part 21 progress.",
-        "See docs/part21-next-milestone.md for the full checklist.",
+        f"Chunks file: {payload['outputs']['chunks_path']}",
+        f"Qdrant path: {payload['outputs']['qdrant_path']}",
         "=" * 72,
     ])
-
     return "\n".join(lines)
 
 
@@ -200,10 +111,11 @@ def format_eval_report(payload):
     summary = payload["summary"]
     lines = [
         "=" * 72,
-        "RETRIEVAL EVALUATION RESULTS",
+        "RETRIEVAL EVALUATION",
         "=" * 72,
-        f"Run time: {payload['run_time_central']}",
-        f"Eval set: {payload['eval_file']} ({payload['question_count']} questions)",
+        f"Run folder: {payload['run_folder']}",
+        f"Run time:   {payload['run_time_central']}",
+        f"Eval set:   {payload['eval_file']} ({payload['question_count']} questions)",
         "",
         format_settings_block(settings),
         "",
@@ -216,43 +128,27 @@ def format_eval_report(payload):
         recall = summary["metrics"][f"recall_at_{key}"]
         mrr = summary["metrics"][f"mrr_at_{key}"]
         lines.append(format_metric_line(
-            f"Recall@{top_k}",
-            recall["value"],
-            recall["hits"],
-            recall["total"],
+            f"Recall@{top_k}", recall["value"], recall["hits"], recall["total"],
         ))
         lines.append(format_metric_line(f"MRR@{top_k}", mrr["value"]))
         lines.append("")
 
-    lines.extend([
-        "PER-QUESTION RESULTS",
-        "-" * 40,
-    ])
-
+    lines.extend(["PER-QUESTION RESULTS", "-" * 40])
     for item in payload["questions"]:
         status = "HIT" if item["found_rank"] is not None else "MISS"
         rank_text = f"rank {item['found_rank']}" if item["found_rank"] else "not in top results"
-
         lines.extend([
             "",
             f"[{item['id']}] {item['question']}",
             f"  Expected source: {item['expected_source']}",
-            f"  Expected answer: {item['expected_answer']}",
             f"  Result: {status} ({rank_text})",
+            "  Top retrieved chunks:",
         ])
-
-        for top_k in settings["eval_top_ks"]:
-            hit = "yes" if item["found_rank"] is not None and item["found_rank"] <= top_k else "no"
-            lines.append(f"  Recall@{top_k}: {hit}")
-
-        lines.append("  Top retrieved chunks:")
         for hit in item["retrieved"]:
             lines.append(
                 f"    #{hit['rank']} {hit['source']} chunk {hit['chunk_index']} "
                 f"(score {hit['score']:.3f})"
             )
-            if hit.get("text_preview"):
-                lines.append(f"       \"{hit['text_preview']}\"")
 
     lines.extend(["", "=" * 72])
     return "\n".join(lines)
@@ -262,16 +158,14 @@ def format_generation_report(payload):
     settings = payload["index_settings"]
     lines = [
         "=" * 72,
-        "BASELINE GENERATION RESULT",
+        "GENERATION (single question)",
         "=" * 72,
-        f"Run time: {payload['run_time_central']}",
+        f"Run folder: {payload['run_folder']}",
+        f"Run time:   {payload['run_time_central']}",
         "",
         format_settings_block(settings),
         "",
-        "GENERATION SETTINGS",
-        "-" * 40,
-        f"Model: {settings['generation_model']}",
-        f"Top-k retrieved: {payload['top_k']}",
+        f"Model: {settings['generation_model']} | Top-k: {payload['top_k']}",
         "",
         "QUESTION",
         "-" * 40,
@@ -284,65 +178,19 @@ def format_generation_report(payload):
         "RETRIEVED SOURCES",
         "-" * 40,
     ]
-
     for hit in payload["retrieved"]:
-        lines.extend([
-            f"  #{hit['rank']} {hit['source']} chunk {hit['chunk_index']} (score {hit['score']:.3f})",
-            f"     \"{hit['text_preview']}\"",
-            "",
-        ])
-
-    lines.append("=" * 72)
+        doc_id = hit.get("rank", "?")
+        lines.append(
+            f"  [Doc {doc_id}] {hit['source']} chunk {hit['chunk_index']} "
+            f"(score {hit['score']:.3f})"
+        )
+        lines.append(f"     \"{hit['text_preview']}\"")
+    lines.extend(["", "=" * 72])
     return "\n".join(lines)
-
-
-def save_run(run_type, data, report_formatter=None, metrics=None):
-    output_dir = run_results_dir(run_type)
-    output_dir.mkdir(parents=True, exist_ok=True)
-
-    utc_now, central_dt = get_run_times()
-    settings = build_config_snapshot()
-    basename = build_run_basename(run_type, central_dt, settings, metrics=metrics)
-    category_info = RUN_CATEGORIES[run_type]
-
-    payload = {
-        "run_type": run_type,
-        "run_category": category_info["title"],
-        "run_name": basename,
-        "run_time_utc": utc_now.isoformat(),
-        "run_time_central": central_dt.strftime("%Y-%m-%d %H:%M:%S %Z"),
-        "run_timezone": "America/Chicago",
-        "milestone": {
-            "name": "Part 21: Local RAG baseline over 20-50 documents",
-            "dataset_stage": settings["dataset_stage"],
-            "target_documents": f"{TARGET_DOC_COUNT_MIN}-{TARGET_DOC_COUNT_MAX}",
-            "target_questions": TARGET_QUESTION_COUNT,
-        },
-        "index_settings": settings,
-        **data,
-    }
-
-    json_path = output_dir / f"{basename}.json"
-    latest_json_path = latest_result_path(run_type, "json")
-    txt_path = output_dir / f"{basename}.txt"
-    latest_txt_path = latest_result_path(run_type, "txt")
-
-    for path in (json_path, latest_json_path):
-        with path.open("w", encoding="utf-8") as f:
-            json.dump(payload, f, indent=2)
-            f.write("\n")
-
-    if report_formatter:
-        report = report_formatter(payload)
-        for path in (txt_path, latest_txt_path):
-            path.write_text(report + "\n", encoding="utf-8")
-
-    return json_path, txt_path
 
 
 def save_build_results(documents, chunks, vector_size, outputs):
     source_stats = {}
-
     for chunk in chunks:
         word_count = len(chunk["text"].split())
         entry = source_stats.setdefault(chunk["source"], {"word_counts": []})
@@ -350,7 +198,6 @@ def save_build_results(documents, chunks, vector_size, outputs):
 
     source_breakdown = []
     chunk_rows = []
-
     for source, info in sorted(source_stats.items()):
         counts = info["word_counts"]
         source_breakdown.append({
@@ -369,8 +216,10 @@ def save_build_results(documents, chunks, vector_size, outputs):
         })
 
     all_word_counts = [row["word_count"] for row in chunk_rows]
+    settings = build_config_snapshot()
 
-    return save_run("build_index", {
+    data = {
+        "index_settings": settings,
         "build_stats": {
             "document_count": len(documents),
             "chunk_count": len(chunks),
@@ -381,72 +230,88 @@ def save_build_results(documents, chunks, vector_size, outputs):
             "chunks": chunk_rows,
         },
         "outputs": outputs,
-    }, report_formatter=format_build_report)
+    }
+
+    return save_run_folder(
+        run_name="build_index",
+        run_kind="build_index",
+        data=data,
+        report_builder=format_build_report,
+        summary_row={
+            "chunk_size": settings["chunk_size_words"],
+            "overlap": settings["overlap_words"],
+            "question_count": len(documents),
+        },
+    )
 
 
 def build_eval_summary(metrics, question_count, top_ks):
     summary_metrics = {}
-
     for top_k in top_ks:
         key = str(top_k)
         recall = metrics[key]["recall"]
         mrr = metrics[key]["mrr"]
         hits = metrics[key]["hits"]
-
         summary_metrics[f"recall_at_{key}"] = {
-            "value": recall,
-            "hits": hits,
-            "total": question_count,
+            "value": recall, "hits": hits, "total": question_count,
             "label": f"Recall@{top_k}",
         }
-        summary_metrics[f"mrr_at_{key}"] = {
-            "value": mrr,
-            "label": f"MRR@{top_k}",
-        }
-
-    return {
-        "questions_evaluated": question_count,
-        "metrics": summary_metrics,
-    }
+        summary_metrics[f"mrr_at_{key}"] = {"value": mrr, "label": f"MRR@{top_k}"}
+    return {"questions_evaluated": question_count, "metrics": summary_metrics}
 
 
 def save_eval_results(eval_file, question_count, metrics, per_question, top_ks):
+    settings = build_config_snapshot()
     linked_build = load_latest_build_run()
     build_ref = None
-
     if linked_build:
         build_ref = {
-            "run_name": linked_build.get("run_name"),
-            "run_time_utc": linked_build.get("run_time_utc"),
+            "run_folder": linked_build.get("run_folder"),
             "run_time_central": linked_build.get("run_time_central"),
             "build_stats": linked_build.get("build_stats"),
         }
 
-    return save_run("evaluate_retrieval", {
+    data = {
+        "index_settings": settings,
         "eval_file": str(eval_file),
         "question_count": question_count,
         "linked_build": build_ref,
         "summary": build_eval_summary(metrics, question_count, top_ks),
         "metrics": {
-            f"recall_at_{k}": metrics[str(k)]["recall"]
-            for k in top_ks
-        } | {
-            f"mrr_at_{k}": metrics[str(k)]["mrr"]
-            for k in top_ks
+            **{f"recall_at_{k}": metrics[str(k)]["recall"] for k in top_ks},
+            **{f"mrr_at_{k}": metrics[str(k)]["mrr"] for k in top_ks},
         },
         "questions": per_question,
-    }, report_formatter=format_eval_report, metrics=metrics)
+    }
+
+    return save_run_folder(
+        run_name="evaluate_retrieval",
+        run_kind="evaluate_retrieval",
+        data=data,
+        report_builder=format_eval_report,
+        questions=per_question,
+        summary_row={
+            "chunk_size": settings["chunk_size_words"],
+            "overlap": settings["overlap_words"],
+            "top_k": max(top_ks),
+            "retriever": "dense",
+            "embedding_model": settings["embedding_model"],
+            "recall_at_k": round(metrics[str(max(top_ks))]["recall"] * 100, 2),
+            "mrr_at_k": round(metrics[str(max(top_ks))]["mrr"] * 100, 2),
+            "question_count": question_count,
+            "run_mode": "retrieval_only",
+        },
+    )
 
 
 def save_generation_results(query, answer, retrieved, top_k):
+    settings = build_config_snapshot()
     linked_build = load_latest_build_run()
     build_ref = None
-
     if linked_build:
         build_ref = {
-            "run_name": linked_build.get("run_name"),
+            "run_folder": linked_build.get("run_folder"),
             "run_time_central": linked_build.get("run_time_central"),
-            "build_stats": linked_build.get("build_stats"),
         }
 
     retrieved_rows = []
@@ -461,10 +326,19 @@ def save_generation_results(query, answer, retrieved, top_k):
             "text_preview": preview,
         })
 
-    return save_run("generation", {
+    data = {
+        "index_settings": settings,
         "query": query,
         "answer": answer,
         "top_k": top_k,
         "linked_build": build_ref,
         "retrieved": retrieved_rows,
-    }, report_formatter=format_generation_report)
+    }
+
+    return save_run_folder(
+        run_name="generation",
+        run_kind="generation",
+        data=data,
+        report_builder=format_generation_report,
+        summary_row={"top_k": top_k, "question_count": 1},
+    )

@@ -17,7 +17,7 @@ python src/build_index.py
 python src/search.py "What is chunking?"
 ```
 
-Results: `results/baseline/retrieval/`
+Results: `experiments/Results/runs/` (see `REPORT.txt` in each folder)
 
 ## Baseline generation
 
@@ -27,7 +27,7 @@ Retrieve context, then generate an answer with Ollama.
 python src/ask.py "What is chunking?"
 ```
 
-Results: `results/baseline/generation/`
+Results: `experiments/Results/runs/`
 
 Requires Ollama running locally with `llama3.1:8b` (or change `OLLAMA_MODEL` in `src/config.py`).
 
@@ -39,32 +39,32 @@ Measure retrieval quality with Recall@k and MRR@k on hand-written questions.
 python src/evaluate_retrieval.py
 ```
 
-Results: `results/baseline/evaluation/`
+Results: `experiments/Results/runs/`
 
 Eval questions live in `data/eval/questions.jsonl`. The toy set has 5 questions; the Part 21 target is 50.
 
 ## Experiment grid
 
-Run baseline + one-variable-at-a-time tests (chunk size, overlap, top-k, retriever, reranker).
-
 ```bash
 python src/run_experiments.py --list
 python src/run_experiments.py --run baseline --retrieval-only
 python src/run_experiments.py --round chunk_size
-python src/run_experiments.py --all
 ```
 
-Results CSV: `results/experiments/experiment_results.csv`
+**All results live in one place:**
 
-Human-readable log: **`experiments/Results/EXPERIMENT_LOG.txt`**
-
-Regenerate the log anytime from existing CSV:
-
-```bash
-python src/regenerate_experiment_log.py
+```
+experiments/Results/
+  MASTER_LOG.txt      ← compare all runs (start here)
+  summary.csv         ← spreadsheet table
+  runs/
+    001__baseline__2026-06-22_.../
+      REPORT.txt      ← human-readable report for that run
+      data.json       ← raw data
+      questions.jsonl
 ```
 
-See `experiments/README.md` for the full 25-run plan and scoring formula.
+See `experiments/Results/README.txt`.
 
 ## Small experiments
 
@@ -111,15 +111,14 @@ For publishable research later, use a standard benchmark like [BEIR](https://git
 ## Project layout
 
 ```
-data/raw/              source documents (.txt)
-data/eval/             hand-written eval questions
-data/processed/        generated chunks
-results/baseline/      retrieval, evaluation, generation runs
-results/experiments/   experiment grid CSV + per-run reports
-experiments/           grid config and experiment notes
-notes/                 failure case notes
-docs/                  milestone and research notes
-src/                   scripts and shared config
+experiments/Results/     all run output (MASTER_LOG.txt + runs/)
+data/raw/                source documents (.txt, .pdf)
+data/eval/               hand-written eval questions
+data/processed/          generated chunks
+experiments/             grid config
+notes/                   failure case notes
+docs/                    milestone and research notes
+src/                     scripts and shared config
 ```
 
 ## Configuration

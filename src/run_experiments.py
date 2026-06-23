@@ -2,8 +2,9 @@ import argparse
 import sys
 
 from experiment_config import build_experiment_configs, get_run_by_name, get_runs_for_round
-from experiment_runner import CSV_PATH, run_grid
+from experiment_runner import run_grid
 from pipeline import load_questions
+from run_storage import MASTER_LOG
 
 
 ROUND_ORDER = [
@@ -106,7 +107,7 @@ def main():
         show_progress=args.progress,
     )
 
-    print(f"\nResults CSV: {CSV_PATH}")
+    print(f"\nMaster log: {MASTER_LOG}")
 
 
 if __name__ == "__main__":

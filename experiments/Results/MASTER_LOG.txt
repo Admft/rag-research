@@ -1,0 +1,56 @@
+========================================================================
+RAG RESEARCH — MASTER LOG
+All times: Central Time (America/Chicago)
+Last updated: 2026-06-22 20:51:37 CDT
+========================================================================
+
+WHERE THINGS LIVE
+----------------------------------------
+  experiments/Results/MASTER_LOG.txt  ← you are here (compare all runs)
+  experiments/Results/summary.csv     ← spreadsheet-friendly table
+  experiments/Results/runs/         ← one folder per run
+      001__baseline__2026-06-22_.../
+          REPORT.txt   ← read this first (human-friendly)
+          data.json    ← full raw data
+          questions.jsonl  ← per-question details (if applicable)
+
+HOW TO READ SCORES
+----------------------------------------
+  Retrieval only  → higher Recall@k and MRR@k is better
+  Full pipeline   → higher final_score is better (0-100)
+
+EXPERIMENT LEADERBOARDS
+----------------------------------------
+
+[Baseline test — Retrieval only]
+  1. 001__baseline__2026-06-22_20-28-46_CDT — Recall@5 100.0% | chunk 512 | overlap 50 | top_k 5 | dense
+
+[Baseline test — Full pipeline]
+  1. 002__baseline__2026-06-22_20-51-37_CDT — Final score 66.0 | chunk 256 | overlap 50 | top_k 5 | dense
+
+========================================================================
+ALL RUNS (newest first)
+========================================================================
+
+#1  002__baseline__2026-06-22_20-51-37_CDT
+     Name:   baseline
+     Type:   Experiment grid run
+     Round:  Baseline test
+     Mode:   Full pipeline (retrieve + generate + score)
+     Ran:    2026-06-22 20:51:37 CDT
+     Settings: chunk 256 | overlap 50 | top_k 5 | dense | reranker bge
+     Scores: final 66.04 | correctness 69.75 | faithfulness 66.53 | context recall 69.80
+     Retrieval: Recall@5 98.33% | MRR@5 94.72%
+     Folder: experiments/Results/runs/002__baseline__2026-06-22_20-51-37_CDT/
+
+#2  001__baseline__2026-06-22_20-28-46_CDT
+     Name:   baseline
+     Type:   Experiment grid run
+     Round:  Baseline test
+     Mode:   Retrieval only
+     Ran:    2026-06-22 20:28:46 CDT
+     Settings: chunk 512 | overlap 50 | top_k 5 | dense | reranker none
+     Retrieval: Recall@5 100.00% | MRR@5 100.00%
+     Folder: experiments/Results/runs/001__baseline__2026-06-22_20-28-46_CDT/
+
+End of master log.

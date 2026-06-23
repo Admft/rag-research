@@ -7,7 +7,7 @@ import requests
 from config import OLLAMA_MODEL, OLLAMA_URL
 
 
-def call_ollama(prompt, model=None, timeout=180, json_mode=False):
+def call_ollama(prompt, model=None, timeout=180, json_mode=False, max_tokens=2048):
     model = model or OLLAMA_MODEL
     start = time.perf_counter()
 
@@ -18,6 +18,8 @@ def call_ollama(prompt, model=None, timeout=180, json_mode=False):
     }
     if json_mode:
         payload["format"] = "json"
+    else:
+        payload["options"] = {"num_predict": max_tokens}
 
     response = requests.post(
         OLLAMA_URL,

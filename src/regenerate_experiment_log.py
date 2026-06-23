@@ -1,6 +1,6 @@
-from experiment_summary import regenerate_experiment_log
+from run_storage import regenerate_master_log
 
 
 if __name__ == "__main__":
-    path = regenerate_experiment_log()
+    path = regenerate_master_log()
     print(f"Updated: {path}")

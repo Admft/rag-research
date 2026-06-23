@@ -107,7 +107,7 @@ def main():
     print(f"Qdrant local path: {qdrant_path}")
     print(f"Collection name: {COLLECTION_NAME}")
 
-    result_paths = save_build_results(
+    run_dir, master_log = save_build_results(
         documents=documents,
         chunks=chunks,
         vector_size=vector_size,
@@ -117,8 +117,8 @@ def main():
             "collection_name": COLLECTION_NAME,
         },
     )
-    print(f"Saved run results to {result_paths[0]}")
-    print(f"Saved readable report to {result_paths[1]}")
+    print(f"Saved run folder: {run_dir}")
+    print(f"Read REPORT.txt inside that folder, or see: {master_log}")
 
 
 if __name__ == "__main__":

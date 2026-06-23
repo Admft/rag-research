@@ -1,73 +1,38 @@
 import sys
 
-import requests
 from qdrant_client import QdrantClient
 from sentence_transformers import SentenceTransformer
 
-from config import COLLECTION_NAME, EMBEDDING_MODEL_NAME, OLLAMA_MODEL, OLLAMA_URL, QDRANT_PATH
+from config import COLLECTION_NAME, EMBEDDING_MODEL_NAME, OLLAMA_MODEL, QDRANT_PATH
+from llm import call_ollama
+from prompts import build_generation_prompt, extract_final_answer
 from results import save_generation_results
 
 
 def retrieve(query, top_k=5):
     model = SentenceTransformer(EMBEDDING_MODEL_NAME)
     query_vector = model.encode(query, normalize_embeddings=True)
-
     client = QdrantClient(path=str(QDRANT_PATH))
 
     results = client.query_points(
         collection_name=COLLECTION_NAME,
         query=query_vector.tolist(),
-        limit=top_k
+        limit=top_k,
     )
-
     return results.points
 
 
-def build_prompt(query, retrieved_points):
-    context_blocks = []
-
-    for i, point in enumerate(retrieved_points, start=1):
-        payload = point.payload
-        context_blocks.append(
-            f"[Source {i}: {payload['source']} chunk {payload['chunk_index']}]\n"
-            f"{payload['text']}"
-        )
-
-    context = "\n\n".join(context_blocks)
-
-    prompt = f"""You are a careful RAG assistant.
-
-Answer the user's question using ONLY the provided context.
-
-Rules:
-- If the context does not contain the answer, say: "I do not know based on the provided context."
-- Do not use outside knowledge.
-- Cite sources using [Source 1], [Source 2], etc.
-- Keep the answer concise.
-
-Context:
-{context}
-
-Question:
-{query}
-
-Answer:
-"""
-    return prompt
-
-
-def call_ollama(prompt):
-    response = requests.post(
-        OLLAMA_URL,
-        json={
-            "model": OLLAMA_MODEL,
-            "prompt": prompt,
-            "stream": False
-        },
-        timeout=120
-    )
-    response.raise_for_status()
-    return response.json()["response"]
+def retrieved_to_rows(points):
+    return [
+        {
+            "rank": rank,
+            "source": point.payload["source"],
+            "chunk_index": point.payload["chunk_index"],
+            "text": point.payload["text"],
+            "score": point.score,
+        }
+        for rank, point in enumerate(points, start=1)
+    ]
 
 
 def main():
@@ -77,33 +42,43 @@ def main():
 
     query = sys.argv[1]
     top_k = 5
+    prompt_style = "strict_context_with_citations"
 
     print("Retrieving context...")
-    retrieved = retrieve(query, top_k=top_k)
+    retrieved_points = retrieve(query, top_k=top_k)
+    retrieved = retrieved_to_rows(retrieved_points)
 
     print(f"Generating answer with {OLLAMA_MODEL}...")
-    prompt = build_prompt(query, retrieved)
-    answer = call_ollama(prompt)
+    prompt = build_generation_prompt(query, retrieved, prompt_style)
+    raw_answer, _ = call_ollama(prompt)
+    answer = extract_final_answer(raw_answer)
 
     print()
     print("=" * 80)
     print("ANSWER")
     print("=" * 80)
-    print(answer)
+    if answer:
+        print(answer)
+    else:
+        print("(No <answer> block found — model may have stopped during scratchpad.)")
+        print()
+        print("Raw output:")
+        print(raw_answer[:1500])
 
     print()
     print("=" * 80)
     print("RETRIEVED SOURCES")
     print("=" * 80)
+    for item in retrieved:
+        print(
+            f"[Doc {item['rank']}] score={item['score']:.4f} "
+            f"file={item['source']} chunk={item['chunk_index']}"
+        )
 
-    for i, point in enumerate(retrieved, start=1):
-        payload = point.payload
-        print(f"[Source {i}] score={point.score:.4f} file={payload['source']} chunk={payload['chunk_index']}")
-
-    result_paths = save_generation_results(query, answer, retrieved, top_k=top_k)
+    run_dir, master_log = save_generation_results(query, answer, retrieved_points, top_k=top_k)
     print()
-    print(f"Saved run results to {result_paths[0]}")
-    print(f"Saved readable report to {result_paths[1]}")
+    print(f"Saved run folder: {run_dir}")
+    print(f"Master log: {master_log}")
 
 
 if __name__ == "__main__":

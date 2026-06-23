@@ -1,6 +1,7 @@
-from llm import call_ollama, parse_json_response
+import re
 
-SCORE_WEIGHTS = {
+from llm import call_ollama, parse_json_response
+from prompts import extract_final_answer, format_context
     "answer_correctness": 0.35,
     "faithfulness": 0.25,
     "context_recall": 0.20,
@@ -16,27 +17,38 @@ def compute_final_score(metrics):
     return round(total, 2)
 
 
+def cited_doc_ids(answer):
+    ids = set()
+    for match in re.finditer(r"\[Doc\s*(\d+)\]", answer, re.IGNORECASE):
+        ids.add(int(match.group(1)))
+    return ids
+
+
 def estimate_citation_accuracy(answer, retrieved, expected_source):
-    score = 0.0
-    answer_lower = answer.lower()
-    expected_lower = expected_source.lower()
+    answer_text = extract_final_answer(answer)
+    doc_ids = cited_doc_ids(answer_text)
 
-    cited_sources = []
-    for item in retrieved:
-        source = item["source"]
-        chunk_tag = f"chunk {item['chunk_index']}"
-        if source.lower() in answer_lower or chunk_tag in answer_lower:
-            cited_sources.append(source)
-
-    if not cited_sources:
+    if not doc_ids:
         return 0.0
 
-    if any(source.lower() == expected_lower for source in cited_sources):
-        score += 70.0
+    cited_sources = []
+    valid_ids = 0
+    for doc_id in doc_ids:
+        index = doc_id - 1
+        if 0 <= index < len(retrieved):
+            valid_ids += 1
+            cited_sources.append(retrieved[index]["source"])
 
-    if len(set(cited_sources)) == 1:
-        score += 30.0
-    else:
+    if valid_ids == 0:
+        return 0.0
+
+    score = (valid_ids / len(doc_ids)) * 40.0
+
+    expected_lower = expected_source.lower()
+    if any(source.lower() == expected_lower for source in cited_sources):
+        score += 50.0
+
+    if len(set(cited_sources)) == 1 and cited_sources[0].lower() == expected_lower:
         score += 10.0
 
     return min(score, 100.0)
@@ -50,8 +62,9 @@ def normalize_metric_scores(metrics):
 
 
 def fallback_metric_scores(question, expected_answer, answer, retrieved):
+    answer_text = extract_final_answer(answer)
     expected_words = set(expected_answer.lower().split())
-    answer_words = set(answer.lower().split())
+    answer_words = set(answer_text.lower().split())
     overlap = len(expected_words & answer_words)
     correctness = min(100.0, (overlap / max(len(expected_words), 1)) * 100)
 
@@ -69,13 +82,11 @@ def fallback_metric_scores(question, expected_answer, answer, retrieved):
 
 
 def judge_metrics(question, expected_answer, expected_source, answer, retrieved):
-    context = "\n\n".join(
-        f"[{item['source']} chunk {item['chunk_index']}]\n{item['text']}"
-        for item in retrieved
-    )
+    answer_text = extract_final_answer(answer)
+    context = format_context(retrieved)
 
     judge_prompt = f"""You are a strict RAG evaluator. Do not answer the question.
-Your only job is to score the system output.
+Score only the final answer content (ignore planning sections if present).
 
 Return ONLY a JSON object with exactly these numeric keys (0-100):
 {{
@@ -104,7 +115,7 @@ Retrieved context:
 {context}
 
 Generated answer:
-{answer}
+{answer_text}
 """
 
     raw, _ = call_ollama(judge_prompt, timeout=180, json_mode=True)
@@ -116,7 +127,7 @@ Generated answer:
         try:
             return normalize_metric_scores(parse_json_response(raw))
         except ValueError:
-            return fallback_metric_scores(question, expected_answer, answer, retrieved)
+            return fallback_metric_scores(question, expected_answer, answer_text, retrieved)
 
 
 def score_answer(question, expected_answer, expected_source, answer, retrieved):

@@ -106,15 +106,15 @@ def main():
         print(f"MRR@{top_k}: {mrr_at_k:.3f}")
         print()
 
-    result_paths = save_eval_results(
+    run_dir, master_log = save_eval_results(
         eval_file=EVAL_FILE,
         question_count=len(questions),
         metrics=metrics,
         per_question=per_question,
         top_ks=EVAL_TOP_KS,
     )
-    print(f"Saved run results to {result_paths[0]}")
-    print(f"Saved readable report to {result_paths[1]}")
+    print(f"Saved run folder: {run_dir}")
+    print(f"Master log: {master_log}")
 
 
 if __name__ == "__main__":
