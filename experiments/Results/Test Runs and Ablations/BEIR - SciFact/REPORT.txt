@@ -4,7 +4,7 @@ EXPERIMENT: beir_scifact
 Run folder: BEIR - SciFact
 Round:      beir
 Mode:       full_pipeline
-Run time:   2026-06-23 21:08:06 CDT
+Run time:   2026-06-24 08:26:25 CDT
 
 CONFIG
 ----------------------------------------
@@ -22,16 +22,16 @@ Judge:            qwen2.5:14b
 
 SCORES
 ----------------------------------------
-Final score:          70.0
-Answer correctness:   55.0
-Faithfulness:         95.0
-Context recall:       65.0
-Context precision:    73.33
-Citation accuracy:    66.67
+Final score:          56.73
+Answer correctness:   40.7
+Faithfulness:         82.2
+Context recall:       42.6
+Context precision:    81.0
+Citation accuracy:    53.2
 Answer parse rate:    100.0%
-Recall@5:            66.7%
-MRR@5:                66.7%
-Avg latency:          16.621s
+Recall@5:            78.0%
+MRR@5:                64.2%
+Avg latency:          4.729s
 
 PER-QUESTION
 ----------------------------------------
@@ -39,19 +39,301 @@ PER-QUESTION
 [scifact_q001] 0-dimensional biomaterials show inductive properties.
   Expected source: 31715818
   Recall hit: no (rank None)
-  Final score: 35.0
-  Answer: The provided context does not contain the answer.
+  Final score: 15.75
+  Answer: Functionalized biomaterials incorporating inflammatory cytokines, immune danger signals, and tumor lysates can control the activation and localization of dendritic cells in situ, enhancing host immunity and mediating tumor regression [Doc 2].
 
 [scifact_q002] All hematopoietic stem cells segregate their chromosomes randomly.
   Expected source: 4381486
   Recall hit: yes (rank 1)
-  Final score: 87.75
-  Answer: All hematopoietic stem cells segregate their chromosomes randomly, according to the sequential administration of labels revealing no asymmetric segregation. [Doc 1]
+  Final score: 80.5
+  Answer: All hematopoietic stem cells segregate their chromosomes randomly [Doc 1].
 
 [scifact_q003] Radioiodine treatment of non-toxic multinodular goitre reduces thyroid volume.
   Expected source: 9745001
   Recall hit: yes (rank 1)
+  Final score: 88.75
+  Answer: Radioiodine treatment significantly reduces thyroid volume in patients with non-toxic multinodular goitre, with a median reduction of 60% by 24 months [Doc 1].
+
+[scifact_q004] Rapamycin decreases the concentration of triacylglycerols in fruit flies.
+  Expected source: 6277638
+  Recall hit: yes (rank 1)
+  Final score: 33.0
+  Answer: The provided context does not contain the answer.
+
+[scifact_q005] Rapid phosphotransfer rates govern fidelity in two component systems
+  Expected source: 11603066
+  Recall hit: yes (rank 3)
+  Final score: 42.5
+  Answer: Phosphatase specificity follows phosphotransfer specificity for cognate HK-RR pairs, indicating that rapid and specific phosphotransfer is critical for signaling fidelity in bacterial two-component systems [Doc 2].
+
+[scifact_q006] Rapid up-regulation and higher basal expression of interferon-induced genes increase survival of granule cell neurons that are infected by West Nile virus.
+  Expected source: 9433958
+  Recall hit: yes (rank 2)
+  Final score: 53.0
+  Answer: Rapid up-regulation and higher basal expression of interferon-induced genes do not directly correlate with increased survival of granule cell neurons infected by West Nile virus based on the provided context. However, granule cell neurons exhibit unique innate immune programs that confer differentia
+
+[scifact_q007] Rapid up-regulation and higher basal expression of interferon-induced genes reduce survival of granule cell neurons that are infected by West Nile virus.
+  Expected source: 9433958
+  Recall hit: yes (rank 2)
+  Final score: 22.5
+  Answer: The provided context does not contain the answer.
+
+[scifact_q008] Recurrent mutations occur frequently within CTCF anchor sites adjacent to oncogenes.
+  Expected source: 5373138
+  Recall hit: yes (rank 1)
+  Final score: 35.0
+  Answer: The provided context does not contain the answer.
+
+[scifact_q009] Reduced responsiveness to interleukin-2 in regulatory T cells is associated with greater resistance to autoimmune diseases such as Type 1 Diabetes.
+  Expected source: 13923140
+  Recall hit: yes (rank 2)
+  Final score: 66.0
+  Answer: Reduced responsiveness to interleukin-2 in regulatory T cells is associated with higher susceptibility, not resistance, to autoimmune diseases such as Type 1 Diabetes [Doc 1][Doc 2].
+
+[scifact_q010] Replacement of histone H2A with H2A.Z slows gene activation in yeasts by stabilizing +1 nucleosomes.
+  Expected source: 25254425
+  Recall hit: no (rank None)
+  Final score: 35.0
+  Answer: The provided context does not contain the answer.
+
+[scifact_q011] Ribosomopathies have a low degree of cell and tissue specific pathology.
+  Expected source: 12486491
+  Recall hit: no (rank None)
+  Final score: 35.0
+  Answer: The provided context does not contain the answer.
+
+[scifact_q012] S-nitrosylated GAPDH physiologically transnitrosylates histone deacetylases.
+  Expected source: 20381484
+  Recall hit: yes (rank 1)
+  Final score: 87.0
+  Answer: S-nitrosylated GAPDH (SNO-GAPDH) physiologically transnitrosylates histone deacetylase-2 (HDAC2), a nuclear protein, as shown in [Doc 1].
+
+[scifact_q013] Sildenafil improves erectile function in men who experience sexual dysfunction as a result of the use of SSRI antidepressants.
+  Expected source: 39281140
+  Recall hit: yes (rank 1)
+  Final score: 88.75
+  Answer: Sildenafil effectively improved erectile function and other aspects of sexual function in men with sexual dysfunction associated with the use of selective serotonin reuptake inhibitor (SSRI) antidepressants [Doc 1].
+
+[scifact_q014] Silencing of Bcl2 is important for the maintenance and progression of tumors.
+  Expected source: 37549932
+  Recall hit: yes (rank 1)
+  Final score: 83.25
+  Answer: Eliminating BCL-2 yielded rapid loss of leukemic cells, suggesting that silencing of Bcl2 is crucial for the maintenance and progression of tumors [Doc 1].
+
+[scifact_q015] Smc5/6 engagment drives the activation of SUMO E3 ligase Mms21 by ATP-dependent remolding.
+  Expected source: 17628888
+  Recall hit: yes (rank 1)
   Final score: 87.25
-  Answer: Radioiodine treatment of non-toxic multinodular goitre results in a substantial reduction in thyroid volume, with the median volume decreasing from 73 ml to 29 ml at 24 months post-treatment [Doc 1].
+  Answer: The ATP-binding activity of the Smc5/6 complex drives the activation of the SUMO E3 ligase Mms21 through physical remodeling, which facilitates sumoylation [Doc 1].
+
+[scifact_q016] Statins decrease blood cholesterol.
+  Expected source: 7662206
+  Recall hit: yes (rank 3)
+  Final score: 79.25
+  Answer: Statins decrease blood cholesterol by inhibiting cholesterol biosynthesis, thereby reducing low-density lipoprotein (LDL) levels [Doc 1][Doc 3].
+
+[scifact_q017] Statins increase blood cholesterol.
+  Expected source: 7662206
+  Recall hit: no (rank None)
+  Final score: 33.5
+  Answer: The provided context does not contain the answer.
+
+[scifact_q018] Stroke patients with prior use of direct oral anticoagulants have a lower risk of in-hospital mortality than stroke patients with prior use of warfarin.
+  Expected source: 3898784
+  Recall hit: yes (rank 1)
+  Final score: 86.75
+  Answer: Among patients with intracerebral hemorrhage (ICH), prior use of direct oral anticoagulants (NOACs) was associated with a lower risk of in-hospital mortality compared with the use of warfarin [Doc 1][Doc 2][Doc 3].
+
+[scifact_q019] Subcutaneous fat depots undergo extensive browning processes after cold exposure.
+  Expected source: 20532591
+  Recall hit: yes (rank 1)
+  Final score: 83.0
+  Answer: Subcutaneous fat depots can undergo extensive browning processes after cold exposure, involving the de novo differentiation of adipocytes [Doc 1].
+
+[scifact_q020] Suboptimal nutrition is not predictive of chronic disease
+  Expected source: 13770184
+  Recall hit: yes (rank 3)
+  Final score: 36.5
+  Answer: Suboptimal nutrition is predictive of certain chronic diseases; for instance, lower birthweight and undernutrition in childhood are risk factors for high glucose concentrations, blood pressure, and harmful lipid profiles once adult body-mass index and height are adjusted for [Doc 4].
+
+[scifact_q021] Synaptic activity enhances local release of brain derived neurotrophic factor from postsynaptic dendrites.
+  Expected source: 4456756
+  Recall hit: yes (rank 1)
+  Final score: 84.25
+  Answer: Synaptic activity enhances local release of brain-derived neurotrophic factor (BDNF) from postsynaptic dendrites, which then activates TrkB within the same spine [Doc 1].
+
+[scifact_q022] Angiotensin converting enzyme inhibitors are associated with increased risk for functional renal insufficiency.
+  Expected source: 6157837
+  Recall hit: yes (rank 1)
+  Final score: 84.0
+  Answer: Angiotensin converting enzyme inhibitors (ACE) are associated with an increased risk for the development of functional renal insufficiency [Doc 1].
+
+[scifact_q023] T regulatory cells (tTregs) lacking αvβ8 are more adept at suppressing pathogenic T-cell responses during active inflammation.
+  Expected source: 17997584
+  Recall hit: yes (rank 1)
+  Final score: 33.0
+  Answer: The provided context does not contain the answer.
+
+[scifact_q024] TCR/CD3 microdomains are a required to induce the immunologic synapse to activate T cells.
+  Expected source: 33499189
+  Recall hit: yes (rank 4)
+  Final score: 44.5
+  Answer: TCR/CD3 microdomains are required for inducing the immunological synapse as confirmed by the conformational changes in CD3 epsilon that expose a proline-rich sequence leading to recruitment of adaptor proteins like Nck, critical for maturation of the immune synapse and T cell activation [Doc 1].
+
+[scifact_q025] TNFAIP3 is a tumor suppressor in glioblastoma.
+  Expected source: 33370
+  Recall hit: yes (rank 1)
+  Final score: 33.5
+  Answer: The provided context does not contain the answer.
+
+[scifact_q026] Taking 400mg of α-tocopheryl acetate helps to prevent prostate cancer.
+  Expected source: 12009265
+  Recall hit: yes (rank 1)
+  Final score: 88.25
+  Answer: The provided context does not support the claim that taking 400mg of α-tocopheryl acetate helps to prevent prostate cancer. In fact, it states there was no effect on prostate cancer incidence [Doc 1][Doc 3].
+
+[scifact_q027] Taxation of sugar-sweetened beverages had no effect on the incidence rate of type II diabetes in India.
+  Expected source: 10071552
+  Recall hit: yes (rank 1)
+  Final score: 76.75
+  Answer: Taxation of sugar-sweetened beverages has been estimated to potentially reduce the incidence rate of type II diabetes in India, with a 20% SSB excise tax averting 1.6% (95% CI 1.2%-1.9%) of incident type 2 diabetes from 2014-2023 [Doc 1].
+
+[scifact_q028] Teaching hospitals do not provide better care than non-teaching hospitals.
+  Expected source: 13906581
+  Recall hit: yes (rank 1)
+  Final score: 82.25
+  Answer: The available data suggest that a healthcare facility's teaching status does not markedly improve or worsen patient outcomes, as concluded from studies comparing mortality and other patient outcomes between teaching and nonteaching structures [Doc 1].
+
+[scifact_q029] Anthrax spores can be disposed of easily after they are dispersed.
+  Expected source: 33872649
+  Recall hit: yes (rank 1)
+  Final score: 33.5
+  Answer: The provided context does not contain the answer.
+
+[scifact_q030] Tetraspanin-3 is a causative factor in the development of acute myelogenous leukemia
+  Expected source: 11369420
+  Recall hit: yes (rank 1)
+  Final score: 80.5
+  Answer: Tetraspanin-3 is required for the development and propagation of acute myelogenous leukemia (AML) as its inhibition impairs leukemia stem cell self-renewal and improves mouse survival in AML models [Doc 1].
+
+[scifact_q031] The DdrB protein from Deinococcus radiodurans is an alternative SSB.
+  Expected source: 15305881
+  Recall hit: yes (rank 1)
+  Final score: 70.75
+  Answer: The DdrB protein from Deinococcus radiodurans is an alternative single-stranded DNA binding (SSB) protein, characterized by its unique structure and function. [Doc 1]
+
+[scifact_q032] The PPR MDA5 has two N-terminal CARD domains.
+  Expected source: 31272411
+  Recall hit: no (rank None)
+  Final score: 33.5
+  Answer: The provided context does not contain the answer.
+
+[scifact_q033] The PRR MDA5 has a central DExD/H RNA helices domain.
+  Expected source: 31272411
+  Recall hit: no (rank None)
+  Final score: 33.5
+  Answer: The provided context does not contain the answer.
+
+[scifact_q034] Antibiotic induced alterations in the gut microbiome reduce resistance against Clostridium difficile
+  Expected source: 6372244
+  Recall hit: yes (rank 1)
+  Final score: 81.25
+  Answer: Antibiotic-induced shifts in the mouse gut microbiome and metabolome increase susceptibility to Clostridium difficile infection by altering the metabolic profile that favors C. difficile germination and growth [Doc 1]. Specific bacterial taxa like C. scindens, which provide resistance against C. dif
+
+[scifact_q035] The PRR MDA5 is a sensor of RNA virus infection.
+  Expected source: 31272411
+  Recall hit: yes (rank 2)
+  Final score: 40.0
+  Answer: The cytoplasmic RNA sensor Mda5 (PRR) is involved in the detection of RNA virus infection and triggering type I interferon induction [Doc 1].
+
+[scifact_q036] The US health care system can save up to $750 million if 7% of patients waiting for kidney transplants participate in the optimized national kidney paired donation program.
+  Expected source: 16737210
+  Recall hit: yes (rank 1)
+  Final score: 98.5
+  Answer: The US health care system can save up to $750 million if 7% of patients waiting for kidney transplants participate in the optimized national kidney paired donation program. [Doc 1]
+
+[scifact_q037] The YAP1 and TEAD complex tanslocates into the nucleus where it interacts with transcription factors and DNA-binding proteins that modulate target gene transcription.
+  Expected source: 52873726
+  Recall hit: yes (rank 1)
+  Final score: 63.5
+  Answer: The current paradigm for the regulation of Hippo pathway centres on phosphorylation-dependent nucleocytoplasmic shuttling of YAP/TAZ through a complex network of upstream components, and TEAD is essential in mediating YAP-dependent gene expression [Doc 2]. However, unlike other transcription factors
+
+[scifact_q038] The amount of publicly available DNA data doubles every 10 years.
+  Expected source: 30655442
+  Recall hit: no (rank None)
+  Final score: 35.0
+  Answer: The provided context does not contain the answer.
+
+[scifact_q039] The arm density of TatAd complexes is due to structural rearrangements within Class1 TatAd complexes such as the 'charge zipper mechanism'.
+  Expected source: 11419230
+  Recall hit: yes (rank 2)
+  Final score: 79.25
+  Answer: The arm density of TatAd complexes could be due to structural rearrangements such as the 'charge zipper mechanism', which is proposed for folding and self-assembly of TatA complex [Doc 2].
+
+[scifact_q040] The availability of safe places to study is effective at decreasing homelessness.
+  Expected source: 25649714
+  Recall hit: no (rank None)
+  Final score: 35.0
+  Answer: The provided context does not contain the answer.
+
+[scifact_q041] The availability of safe places to study is not effective at decreasing homelessness.
+  Expected source: 25649714
+  Recall hit: no (rank None)
+  Final score: 35.0
+  Answer: The provided context does not contain the answer.
+
+[scifact_q042] The benefits of colchicine were achieved with effective widespread use of secondary prevention strategies such as high-dose statins.
+  Expected source: 16760369
+  Recall hit: no (rank None)
+  Final score: 35.0
+  Answer: The provided context does not contain the answer.
+
+[scifact_q043] The binding orientation of the ML-SA1 activator at hTRPML2 is different from the binding orientation of the ML-SA1 activator at hTRPML1.
+  Expected source: 3441524
+  Recall hit: yes (rank 1)
+  Final score: 35.0
+  Answer: The provided context does not contain the answer.
+
+[scifact_q044] The center of the granuloma in an immune cell induces a pro-inflammatory immune response.
+  Expected source: 3475317
+  Recall hit: yes (rank 2)
+  Final score: 89.25
+  Answer: The center of the granuloma in an immune cell induces a pro-inflammatory immune response characterized by the presence of antimicrobial peptides, reactive oxygen species and pro-inflammatory eicosanoids [Doc 2].
+
+[scifact_q045] The combination of H3K4me3 and H3K79me2 is found in quiescent hair follicle stem cells.
+  Expected source: 31141365
+  Recall hit: yes (rank 2)
+  Final score: 35.0
+  Answer: The provided context does not contain the answer.
+
+[scifact_q046] The composition of myosin-II isoform switches from the polarizable B isoform to the more homogenous A isoform during hematopoietic differentiation.
+  Expected source: 18909530
+  Recall hit: yes (rank 1)
+  Final score: 82.25
+  Answer: The composition of myosin-II isoform switches from the polarizable B isoform to the more homogenous A isoform during hematopoietic differentiation, as MIIB is downregulated and MIIA becomes activated by dephosphorylation during differentiation [Doc 1].
+
+[scifact_q047] The deregulated and prolonged activation of monocytes has deleterious effects in inflammatory diseases.
+  Expected source: 14407673
+  Recall hit: no (rank None)
+  Final score: 10.0
+  Answer: The provided context does not contain the answer.
+
+[scifact_q048] The extracellular domain of TMEM27 is cleaved in human beta cells.
+  Expected source: 24142891
+  Recall hit: yes (rank 1)
+  Final score: 35.0
+  Answer: The provided context does not contain the answer.
+
+[scifact_q049] The genomic aberrations found in matasteses are very similar to those found in the primary tumor.
+  Expected source: 19736671
+  Recall hit: yes (rank 3)
+  Final score: 8.5
+  Answer: The provided context does not contain the answer.
+
+[scifact_q050] The locus rs647161 is associated with colorectal carcinoma.
+  Expected source: 9650982
+  Recall hit: yes (rank 1)
+  Final score: 88.75
+  Answer: The locus rs647161 is associated with colorectal cancer susceptibility [Doc 1].
 
 ========================================================================

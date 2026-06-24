@@ -18,7 +18,19 @@ from .indexer import build_beir_index, load_beir_index
 from .loader import load_eval_questions
 from experiment_runner import format_experiment_report
 from indexing import release_embed_gpu
-from pipeline import average, run_experiment
+from pipeline import average, find_source_rank
+from prompts import (
+    GENERATION_RESPONSE_SCHEMA,
+    build_generation_prompt,
+    has_answer_block,
+    parse_generation_response,
+    uses_json_output,
+)
+from retrievers import Retriever
+from scoring import score_answer
+from config import OLLAMA_GENERATION_MAX_TOKENS
+from llm import call_ollama
+import time
 
 
 def require_ollama_ready():
@@ -117,17 +129,75 @@ def run_beir_evaluation(dataset, show_progress=False, force=False, max_queries=5
     total = len(questions)
     print(f"Evaluating {display} on {total} questions...")
 
-    for i, question in enumerate(questions, start=1):
-        payload = run_experiment(
-            config,
-            [question],
-            index=index,
-            show_progress=False,
+    release_embed_gpu(index)
+    retriever = Retriever(index, config)
+    json_output = uses_json_output(config.prompt)
+
+    for i, item in enumerate(questions, start=1):
+        question = item["question"]
+        expected_source = item.get("expected_source") or item.get("source_pdf", "")
+        expected_answer = item.get("answer", "")
+
+        retrieve_start = time.perf_counter()
+        retrieved = retriever.retrieve(question)
+        retrieve_latency = time.perf_counter() - retrieve_start
+
+        found_rank = find_source_rank(retrieved, expected_source)
+        recall_hit = found_rank is not None and found_rank <= config.top_k
+
+        row = {
+            "id": item.get("id", "unknown"),
+            "question": question,
+            "question_type": item.get("question_type", "normal"),
+            "expected_source": expected_source,
+            "expected_answer": expected_answer,
+            "found_rank": found_rank,
+            "recall_hit": recall_hit,
+            "retrieve_latency_s": round(retrieve_latency, 3),
+            "retrieved": retrieved,
+        }
+
+        prompt = build_generation_prompt(question, retrieved, config.prompt)
+        gen_start = time.perf_counter()
+        if json_output:
+            raw_answer, gen_latency = call_ollama(
+                prompt,
+                model=config.generator,
+                json_schema=GENERATION_RESPONSE_SCHEMA,
+                max_tokens=OLLAMA_GENERATION_MAX_TOKENS,
+            )
+        else:
+            raw_answer, gen_latency = call_ollama(
+                prompt,
+                model=config.generator,
+                max_tokens=OLLAMA_GENERATION_MAX_TOKENS,
+            )
+        answer, answer_parsed, scratchpad = parse_generation_response(raw_answer, config.prompt)
+
+        score_start = time.perf_counter()
+        metrics = score_answer(
+            question=question,
+            expected_answer=expected_answer,
+            expected_source=expected_source,
+            answer=raw_answer,
+            retrieved=retrieved,
+            judge_model=config.judge,
         )
-        row = payload["questions"][0]
+        score_latency = time.perf_counter() - score_start
+
+        row.update({
+            "raw_answer": raw_answer,
+            "answer": answer,
+            "scratchpad": scratchpad,
+            "answer_parsed": answer_parsed,
+            "has_answer_block": has_answer_block(raw_answer, config.prompt),
+            "generation_latency_s": round(gen_latency, 3),
+            "score_latency_s": round(score_latency, 3),
+            "total_latency_s": round(retrieve_latency + gen_latency + score_latency, 3),
+            "metrics": metrics,
+        })
         per_question.append(row)
-        score = row.get("metrics", {}).get("final_score", 0.0)
-        print(f"[{display}] query {i}/{total} | score: {score}")
+        print(f"[{display}] query {i}/{total} | score: {metrics['final_score']}", flush=True)
 
     index_stats = {
         "documents": index_meta.get("documents"),

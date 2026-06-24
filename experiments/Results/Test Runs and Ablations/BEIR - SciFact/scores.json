@@ -1,12 +1,12 @@
 {
-  "final_score": 70.0,
-  "answer_correctness": 55.0,
-  "faithfulness": 95.0,
-  "context_recall": 65.0,
-  "context_precision": 73.33,
-  "citation_accuracy": 66.67,
+  "final_score": 56.73,
+  "answer_correctness": 40.7,
+  "faithfulness": 82.2,
+  "context_recall": 42.6,
+  "context_precision": 81.0,
+  "citation_accuracy": 53.2,
   "answer_parse_rate": 100.0,
-  "recall_at_k": 66.67,
-  "mrr_at_k": 66.67,
-  "avg_latency_s": 16.621
+  "recall_at_k": 78.0,
+  "mrr_at_k": 64.17,
+  "avg_latency_s": 4.729
 }

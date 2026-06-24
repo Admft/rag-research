@@ -114,8 +114,29 @@ def build_beir_index(dataset, show_progress=False, force=False, max_queries=50):
     return qdrant_path
 
 
-def load_beir_index(dataset):
+def _build_bm25(chunk_texts):
+    from chunking import normalize_for_lexical
+    from rank_bm25 import BM25Okapi
+
+    tokenized = [normalize_for_lexical(text).split() for text in chunk_texts]
+    return BM25Okapi(tokenized)
+
+
+def _make_experiment_index(config, chunks, embed_model, client, bm25):
+    """Construct ExperimentIndex without re-building BM25 in __init__."""
     from indexing import ExperimentIndex
+
+    index = ExperimentIndex.__new__(ExperimentIndex)
+    index.config = config
+    index.chunks = chunks
+    index.embed_model = embed_model
+    index.qdrant_client = client
+    index.chunk_texts = [chunk["text"] for chunk in chunks]
+    index.bm25 = bm25
+    return index
+
+
+def load_beir_index(dataset):
     from qdrant_client import QdrantClient
     from sentence_transformers import SentenceTransformer
 
@@ -146,7 +167,11 @@ def load_beir_index(dataset):
         description=f"BEIR {key} corpus index (locked baseline settings)",
     )
 
-    embed_model = SentenceTransformer(config.embedding_model)
+    chunk_texts = [chunk["text"] for chunk in chunks]
+    if len(chunks) > 20000:
+        print(f"Building BM25 index for {len(chunks)} chunks...")
+    bm25 = _build_bm25(chunk_texts)
+
     client = QdrantClient(path=str(qdrant_path))
     if not client.collection_exists(COLLECTION_NAME):
         raise RuntimeError(
@@ -154,4 +179,5 @@ def load_beir_index(dataset):
             f"Run: python3 run_beir.py --index --force"
         )
 
-    return ExperimentIndex(config, chunks, embed_model, client), saved
+    embed_model = SentenceTransformer(config.embedding_model)
+    return _make_experiment_index(config, chunks, embed_model, client, bm25), saved

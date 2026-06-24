@@ -1,0 +1,42 @@
+BEIR full eval started Wed Jun 24 08:08:34 CDT 2026
+
+========== nfcorpus Wed Jun 24 08:08:34 CDT 2026 ==========
+  0%|          | 0/3633 [00:00<?, ?it/s]100%|██████████| 3633/3633 [00:00<00:00, 230068.64it/s]
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 5492.38it/s]
+Evaluating NFCorpus on 50 questions...
+Loading weights:   0%|          | 0/201 [00:00<?, ?it/s]Loading weights: 100%|██████████| 201/201 [00:00<00:00, 5182.93it/s]
+[NFCorpus] query 1/50 | score: 36.5
+Loading weights:   0%|          | 0/201 [00:00<?, ?it/s]Loading weights: 100%|██████████| 201/201 [00:00<00:00, 4798.65it/s]
+[NFCorpus] query 2/50 | score: 29.5
+Loading weights:   0%|          | 0/201 [00:00<?, ?it/s]Loading weights: 100%|██████████| 201/201 [00:00<00:00, 5400.18it/s]
+[NFCorpus] query 3/50 | score: 45.5
+Loading weights:   0%|          | 0/201 [00:00<?, ?it/s]Loading weights: 100%|██████████| 201/201 [00:00<00:00, 5484.28it/s]
+[NFCorpus] query 4/50 | score: 35.25
+Loading weights:   0%|          | 0/201 [00:00<?, ?it/s]Loading weights: 100%|██████████| 201/201 [00:00<00:00, 5702.14it/s]
+[NFCorpus] query 5/50 | score: 78.75
+Loading weights:   0%|          | 0/201 [00:00<?, ?it/s]Loading weights: 100%|██████████| 201/201 [00:00<00:00, 4995.17it/s]
+FAILED nfcorpus exit=139 Wed Jun 24 08:10:29 CDT 2026
+
+========== scifact Wed Jun 24 08:10:29 CDT 2026 ==========
+FAILED scifact exit=139 Wed Jun 24 08:10:41 CDT 2026
+
+========== fiqa Wed Jun 24 08:10:41 CDT 2026 ==========
+  0%|          | 0/57638 [00:00<?, ?it/s] 67%|██████▋   | 38514/57638 [00:00<00:00, 385120.17it/s]100%|██████████| 57638/57638 [00:00<00:00, 387141.52it/s]
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 6097.13it/s]
+/home/adamm/projects/rag-research/beir/indexer.py:150: UserWarning: Local mode is not recommended for collections with more than 20,000 points. Collection <rag_chunks> contains 70465 points. Consider using Qdrant in Docker or Qdrant Cloud for better performance with large datasets.
+  client = QdrantClient(path=str(qdrant_path))
+munmap_chunk(): invalid pointer
+FAILED fiqa exit=134 Wed Jun 24 08:11:11 CDT 2026
+
+BEIR full eval finished Wed Jun 24 08:11:11 CDT 2026
+
+========== RETRY Wed Jun 24 08:13:51 CDT 2026 ==========
+
+========== nfcorpus Wed Jun 24 08:13:51 CDT 2026 ==========
+  0%|          | 0/3633 [00:00<?, ?it/s]100%|██████████| 3633/3633 [00:00<00:00, 257841.32it/s]
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 5946.91it/s]
+Evaluating NFCorpus on 50 questions...
+Loading weights:   0%|          | 0/201 [00:00<?, ?it/s]Loading weights: 100%|██████████| 201/201 [00:00<00:00, 5018.48it/s]

@@ -4,7 +4,7 @@ EXPERIMENT: beir_nfcorpus
 Run folder: BEIR - NFCorpus
 Round:      beir
 Mode:       full_pipeline
-Run time:   2026-06-23 19:39:29 CDT
+Run time:   2026-06-24 08:22:11 CDT
 
 CONFIG
 ----------------------------------------
@@ -22,16 +22,16 @@ Judge:            qwen2.5:14b
 
 SCORES
 ----------------------------------------
-Final score:          36.5
-Answer correctness:   0.0
-Faithfulness:         50.0
-Context recall:       100.0
-Context precision:    0.0
-Citation accuracy:    40.0
+Final score:          32.21
+Answer correctness:   12.7
+Faithfulness:         54.9
+Context recall:       18.6
+Context precision:    67.6
+Citation accuracy:    35.6
 Answer parse rate:    100.0%
-Recall@5:            0.0%
-MRR@5:                0.0%
-Avg latency:          35.034s
+Recall@5:            10.0%
+MRR@5:                9.0%
+Avg latency:          6.605s
 
 PER-QUESTION
 ----------------------------------------
@@ -39,7 +39,301 @@ PER-QUESTION
 [nfcorpus_q001] deafness
   Expected source: MED-4532
   Recall hit: no (rank None)
-  Final score: 36.5
-  Answer: Deafness can occur as part of deaf mutism, which is associated with endemic cretinism caused by dietary iodine deficiency [Doc 3].
+  Final score: 21.0
+  Answer: Deafness, specifically deaf mutism, is associated with endemic cretinism [Doc 3].
+
+[nfcorpus_q002] DHA
+  Expected source: MED-2750
+  Recall hit: no (rank None)
+  Final score: 23.5
+  Answer: Docosahexaenoic acid (DHA) is effective in controlling cancer cell growth when sourced from cultured microalgae, suggesting a safe alternative to fish-derived DHA which may contain toxins. Additionally, DHA bioavailability from algal oils in capsules and an algal-DHA-fortified food was found to be e
+
+[nfcorpus_q003] Stopping Heart Disease in Childhood
+  Expected source: MED-3254
+  Recall hit: yes (rank 1)
+  Final score: 46.0
+  Answer: Prevention of cardiovascular disease should begin early in life to mitigate the progression of atherosclerosis which starts in childhood and continues during adolescence and young adulthood, as indicated by risk scores based on traditional coronary heart disease risk factors [Doc 1][Doc 2].
+
+[nfcorpus_q004] dietary scoring
+  Expected source: MED-4686
+  Recall hit: no (rank None)
+  Final score: 21.25
+  Answer: A literature-based adherence score exists for the Mediterranean diet, ranging from 0 to 18 points [Doc 2].
+
+[nfcorpus_q005] domoic acid
+  Expected source: MED-4380
+  Recall hit: yes (rank 1)
+  Final score: 54.0
+  Answer: Domoic acid is a neurotoxin produced by certain diatom species that leads to amnesic shellfish poisoning (ASP) when ingested through contaminated seafood [Doc 1] [Doc 2].
+
+[nfcorpus_q006] Dr. Dean Ornish
+  Expected source: MED-2763
+  Recall hit: no (rank None)
+  Final score: 35.0
+  Answer: The provided context does not contain the answer.
+
+[nfcorpus_q007] Dr. Walter Willett
+  Expected source: MED-4000
+  Recall hit: no (rank None)
+  Final score: 35.0
+  Answer: The provided context does not contain the answer.
+
+[nfcorpus_q008] ECMO
+  Expected source: MED-2109
+  Recall hit: yes (rank 2)
+  Final score: 84.25
+  Answer: Extracorporeal membrane oxygenation (ECMO) significantly decreased mortality and morbidity in newborn respiratory failure cases, as shown by improved survival rates compared to maximal supportive treatment [Doc 1]. A randomized trial also demonstrated higher overall survival for ECMO-treated infants
+
+[nfcorpus_q009] eggnog
+  Expected source: MED-3806
+  Recall hit: no (rank None)
+  Final score: 35.0
+  Answer: The provided context does not contain the answer.
+
+[nfcorpus_q010] endocrine disruptors
+  Expected source: MED-2494
+  Recall hit: no (rank None)
+  Final score: 43.0
+  Answer: Endocrine-disrupting chemicals are associated with disorders such as cancer, diabetes, obesity, the metabolic syndrome, and infertility [Doc 2]. Diethylstilboestrol (DES), for instance, is an endocrine disrupter which causes cancer in rodents and was linked to rare cancers in humans [Doc 3].
+
+[nfcorpus_q011] energy drinks
+  Expected source: MED-3788
+  Recall hit: no (rank None)
+  Final score: 16.5
+  Answer: Energy drink consumption increases platelet aggregation and decreases endothelial function, potentially harming cardiovascular health [Doc 1]. Additionally, energy drinks contribute to tooth erosion due to their acidic properties [Doc 2].
+
+[nfcorpus_q012] Food Dyes and ADHD
+  Expected source: MED-3378
+  Recall hit: no (rank None)
+  Final score: 39.0
+  Answer: Research suggests that a subgroup of children with ADHD shows symptom improvement on an AFC-free diet and reacts adversely when challenged with AFCs [Doc 3]. While not established as the main cause, these studies indicate a potential dietary sensitivity for some individuals [Doc 1].
+
+[nfcorpus_q013] ergothioneine
+  Expected source: MED-4165
+  Recall hit: yes (rank 1)
+  Final score: 76.25
+  Answer: Ergothioneine is specifically accumulated in cells through the organic cation transporter OCTN1 [Doc 1]. Dietary sources rich in ergothioneine include specialty mushrooms, kidney, liver, black and red beans, and oat bran [Doc 1].
+
+[nfcorpus_q014] Evidence-based medicine
+  Expected source: MED-1496
+  Recall hit: no (rank None)
+  Final score: 36.0
+  Answer: Evidence-based medicine optimizes clinical decision-making in evaluating Alzheimer's disease (AD) risk factors and their treatment [Doc 1], but it also biases physicians against nutritional approaches to managing chronic diseases due to an emphasis on double-blind, randomized controlled trials [Doc 
+
+[nfcorpus_q015] factory farming practices
+  Expected source: MED-2700
+  Recall hit: no (rank None)
+  Final score: 33.5
+  Answer: Conventional farming approaches have been shown to have higher environmental impact and greater use of pesticides compared to organic methods, which also tend to have lower concentrations of toxic metals like cadmium and fewer pesticide residues [Doc 2], [Doc 5].
+
+[nfcorpus_q016] fava beans
+  Expected source: MED-4281
+  Recall hit: no (rank None)
+  Final score: 17.0
+  Answer: In vitro studies indicate that Australian-grown faba beans (Vicia faba L.) possess chemopreventive capacities, inhibit angiotensin-converting enzyme (ACE), α-glucosidase, and pancreatic lipase. These extracts also show antioxidant activity and the ability to induce apoptosis in leukemia cells [Doc 1
+
+[nfcorpus_q017] fenugreek
+  Expected source: MED-3518
+  Recall hit: no (rank None)
+  Final score: 12.75
+  Answer: Fenugreek ingestion by mothers during labor can result in a maple syrup-like odour in their newborn infants, leading to a false suspicion of maple syrup urine disease (MSUD) [Doc 1].
+
+[nfcorpus_q018] Finland
+  Expected source: MED-1265
+  Recall hit: no (rank None)
+  Final score: 7.0
+  Answer: Finland had the highest suicide rate in Europe according to the EUROSAVE study, while statins were found to reduce the risk of breast cancer mortality among Finnish patients [Doc 2][Doc 1].
+
+[nfcorpus_q019] flax oil
+  Expected source: MED-4000
+  Recall hit: no (rank None)
+  Final score: 26.5
+  Answer: Flaxseed oil supplementation diminishes skin sensitivity, improves skin barrier function and condition, and lowers blood pressure in dyslipidaemic patients [Doc 1], [Doc 2].
+
+[nfcorpus_q020] Exploiting Autophagy to Live Longer
+  Expected source: MED-2513
+  Recall hit: no (rank None)
+  Final score: 35.0
+  Answer: The provided context does not contain the answer.
+
+[nfcorpus_q021] folic acid
+  Expected source: MED-1195
+  Recall hit: no (rank None)
+  Final score: 45.0
+  Answer: Folic acid is a synthetic form of vitamin B9 that needs conversion into tetrahydrofolate by dihydrofolate reductase, which has been shown to be extremely slow and variable among human samples [Doc 1]. This limitation raises concerns about the efficacy of high-dose folic acid supplementation in clini
+
+[nfcorpus_q022] Fosamax
+  Expected source: MED-2988
+  Recall hit: no (rank None)
+  Final score: 35.0
+  Answer: The provided context does not contain the answer.
+
+[nfcorpus_q023] fructose
+  Expected source: MED-1259
+  Recall hit: no (rank None)
+  Final score: 37.0
+  Answer: Fructose, a monosaccharide present in fruits and added sugars like high-fructose corn syrup, is distinct from glucose. Unlike glucose, fructose consumption does not generate an insulin response but can promote de novo lipogenesis and hepatic insulin resistance [Doc 1, Doc 2].
+
+[nfcorpus_q024] How Citrus Might Help Keep Your Hands Warm
+  Expected source: MED-3474
+  Recall hit: no (rank None)
+  Final score: 10.0
+  Answer: The provided context does not contain the answer.
+
+[nfcorpus_q025] galactosemia
+  Expected source: MED-1337
+  Recall hit: no (rank None)
+  Final score: 18.0
+  Answer: Bone loss is a complication of galactosemia, with bone mineral density (BMD) being lower than normal, indicating an increased risk of fractures. Higher calcium levels predict hip and spine BMD, while higher gonadotropin levels are inversely associated with spinal BMD in women [Doc 1].
+
+[nfcorpus_q026] genetic manipulation
+  Expected source: MED-4753
+  Recall hit: no (rank None)
+  Final score: 35.0
+  Answer: The provided context does not contain the answer.
+
+[nfcorpus_q027] Global Burden of Disease Study
+  Expected source: MED-2076
+  Recall hit: no (rank None)
+  Final score: 4.0
+  Answer: In 2010, the three leading risk factors for global disease burden were high blood pressure (7.0% of DALYs), tobacco smoking including second-hand smoke (6.3%), and alcohol use (5.5%) [Doc 1]. In contrast, childhood underweight was a major risk factor in 1990 but decreased in importance by 2010 [Doc 
+
+[nfcorpus_q028] goji berries
+  Expected source: MED-2882
+  Recall hit: no (rank None)
+  Final score: 35.5
+  Answer: Goji berries, or Lycium barbarum, are utilized in folk medicine for their fruit (fructus Lycii) and root bark (cortex Lycii radicis), with studies indicating they may have antioxidative effects and could help manage age-related diseases [Doc 1][Doc 2].
+
+[nfcorpus_q029] grapes
+  Expected source: MED-2663
+  Recall hit: no (rank None)
+  Final score: 20.5
+  Answer: Grapefruit consumption was associated with modest weight loss (-0.61 ± 2.23 kg, P = .097), a reduction in waist circumference (-2.45 ± 0.60 cm, P = .0002), and systolic blood pressure (-3.21 ± 10.13 mm Hg, P = .03) [Doc 2]. An after-school snack of raisins or grapes lowers cumulative food intake com
+
+[nfcorpus_q030] growth promoters
+  Expected source: MED-2769
+  Recall hit: no (rank None)
+  Final score: 17.0
+  Answer: Hormonal growth promoting agents in food-producing animals, also known as 'anabolics,' are used to increase muscle production. The European Union has a total ban on these substances while the United States allows specific hormones under controlled conditions [Doc 1].
+
+[nfcorpus_q031] halibut
+  Expected source: MED-4182
+  Recall hit: no (rank None)
+  Final score: 30.0
+  Answer: The provided context does not contain the answer.
+
+[nfcorpus_q032] Harvard Physicians’ Study II
+  Expected source: MED-2757
+  Recall hit: no (rank None)
+  Final score: 34.5
+  Answer: The Physicians' Health Study II found no significant effect of vitamins E and C on the prevention of cardiovascular disease (CVD) among men [Doc 2]. However, there was a small reduction in total cancer risk observed with daily multivitamin supplementation [Doc 5].
+
+[nfcorpus_q033] Starving Tumors of Their Blood Supply
+  Expected source: MED-3549
+  Recall hit: no (rank None)
+  Final score: 25.0
+  Answer: Copper depletion, facilitated by drugs such as tetrathiomolybdate or high-dose zinc supplementation, may starve tumors of their blood supply by inhibiting angiogenesis [Doc 2].
+
+[nfcorpus_q034] hearing
+  Expected source: MED-4375
+  Recall hit: no (rank None)
+  Final score: 35.0
+  Answer: The provided context does not contain the answer.
+
+[nfcorpus_q035] heme iron
+  Expected source: MED-1401
+  Recall hit: no (rank None)
+  Final score: 37.0
+  Answer: Heme iron intake is associated with an increased risk of developing type 2 diabetes in various populations [Doc 2] and higher levels are linked to a heightened risk of gestational diabetes mellitus (GDM) during pregnancy [Doc 1, Doc 4].
+
+[nfcorpus_q036] hernia
+  Expected source: MED-2997
+  Recall hit: no (rank None)
+  Final score: 32.5
+  Answer: Hiatus hernia is rarer in developing countries and equally common among Black and White Americans, suggesting environmental rather than genetic causes [Doc 3]. The provided context does not contain information on other types of hernias.
+
+[nfcorpus_q037] Hiroshima
+  Expected source: MED-3617
+  Recall hit: no (rank None)
+  Final score: 14.0
+  Answer: The study focused on atomic-bomb survivors of Hiroshima and Nagasaki [Doc 1].
+
+[nfcorpus_q038] hormonal dysfunction
+  Expected source: MED-3085
+  Recall hit: no (rank None)
+  Final score: 19.5
+  Answer: Hormonal dysfunctions related to polycystic ovary syndrome (PCOS) include insulin resistance, obesity, and androgen excess. These factors contribute significantly to the development of PCOS and its metabolic issues such as glucose intolerance [Doc 1][Doc 5]. Additionally, disorders with androgenic a
+
+[nfcorpus_q039] hyperactivity
+  Expected source: MED-3378
+  Recall hit: no (rank None)
+  Final score: 52.5
+  Answer: Artificial colours or a sodium benzoate preservative (or both) in the diet result in increased hyperactivity in 3-year-old and 8/9-year-old children in the general population [Doc 1]. This aligns with historical findings suggesting that diets free of artificial food additives can reduce symptoms of 
+
+[nfcorpus_q040] IGF-1
+  Expected source: MED-2513
+  Recall hit: no (rank None)
+  Final score: 35.5
+  Answer: Insulin-like growth factor 1 (IGF-1) is implicated in chronic diseases and conditions such as acne, atherosclerosis, carcinogenesis, and neurodegenerative diseases in Western societies [Doc 1]. Elevated serum levels of IGF-1 are also associated with increased risk for childhood cancers [Doc 2].
+
+[nfcorpus_q041] industrial toxins
+  Expected source: MED-2494
+  Recall hit: no (rank None)
+  Final score: 30.25
+  Answer: Industrial chemicals such as phthalates may pose risks to male reproductive health [Doc 1]. Historically, dinitrophenol was used industrially and as a weight-loss drug before its adverse effects were recognized [Doc 2].
+
+[nfcorpus_q042] insects
+  Expected source: MED-3276
+  Recall hit: no (rank None)
+  Final score: 36.0
+  Answer: Silkworm moth larvae are being considered as an animal protein source for astronauts, with significant differences in nutrient composition and gas exchange when fed on mulberry versus stem lettuce [Doc 2], [Doc 3]. Additionally, residential pesticide exposure may be associated with childhood leukemi
+
+[nfcorpus_q043] Iowa Women’s Health Study
+  Expected source: MED-2757
+  Recall hit: no (rank None)
+  Final score: 4.0
+  Answer: The Iowa Women's Health Study has investigated various health outcomes including the relationship between well-done meat intake and breast cancer risk [Doc 1], adherence to cancer prevention guidelines among female cancer survivors [Doc 2], and the impact of whole-grain consumption on inflammatory d
+
+[nfcorpus_q044] Are Dental X-Rays Safe?
+  Expected source: MED-3618
+  Recall hit: yes (rank 1)
+  Final score: 82.25
+  Answer: Dental x-rays involve exposure to ionizing radiation, which requires careful consideration of the benefits against potential risks. Dentists should only make radiographs when there is a specific reason to believe they will offer unique diagnostic or treatment information [Doc 1][Doc 2].
+
+[nfcorpus_q045] Japan
+  Expected source: MED-2513
+  Recall hit: no (rank None)
+  Final score: 37.25
+  Answer: Residents of Okinawa, Japan, exhibit a long life expectancy due to their traditional low-calorie and nutrient-dense diet [Doc 1]. Additionally, a rise in colorectal cancer incidence was observed in Japan following the large-scale importation of beef after World War II [Doc 2].
+
+[nfcorpus_q046] junk food
+  Expected source: MED-2797
+  Recall hit: no (rank None)
+  Final score: 12.5
+  Answer: Processed meats, including hot dogs, are associated with an increased risk of childhood leukemia [Doc 5]. Contaminated meat is also mentioned, indicating potential health risks linked to junk food [Doc 2].
+
+[nfcorpus_q047] kidney beans
+  Expected source: MED-2966
+  Recall hit: no (rank None)
+  Final score: 54.25
+  Answer: Kidney beans may be beneficial for individuals with type 2 diabetes as part of a meal with rice, potentially reducing postprandial glycemic response compared to rice alone.[Doc 4] Additionally, frequent consumption of kidney beans is associated with improved colonic function and fermentation.[Doc 2]
+
+[nfcorpus_q048] kohlrabi
+  Expected source: MED-4455
+  Recall hit: no (rank None)
+  Final score: 35.0
+  Answer: The provided context does not contain the answer.
+
+[nfcorpus_q049] lard
+  Expected source: MED-2644
+  Recall hit: no (rank None)
+  Final score: 14.0
+  Answer: In an in vitro study evaluating dietary fiber binding capacities, lard was among the substances tested along with toxic elements, cholesterol, and bile acid [Doc 3].
+
+[nfcorpus_q050] leeks
+  Expected source: MED-4859
+  Recall hit: no (rank None)
+  Final score: 35.0
+  Answer: The provided context does not contain the answer.
 
 ========================================================================
