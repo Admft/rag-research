@@ -211,13 +211,25 @@ def _finalize_beir_result(key, display, questions, per_question, index_meta, con
 
 
 def _run_pending_in_subprocesses(key, pending):
+    from .indexer import warm_bm25_cache
+
+    warm_bm25_cache(key)
+
     script = PROJECT_ROOT / "run_beir.py"
     python = sys.executable
+    failed = []
     for item in pending:
-        subprocess.run(
+        result = subprocess.run(
             [python, str(script), "--eval", key, "--query-id", item["id"]],
             cwd=str(PROJECT_ROOT),
-            check=True,
+        )
+        if result.returncode != 0:
+            print(f"FAILED {item['id']} exit={result.returncode}", flush=True)
+            failed.append(item["id"])
+    if failed:
+        raise RuntimeError(
+            f"{len(failed)} FiQA queries failed: {', '.join(failed)}\n"
+            f"Re-run: .venv/bin/python run_beir.py --eval {key}"
         )
 
 

@@ -1,0 +1,339 @@
+========================================================================
+EXPERIMENT: beir_fiqa
+========================================================================
+Run folder: BEIR - FiQA
+Round:      beir
+Mode:       full_pipeline
+Run time:   2026-06-24 09:20:32 CDT
+
+CONFIG
+----------------------------------------
+Chunk size:       256
+Overlap:          50
+Top-k:            5
+Retriever:        hybrid
+Embedding model:  BAAI/bge-small-en-v1.5
+Reranker:         bge
+Query transform:  none
+Prompt:           strict_context_json
+Context filter:   none
+Generator:        qwen2.5:14b
+Judge:            qwen2.5:14b
+
+SCORES
+----------------------------------------
+Final score:          45.15
+Answer correctness:   32.5
+Faithfulness:         54.9
+Context recall:       40.0
+Context precision:    69.1
+Citation accuracy:    51.4
+Answer parse rate:    100.0%
+Recall@5:            34.0%
+MRR@5:                20.7%
+Avg latency:          8.725s
+
+PER-QUESTION
+----------------------------------------
+
+[fiqa_q001] Tax implications of holding EWU (or other such UK ETFs) as a US citizen?
+  Expected source: 480749
+  Recall hit: no (rank None)
+  Final score: 43.0
+  Answer: As a US citizen, holding EWU or other UK ETFs requires careful consideration due to potential Passive Foreign Investment Company (PFIC) rules [Doc 1]. However, EWU and EWUS traded on US markets are not classified as PFIC but contain PFICs. iShares manages these PFIC holdings within the fund [Doc 2].
+
+[fiqa_q002] Do individual investors use Google to obtain stock quotes?
+  Expected source: 67785
+  Recall hit: no (rank None)
+  Final score: 38.0
+  Answer: Individual investors do use Google to obtain stock quotes, as mentioned in the context of using it for personal investments [Doc 3].
+
+[fiqa_q003] Why does Charles Schwab have a Mandatory Settlement Period after selling stocks?
+  Expected source: 28314
+  Recall hit: yes (rank 2)
+  Final score: 84.25
+  Answer: Charles Schwab has a mandatory settlement period after selling stocks because it requires time to ensure the receipt of funds from the buyer's side, which they cannot control. This process is necessary as there may be additional parties involved in the transaction and three days are needed for verif
+
+[fiqa_q004] Why diversify stocks/investments?
+  Expected source: 570787
+  Recall hit: no (rank None)
+  Final score: 29.5
+  Answer: Diversifying stocks/investments helps mitigate risks by not putting all funds into one asset, reducing the impact of poor performance in any single investment [Doc 1]. It softens market volatility and ensures more consistent returns rather than aiming for the highest possible gains [Doc 1]. Diversif
+
+[fiqa_q005] How to minimise the risk of a reduction in purchase power in case of Brexit for money held in a bank account?
+  Expected source: 526115
+  Recall hit: no (rank None)
+  Final score: 33.5
+  Answer: To minimize risk, consider diversifying your savings with a specific strategy rather than simply spreading money around. Also, evaluate the security and stability of banks in potential investment countries [Doc 1][Doc 4][Doc 5].
+
+[fiqa_q006] F-1 student investing in foreign markets
+  Expected source: 57168
+  Recall hit: no (rank None)
+  Final score: 33.5
+  Answer: It is legal for an F-1 student to invest in foreign markets, similar to any other foreigner, provided tax obligations are met and proper identification such as an SSN or ITIN is obtained [Doc 2][Doc 3].
+
+[fiqa_q007] What does a high operating margin but a small but positive ROE imply about a company?
+  Expected source: 113585
+  Recall hit: yes (rank 1)
+  Final score: 82.25
+  Answer: A company with a high operating margin but small positive ROE might be seen as efficient in operations, yet its profitability relative to shareholder equity is modest. This could imply the stock price is inflated due to optimistic expectations for future revenue growth [Doc 1].
+
+[fiqa_q008] How are various types of income taxed differently in the USA?
+  Expected source: 66858
+  Recall hit: no (rank None)
+  Final score: 40.0
+  Answer: In the USA, income from various sources such as bartering and cryptocurrencies is taxable. For example, bartered goods or services must be reported on Schedule C of Form 1040 at their fair market value [Doc 3]. Additionally, earnings in foreign currencies like gold are taxed based on their USD equiv
+
+[fiqa_q009] Looking for good investment vehicle for seasonal work and savings
+  Expected source: 380942
+  Recall hit: no (rank None)
+  Final score: 42.0
+  Answer: For someone with seasonal work and limited income stability, it's advisable to maintain an emergency fund that covers potential emergencies such as car repairs or medical issues [Doc 2]. This fund should primarily consist of lower-risk investment vehicles like bonds or a high-yield savings account d
+
+[fiqa_q010] Understanding the T + 3 settlement days rule
+  Expected source: 512984
+  Recall hit: no (rank None)
+  Final score: 43.5
+  Answer: The T+3 settlement rule means that trade settlements are completed three days after the trade is executed, affecting accounting rather than trading activities directly [Doc 5][Doc 2]. In a cash account, funds from trades remain unavailable for three business days post-execution due to unsettled tran
+
+[fiqa_q011] How should I prepare for the next financial crisis?
+  Expected source: 17652
+  Recall hit: no (rank None)
+  Final score: 21.5
+  Answer: To prepare for a severe crisis, consider diversifying your assets beyond conventional investments [Doc 1]. You can stack probabilities by reducing holding time and avoiding known volatile events [Doc 2].
+
+[fiqa_q012] Investing/business with other people's money: How does it work?
+  Expected source: 575869
+  Recall hit: yes (rank 1)
+  Final score: 45.0
+  Answer: You can either borrow money or get people to invest in your business by buying stock. People may also choose to park their money with you, like depositing it into a bank account, from which you can lend out some percentage and keep the interest for yourself [Doc 1].
+
+[fiqa_q013] What is considered high or low when talking about volume?
+  Expected source: 79807
+  Recall hit: no (rank None)
+  Final score: 35.5
+  Answer: When discussing volume, it is considered high if a day's trading volume significantly exceeds the usual volume, typically calculated using normal distribution statistics where anything outside 1.5 to 2.0 standard deviations could be significant [Doc 1].
+
+[fiqa_q014] Is there an advantage to a traditional but non-deductable IRA over a taxable account? [duplicate]
+  Expected source: 382236
+  Recall hit: yes (rank 4)
+  Final score: 88.75
+  Answer: There is an advantage to a traditional but non-deductible IRA over a taxable account as it grows tax-free and only taxes earnings at withdrawal, unlike taxable accounts where gains are taxed annually [Doc 2]. However, for tax-inefficient assets like bonds or dividend stocks, the IRA's single taxatio
+
+[fiqa_q015] Is it okay to be married, 30 years old and have no retirement?
+  Expected source: 8266
+  Recall hit: no (rank None)
+  Final score: 35.0
+  Answer: The provided context does not contain the answer.
+
+[fiqa_q016] Rollover into bond fund to do dollar cost averaging [duplicate]
+  Expected source: 549072
+  Recall hit: no (rank None)
+  Final score: 41.0
+  Answer: Dollar cost averaging involves making regular, periodic investments into a fund regardless of the price level. This strategy is suitable for investment vehicles where you cannot invest in a lump sum and helps diversify risk by spreading out purchases over time [Doc 2][Doc 1].
+
+[fiqa_q017] Why would you elect to apply a refund to next year's tax bill?
+  Expected source: 304284
+  Recall hit: no (rank None)
+  Final score: 33.0
+  Answer: You would elect to apply a refund to next year's tax bill if you're self-employed and need to pay quarterly estimated taxes [Doc 1], or if you anticipate significant capital gains that will increase your liability in the coming year [Doc 5].
+
+[fiqa_q018] What extra information might be obtained from the next highest bids in an order book?
+  Expected source: 39185
+  Recall hit: no (rank None)
+  Final score: 32.5
+  Answer: The next highest bids in an order book can provide information on potential support levels and the willingness of buyers to purchase at slightly higher prices, indicating interest and demand beyond the current bid price [Doc 4].
+
+[fiqa_q019] How much do brokerages pay exchanges per trade?
+  Expected source: 571306
+  Recall hit: no (rank None)
+  Final score: 10.0
+  Answer: The provided context does not contain the answer.
+
+[fiqa_q020] Investment strategy for 401k when rolling over soon
+  Expected source: 222485
+  Recall hit: yes (rank 2)
+  Final score: 32.0
+  Answer: When rolling over your 401k, opt for a direct transfer to minimize fees and choose a reputable company such as Fidelity or Vanguard [Doc 1]. If planning a 'Backdoor ROTH,' maintain a low or zero IRA balance [Doc 1].
+
+[fiqa_q021] Does a market maker sell (buy) at a bid or ask price?
+  Expected source: 284235
+  Recall hit: no (rank None)
+  Final score: 80.0
+  Answer: A market maker buys at the bid price and sells at the ask price [Doc 4].
+
+[fiqa_q022] What approaches are there for pricing a small business?
+  Expected source: 76695
+  Recall hit: no (rank None)
+  Final score: 36.75
+  Answer: Small businesses can use cost plus, competition based, and consumer based pricing strategies for setting prices [Doc 1]. Additionally, they should consider charging above their expenses to aim for profitability [Doc 2].
+
+[fiqa_q023] Bitcoin Cost Basis Purchases
+  Expected source: 568064
+  Recall hit: yes (rank 3)
+  Final score: 44.0
+  Answer: The cost basis of acquiring a bitcoin is linked to the expense incurred in mining it. This implies miners wouldn't sell at below this break-even point [Doc 1]. Additionally, Bitcoin is treated by the IRS as property, meaning each transaction involving its use incurs capital gains or losses regardles
+
+[fiqa_q024] What happens with the “long” buyer of a stock when somebody else's short fails (that is, unlimited loss bankrupts short seller)
+  Expected source: 588116
+  Recall hit: no (rank None)
+  Final score: 31.5
+  Answer: When a short seller's position fails due to the stock price increasing, it results in an unlimited loss for the short seller. For long buyers, this situation can be advantageous as their potential gain from holding the stock is theoretically unlimited [Doc 1].
+
+[fiqa_q025] Short term parking of a large inheritance?
+  Expected source: 431799
+  Recall hit: no (rank None)
+  Final score: 35.0
+  Answer: The provided context does not contain the answer.
+
+[fiqa_q026] Explain the details and benefits of rebalancing a retirement portfolio?
+  Expected source: 588607
+  Recall hit: yes (rank 1)
+  Final score: 81.5
+  Answer: Rebalancing a portfolio involves adjusting the weights of different asset categories, such as selling high-performing assets and buying low-performing ones, which helps reduce risk by diversifying your investments [Doc 1]. However, it can incur costs like trading fees and taxes; thus, minimizing the
+
+[fiqa_q027] How to sell a stock in a crashing market?
+  Expected source: 99857
+  Recall hit: no (rank None)
+  Final score: 38.0
+  Answer: To sell a stock in a crashing market, you can sell short or buy puts if you know the crash is coming [Doc 2]. However, it's risky as losses from panic-selling could be substantial [Doc 4].
+
+[fiqa_q028] Probablity of touching In the money vs expiring in the money for an american option
+  Expected source: 6771
+  Recall hit: yes (rank 4)
+  Final score: 32.25
+  Answer: The probability of an American option expiring in the money decreases but the likelihood of it being in the money at any point before expiration remains significant, especially for options with high delta values approaching their expiration date [Doc 2].
+
+[fiqa_q029] How do you translate a per year salary into a part-time per hour job?
+  Expected source: 589970
+  Recall hit: no (rank None)
+  Final score: 52.0
+  Answer: To convert a per year salary into a part-time per hour job, first calculate your real annual compensation (RAC) including benefits. Then, break down the RAC based on the number of working weeks and hours per week you plan to work, such as 20 hours/week for 52 weeks [Doc 1]. Finally, divide this annu
+
+[fiqa_q030] How common is “pass-through” health insurance?
+  Expected source: 443960
+  Recall hit: yes (rank 1)
+  Final score: 37.5
+  Answer: The phrase 'pass-through' insurance is not recognized [Doc 1]. The concept might relate to self-funded health plans but is not commonly used or understood in this context [Doc 1].
+
+[fiqa_q031] How can I calculate a “running” return using XIRR in a spreadsheet?
+  Expected source: 195044
+  Recall hit: yes (rank 5)
+  Final score: 40.5
+  Answer: To calculate a 'running' return using XIRR in a spreadsheet, setup one column for dates and another for investment amounts. Invested money should be marked as negative values and withdrawals as positive. Exclude interim returns like dividends unless they're actually withdrawn. The XIRR function will
+
+[fiqa_q032] What are a few sites that make it easy to invest in high interest rate mutual funds?
+  Expected source: 28291
+  Recall hit: yes (rank 2)
+  Final score: 73.5
+  Answer: Vanguard.com makes it easy to invest in high interest rate mutual funds with low fees, though you might need a local brokerage account if direct access isn't feasible [Doc 2][Doc 5].
+
+[fiqa_q033] Definitions of leverage and of leverage factor
+  Expected source: 103362
+  Recall hit: no (rank None)
+  Final score: 32.0
+  Answer: Leverage is the act of taking on debt instead of using your own equity, commonly seen in financial contexts like loans and trading [Doc 1]. The leverage factor specifies the ratio of borrowed funds to equity, for instance, borrowing 10000 yen with an equity stake of 1000 yen [Doc 1].
+
+[fiqa_q034] Is is possible to dispute IRS underpayment penalties?
+  Expected source: 451935
+  Recall hit: yes (rank 2)
+  Final score: 77.5
+  Answer: It is unlikely you have legitimate grounds to dispute the IRS underpayment penalty [Doc 2].
+
+[fiqa_q035] How much should I be contributing to my 401k given my employer's contribution?
+  Expected source: 160786
+  Recall hit: no (rank None)
+  Final score: 41.0
+  Answer: You should contribute up to $18,000 annually to your 401(k). If your employer offers a matching contribution, you should contribute enough to maximize this free money. Your employer's contribution is separate and does not count against the $18,000 limit [Doc 2].
+
+[fiqa_q036] Rationale behind using 12, 26 and 9 to calculate MACD
+  Expected source: 191588
+  Recall hit: yes (rank 1)
+  Final score: 67.5
+  Answer: The rationale behind using 12, 26, and 9 to calculate MACD is that these values provide a balance between sensitivity and smoothness in identifying trends. The 26-day EMA is considered the long moving average compared to the shorter 12-day EMA [Doc 1].
+
+[fiqa_q037] How do disputed debts work on credit reports?
+  Expected source: 467737
+  Recall hit: no (rank None)
+  Final score: 33.5
+  Answer: Disputed debts on credit reports work through consumers initiating disputes with creditors or directly with credit bureaus. If a creditor cannot verify the dispute within 30 days, it must be removed from the report according to the Fair Credit Reporting Act [Doc 2][Doc 4].
+
+[fiqa_q038] How to account for money earned and spent prior to establishing business bank accounts?
+  Expected source: 73427
+  Recall hit: yes (rank 1)
+  Final score: 43.5
+  Answer: Funds earned and spent before opening a dedicated business account should be classified according to their origination. If the money was taken personally, it would either be considered 'distributions' or recorded as a 'loan'. Similarly, if you paid expenses personally, they could be recorded as 'con
+
+[fiqa_q039] Need a formula to determine monthly payments received at time t if I'm reinvesting my returns
+  Expected source: 518896
+  Recall hit: no (rank None)
+  Final score: 5.0
+  Answer: The provided context does not contain the answer.
+
+[fiqa_q040] Forex independent investments
+  Expected source: 518721
+  Recall hit: no (rank None)
+  Final score: 38.25
+  Answer: It's not advisable to invest in Forex as it is a speculative activity, often described as a zero-sum game where most participants lose money over time [Doc 1]. In fact, there have been instances of unregulated forex trading resulting in significant financial hits for individuals [Doc 2].
+
+[fiqa_q041] Transferring money from 403B to 401K?
+  Expected source: 104134
+  Recall hit: yes (rank 2)
+  Final score: 42.5
+  Answer: You can generally move your 403(b) assets into another employer's 401(k) plan if the new plan allows incoming rollovers, but this should be done carefully considering investment options and protections offered by each type of account [Doc 2].
+
+[fiqa_q042] How to contribute to Roth IRA when income is at the maximum limit & you have employer-sponsored 401k plans?
+  Expected source: 61022
+  Recall hit: no (rank None)
+  Final score: 32.5
+  Answer: If your income exceeds the maximum limit for contributing to a Roth IRA directly and you have an employer-sponsored 401k plan, consider making after-tax contributions to the 401k. Once retired or if your plan allows, roll these after-tax funds into a Roth IRA [Doc 5].
+
+[fiqa_q043] Closing a futures position
+  Expected source: 148728
+  Recall hit: no (rank None)
+  Final score: 50.0
+  Answer: A trader can close a position in futures trading by executing an opposite trade to cancel out their existing contract. This process is detailed on page 22 of CME's introduction to Futures [Doc 2]. Additionally, one can exit before the settlement date through a closing transaction where either party 
+
+[fiqa_q044] Net loss not distributed by mutual funds to their shareholders?
+  Expected source: 496820
+  Recall hit: no (rank None)
+  Final score: 74.0
+  Answer: Mutual funds do not distribute net capital losses to their shareholders; instead, they retain these losses to be written off against future capital gains [Doc 2].
+
+[fiqa_q045] Pay off credit card debt or earn employer 401(k) match?
+  Expected source: 53544
+  Recall hit: no (rank None)
+  Final score: 69.5
+  Answer: Mathematically, you should prioritize earning an employer's 401(k) match due to its guaranteed higher ROI compared to paying off low-interest credit card debt [Doc 2]. However, psychologically and emotionally, being out of debt can be liberating and may warrant focusing on high-interest debts first 
+
+[fiqa_q046] Short Term Capital Gains tax vs. IRA Withdrawal Tax w/o Quarterly Est. Taxes
+  Expected source: 155053
+  Recall hit: yes (rank 2)
+  Final score: 55.0
+  Answer: Short term capital gains are taxed at the ordinary income rate, which for a 25% bracket would be 25%. In contrast, an IRA withdrawal at age 59 1/2 or younger incurs your ordinary tax rate plus a 10% penalty, totaling 35%, making it more costly [Doc 1].
+
+[fiqa_q047] Am I required to have a lawyer create / oversee creation of my will?
+  Expected source: 437100
+  Recall hit: yes (rank 3)
+  Final score: 46.0
+  Answer: You are not legally required to have a lawyer create your will, but doing so properly requires understanding state-specific laws and ensuring it meets legal requirements [Doc 2][Doc 3].
+
+[fiqa_q048] How are the best way to make and save money at 22 years old
+  Expected source: 531698
+  Recall hit: no (rank None)
+  Final score: 34.5
+  Answer: At 22, focus on earning and developing multiple income streams to increase your financial stability. Additionally, save a portion of your salary by sending 10% to a saving account each time you get paid [Doc 5][Doc 1].
+
+[fiqa_q049] Personal taxes for Shopify / Paypal shop?
+  Expected source: 272425
+  Recall hit: no (rank None)
+  Final score: 42.0
+  Answer: Any money received through PayPal is taxable income. You must document each transaction and assume you need separate receipts for expenses, as PayPal or Shopify won't automatically send tax-related documentation [Doc 2].
+
+[fiqa_q050] what is the best way to do a freelancing job over the summer for a student
+  Expected source: 496064
+  Recall hit: no (rank None)
+  Final score: 47.0
+  Answer: The best way to do a freelancing job over the summer as a student is to search for opportunities related to your field, such as programming [Doc2]. You can also directly contact companies offering internships and inquire about freelance or part-time positions [Doc1]. Ensure you manage your tax conce
+
+========================================================================

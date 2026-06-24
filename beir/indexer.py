@@ -1,6 +1,7 @@
 """Build Qdrant indexes for BEIR corpora using the existing indexing pipeline."""
 
 import json
+import pickle
 from contextlib import contextmanager
 
 from ablation.configs import merged_settings, to_experiment_config
@@ -107,6 +108,16 @@ def build_beir_index(dataset, show_progress=False, force=False, max_queries=50):
 
     save_index_config(key, stats)
     eval_path, rows = convert_dataset(key, max_queries=max_queries)
+
+    chunks_path = stats.get("chunks_path")
+    if chunks_path and stats.get("chunks", 0) > 20000:
+        chunk_texts = []
+        with open(chunks_path, "r", encoding="utf-8") as f:
+            for line in f:
+                if line.strip():
+                    chunk_texts.append(json.loads(line)["text"])
+        _build_bm25(chunk_texts, dataset=key, chunks_path=chunks_path)
+
     print(
         f"Indexed {key}: {stats['documents']} docs, {stats['chunks']} chunks "
         f"→ {qdrant_path} ({len(rows)} eval questions → {eval_path})"
@@ -114,12 +125,74 @@ def build_beir_index(dataset, show_progress=False, force=False, max_queries=50):
     return qdrant_path
 
 
-def _build_bm25(chunk_texts):
+def _bm25_cache_paths(dataset):
+    root = dataset_index_path(normalize_dataset_name(dataset))
+    return root / "bm25_okapi.pkl", root / "bm25_okapi.json"
+
+
+def _load_bm25_cache(dataset, chunk_count, chunks_path):
+    cache_path, meta_path = _bm25_cache_paths(dataset)
+    if not cache_path.exists() or not meta_path.exists():
+        return None
+
+    meta = json.loads(meta_path.read_text(encoding="utf-8"))
+    if meta.get("chunk_count") != chunk_count:
+        return None
+    if meta.get("chunks_path") != str(chunks_path):
+        return None
+
+    with cache_path.open("rb") as f:
+        return pickle.load(f)
+
+
+def _save_bm25_cache(dataset, bm25, chunk_count, chunks_path):
+    cache_path, meta_path = _bm25_cache_paths(dataset)
+    cache_path.parent.mkdir(parents=True, exist_ok=True)
+    with cache_path.open("wb") as f:
+        pickle.dump(bm25, f)
+    meta_path.write_text(
+        json.dumps({"chunk_count": chunk_count, "chunks_path": str(chunks_path)}, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+
+def _build_bm25(chunk_texts, dataset=None, chunks_path=None, quiet=False):
     from chunking import normalize_for_lexical
     from rank_bm25 import BM25Okapi
 
+    if dataset is not None and chunks_path is not None:
+        cached = _load_bm25_cache(dataset, len(chunk_texts), chunks_path)
+        if cached is not None:
+            if not quiet:
+                print(f"Loaded cached BM25 index ({len(chunk_texts)} chunks)")
+            return cached
+
+    if not quiet:
+        print(f"Building BM25 index for {len(chunk_texts)} chunks...")
     tokenized = [normalize_for_lexical(text).split() for text in chunk_texts]
-    return BM25Okapi(tokenized)
+    bm25 = BM25Okapi(tokenized)
+
+    if dataset is not None and chunks_path is not None:
+        _save_bm25_cache(dataset, bm25, len(chunk_texts), chunks_path)
+
+    return bm25
+
+
+def warm_bm25_cache(dataset):
+    """Pre-build BM25 cache on disk so per-query subprocesses start faster."""
+    key = normalize_dataset_name(dataset)
+    saved = json.loads(index_config_path(key).read_text(encoding="utf-8"))
+    chunks_path = saved.get("chunks_path")
+    if not chunks_path:
+        raise RuntimeError(f"index_config.json for {key} is missing chunks_path")
+
+    chunk_texts = []
+    with open(chunks_path, "r", encoding="utf-8") as f:
+        for line in f:
+            if line.strip():
+                chunk_texts.append(json.loads(line)["text"])
+
+    return _build_bm25(chunk_texts, dataset=key, chunks_path=chunks_path)
 
 
 def _make_experiment_index(config, chunks, embed_model, client, bm25):
@@ -168,9 +241,12 @@ def load_beir_index(dataset):
     )
 
     chunk_texts = [chunk["text"] for chunk in chunks]
-    if len(chunks) > 20000:
-        print(f"Building BM25 index for {len(chunks)} chunks...")
-    bm25 = _build_bm25(chunk_texts)
+    bm25 = _build_bm25(
+        chunk_texts,
+        dataset=key,
+        chunks_path=chunks_path,
+        quiet=len(chunks) <= 20000,
+    )
 
     client = QdrantClient(path=str(qdrant_path))
     if not client.collection_exists(COLLECTION_NAME):
