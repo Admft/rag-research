@@ -4,11 +4,13 @@
   "conditions": {
     "baseline": {
       "runs": [
-        83.07
+        83.07,
+        82.2,
+        80.11
       ],
-      "mean": 83.07,
-      "std": 0.0,
-      "delta_vs_baseline": -0.15
+      "mean": 81.79,
+      "std": 1.52,
+      "delta_vs_baseline": -1.43
     }
   }
 }

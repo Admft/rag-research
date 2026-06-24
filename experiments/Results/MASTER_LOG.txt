@@ -1,7 +1,7 @@
 ========================================================================
 RAG RESEARCH — MASTER LOG
 All times: Central Time (America/Chicago)
-Last updated: 2026-06-23 19:16:12 CDT
+Last updated: 2026-06-24 04:16:07 CDT
 ========================================================================
 
 WHERE THINGS LIVE
@@ -24,7 +24,29 @@ HOW TO READ SCORES
 ALL RUNS (newest first)
 ========================================================================
 
-#1  001__ablation_ablation_baseline_baseline_r1__2026-06-23_19-16-12_CDT
+#1  009__ablation_ablation_baseline_baseline_r3__2026-06-24_04-16-06_CDT
+     Name:   ablation_ablation_baseline_baseline_r3
+     Type:   ablation
+     Round:  ablation_baseline
+     Mode:   Full pipeline (retrieve + generate + score)
+     Ran:    2026-06-24 04:16:06 CDT
+     Settings: chunk 256 | overlap 50 | top_k 5 | hybrid | reranker bge
+     Scores: final 80.11 | correctness 76.75 | faithfulness 80.55 | context recall 84.08
+     Retrieval: Recall@5 100.00% | MRR@5 94.86%
+     Folder: experiments/Results/runs/009__ablation_ablation_baseline_baseline_r3__2026-06-24_04-16-06_CDT/
+
+#2  008__ablation_ablation_baseline_baseline_r2__2026-06-24_04-09-37_CDT
+     Name:   ablation_ablation_baseline_baseline_r2
+     Type:   ablation
+     Round:  ablation_baseline
+     Mode:   Full pipeline (retrieve + generate + score)
+     Ran:    2026-06-24 04:09:37 CDT
+     Settings: chunk 256 | overlap 50 | top_k 5 | hybrid | reranker bge
+     Scores: final 82.20 | correctness 79.00 | faithfulness 84.17 | context recall 85.83
+     Retrieval: Recall@5 100.00% | MRR@5 94.86%
+     Folder: experiments/Results/runs/008__ablation_ablation_baseline_baseline_r2__2026-06-24_04-09-37_CDT/
+
+#3  001__ablation_ablation_baseline_baseline_r1__2026-06-23_19-16-12_CDT
      Name:   ablation_ablation_baseline_baseline_r1
      Type:   ablation
      Round:  ablation_baseline
