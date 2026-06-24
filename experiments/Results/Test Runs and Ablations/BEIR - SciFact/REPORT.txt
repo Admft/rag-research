@@ -1,0 +1,57 @@
+========================================================================
+EXPERIMENT: beir_scifact
+========================================================================
+Run folder: BEIR - SciFact
+Round:      beir
+Mode:       full_pipeline
+Run time:   2026-06-23 21:08:06 CDT
+
+CONFIG
+----------------------------------------
+Chunk size:       256
+Overlap:          50
+Top-k:            5
+Retriever:        hybrid
+Embedding model:  BAAI/bge-small-en-v1.5
+Reranker:         bge
+Query transform:  none
+Prompt:           strict_context_json
+Context filter:   none
+Generator:        qwen2.5:14b
+Judge:            qwen2.5:14b
+
+SCORES
+----------------------------------------
+Final score:          70.0
+Answer correctness:   55.0
+Faithfulness:         95.0
+Context recall:       65.0
+Context precision:    73.33
+Citation accuracy:    66.67
+Answer parse rate:    100.0%
+Recall@5:            66.7%
+MRR@5:                66.7%
+Avg latency:          16.621s
+
+PER-QUESTION
+----------------------------------------
+
+[scifact_q001] 0-dimensional biomaterials show inductive properties.
+  Expected source: 31715818
+  Recall hit: no (rank None)
+  Final score: 35.0
+  Answer: The provided context does not contain the answer.
+
+[scifact_q002] All hematopoietic stem cells segregate their chromosomes randomly.
+  Expected source: 4381486
+  Recall hit: yes (rank 1)
+  Final score: 87.75
+  Answer: All hematopoietic stem cells segregate their chromosomes randomly, according to the sequential administration of labels revealing no asymmetric segregation. [Doc 1]
+
+[scifact_q003] Radioiodine treatment of non-toxic multinodular goitre reduces thyroid volume.
+  Expected source: 9745001
+  Recall hit: yes (rank 1)
+  Final score: 87.25
+  Answer: Radioiodine treatment of non-toxic multinodular goitre results in a substantial reduction in thyroid volume, with the median volume decreasing from 73 ml to 29 ml at 24 months post-treatment [Doc 1].
+
+========================================================================
