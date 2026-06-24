@@ -1,0 +1,38 @@
+========================================================================
+RAG RESEARCH — MASTER LOG
+All times: Central Time (America/Chicago)
+Last updated: 2026-06-23 19:16:12 CDT
+========================================================================
+
+WHERE THINGS LIVE
+----------------------------------------
+  experiments/Results/MASTER_LOG.txt  ← you are here (compare all runs)
+  experiments/Results/summary.csv     ← spreadsheet-friendly table
+  experiments/Results/runs/         ← one folder per run
+      001__baseline__2026-06-22_.../
+          REPORT.txt   ← read this first (human-friendly)
+          data.json    ← full raw data
+          questions.jsonl  ← per-question details (if applicable)
+
+HOW TO READ SCORES
+----------------------------------------
+  Retrieval only  → higher Recall@k and MRR@k is better
+  Full pipeline   → higher final_score is better (0-100)
+
+
+========================================================================
+ALL RUNS (newest first)
+========================================================================
+
+#1  001__ablation_ablation_baseline_baseline_r1__2026-06-23_19-16-12_CDT
+     Name:   ablation_ablation_baseline_baseline_r1
+     Type:   ablation
+     Round:  ablation_baseline
+     Mode:   Full pipeline (retrieve + generate + score)
+     Ran:    2026-06-23 19:16:12 CDT
+     Settings: chunk 256 | overlap 50 | top_k 5 | hybrid | reranker bge
+     Scores: final 83.07 | correctness 79.42 | faithfulness 82.83 | context recall 89.08
+     Retrieval: Recall@5 100.00% | MRR@5 94.86%
+     Folder: experiments/Results/runs/001__ablation_ablation_baseline_baseline_r1__2026-06-23_19-16-12_CDT/
+
+End of master log.

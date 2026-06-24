@@ -1,0 +1,14 @@
+{
+  "ablation": "Locked Baseline",
+  "baseline_score": 83.22,
+  "conditions": {
+    "baseline": {
+      "runs": [
+        83.07
+      ],
+      "mean": 83.07,
+      "std": 0.0,
+      "delta_vs_baseline": -0.15
+    }
+  }
+}
