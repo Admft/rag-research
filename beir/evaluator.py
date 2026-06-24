@@ -1,6 +1,8 @@
 """Run the existing pipeline on BEIR eval questions."""
 
 import json
+import time
+import types
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
@@ -30,7 +32,62 @@ from retrievers import Retriever
 from scoring import score_answer
 from config import OLLAMA_GENERATION_MAX_TOKENS
 from llm import call_ollama
-import time
+
+
+def _checkpoint_path(result_dir):
+    return result_dir / "checkpoint.jsonl"
+
+
+def _load_checkpoint(result_dir):
+    path = _checkpoint_path(result_dir)
+    if not path.exists():
+        return {}
+    completed = {}
+    with path.open("r", encoding="utf-8") as f:
+        for line in f:
+            if line.strip():
+                row = json.loads(line)
+                completed[row["id"]] = row
+    return completed
+
+
+def _append_checkpoint(result_dir, row):
+    result_dir.mkdir(parents=True, exist_ok=True)
+    with _checkpoint_path(result_dir).open("a", encoding="utf-8") as f:
+        f.write(json.dumps(row) + "\n")
+
+
+def _init_retriever(index, config):
+    """Use CPU for the reranker so it does not fight Ollama for GPU memory."""
+    retriever = Retriever(index, config)
+
+    def _get_reranker_cpu(self):
+        if self._reranker is not None:
+            return self._reranker
+        if self.config.reranker == "none":
+            return None
+        if self.config.reranker in {"cross_encoder", "bge"}:
+            from sentence_transformers import CrossEncoder
+
+            model_name = (
+                "BAAI/bge-reranker-base"
+                if self.config.reranker == "bge"
+                else "cross-encoder/ms-marco-MiniLM-L-6-v2"
+            )
+            self._reranker = CrossEncoder(model_name, device="cpu")
+            return self._reranker
+        raise ValueError(f"Unsupported reranker: {self.config.reranker}")
+
+    retriever._get_reranker = types.MethodType(_get_reranker_cpu, retriever)
+    return retriever
+
+
+def _retrieve_with_retry(retriever, question):
+    try:
+        return retriever.retrieve(question)
+    except (TypeError, RuntimeError):
+        retriever._reranker = None
+        return retriever.retrieve(question)
 
 
 def require_ollama_ready():
@@ -114,6 +171,16 @@ def run_beir_evaluation(dataset, show_progress=False, force=False, max_queries=5
     if max_queries and len(questions) > max_queries:
         questions = questions[:max_queries]
 
+    result_dir = dataset_result_path(key)
+    if force and result_dir.exists():
+        checkpoint = _checkpoint_path(result_dir)
+        if checkpoint.exists():
+            checkpoint.unlink()
+
+    completed = {} if force else _load_checkpoint(result_dir)
+    if completed:
+        print(f"Resuming {display}: {len(completed)} questions already in checkpoint")
+
     index, index_meta = load_beir_index(key)
     release_embed_gpu(index)
 
@@ -125,21 +192,22 @@ def run_beir_evaluation(dataset, show_progress=False, force=False, max_queries=5
         description=f"BEIR {display} evaluation (locked baseline config)",
     )
 
-    per_question = []
+    per_question = [completed[q["id"]] for q in questions if q["id"] in completed]
+    pending = [q for q in questions if q["id"] not in completed]
     total = len(questions)
-    print(f"Evaluating {display} on {total} questions...")
+    print(f"Evaluating {display} on {total} questions ({len(pending)} remaining)...")
 
-    release_embed_gpu(index)
-    retriever = Retriever(index, config)
+    retriever = _init_retriever(index, config)
     json_output = uses_json_output(config.prompt)
 
-    for i, item in enumerate(questions, start=1):
+    for item in pending:
+        i = len(per_question) + 1
         question = item["question"]
         expected_source = item.get("expected_source") or item.get("source_pdf", "")
         expected_answer = item.get("answer", "")
 
         retrieve_start = time.perf_counter()
-        retrieved = retriever.retrieve(question)
+        retrieved = _retrieve_with_retry(retriever, question)
         retrieve_latency = time.perf_counter() - retrieve_start
 
         found_rank = find_source_rank(retrieved, expected_source)
@@ -197,6 +265,7 @@ def run_beir_evaluation(dataset, show_progress=False, force=False, max_queries=5
             "metrics": metrics,
         })
         per_question.append(row)
+        _append_checkpoint(result_dir, row)
         print(f"[{display}] query {i}/{total} | score: {metrics['final_score']}", flush=True)
 
     index_stats = {
@@ -207,7 +276,6 @@ def run_beir_evaluation(dataset, show_progress=False, force=False, max_queries=5
 
     central_dt = datetime.now(ZoneInfo("America/Chicago"))
     run_time_central = central_dt.strftime("%Y-%m-%d %H:%M:%S %Z")
-    result_dir = dataset_result_path(key)
     result_dir.mkdir(parents=True, exist_ok=True)
 
     report_payload = {
@@ -234,6 +302,10 @@ def run_beir_evaluation(dataset, show_progress=False, force=False, max_queries=5
         }, indent=2) + "\n",
         encoding="utf-8",
     )
+
+    checkpoint = _checkpoint_path(result_dir)
+    if checkpoint.exists():
+        checkpoint.unlink()
 
     index.close()
     return {
