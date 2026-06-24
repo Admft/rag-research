@@ -3,5 +3,7 @@ __pycache__/
 *.pyc
 data/qdrant/
 data/processed/
+data/beir/
+data/beir_indexes/
 .env
 .DS_Store

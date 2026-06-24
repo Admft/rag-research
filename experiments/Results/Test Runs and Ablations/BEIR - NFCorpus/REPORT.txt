@@ -1,0 +1,45 @@
+========================================================================
+EXPERIMENT: beir_nfcorpus
+========================================================================
+Run folder: BEIR - NFCorpus
+Round:      beir
+Mode:       full_pipeline
+Run time:   2026-06-23 19:39:29 CDT
+
+CONFIG
+----------------------------------------
+Chunk size:       256
+Overlap:          50
+Top-k:            5
+Retriever:        hybrid
+Embedding model:  BAAI/bge-small-en-v1.5
+Reranker:         bge
+Query transform:  none
+Prompt:           strict_context_json
+Context filter:   none
+Generator:        qwen2.5:14b
+Judge:            qwen2.5:14b
+
+SCORES
+----------------------------------------
+Final score:          36.5
+Answer correctness:   0.0
+Faithfulness:         50.0
+Context recall:       100.0
+Context precision:    0.0
+Citation accuracy:    40.0
+Answer parse rate:    100.0%
+Recall@5:            0.0%
+MRR@5:                0.0%
+Avg latency:          35.034s
+
+PER-QUESTION
+----------------------------------------
+
+[nfcorpus_q001] deafness
+  Expected source: MED-4532
+  Recall hit: no (rank None)
+  Final score: 36.5
+  Answer: Deafness can occur as part of deaf mutism, which is associated with endemic cretinism caused by dietary iodine deficiency [Doc 3].
+
+========================================================================
