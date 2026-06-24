@@ -76,13 +76,20 @@ def write_ablation_mirror(folder_name, condition_name, run_number, run_dir, summ
 
 def prepare_run_dir(folder_name, condition_name, run_number, force=False, flat=False):
     dest = condition_run_dir(folder_name, condition_name, run_number, flat=flat)
-    if dest.exists():
-        if force:
-            shutil.rmtree(dest)
-        else:
-            raise FileExistsError(
-                f"Run folder already exists: {dest}\nUse --force to overwrite."
-            )
+    if not dest.exists():
+        return False
+
+    if force:
+        shutil.rmtree(dest)
+        return False
+
+    scores_path = dest / "scores.json"
+    if scores_path.exists():
+        print(f"[skipped] run_{run_number} already complete")
+        return True
+
+    shutil.rmtree(dest)
+    return False
 
 
 def run_single_pipeline(config, questions, index_cache, show_progress=False):
@@ -135,7 +142,10 @@ def run_condition(
     final_scores = []
 
     for run_number in range(1, runs + 1):
-        prepare_run_dir(folder_name, condition_name, run_number, force=force, flat=flat)
+        if prepare_run_dir(folder_name, condition_name, run_number, force=force, flat=flat):
+            scores_path = condition_run_dir(folder_name, condition_name, run_number, flat=flat) / "scores.json"
+            final_scores.append(float(json.loads(scores_path.read_text(encoding="utf-8"))["final_score"]))
+            continue
         config = to_experiment_config(
             settings,
             name=f"ablation_{round_name}_{condition_name}_r{run_number}",
