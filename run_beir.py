@@ -78,6 +78,11 @@ def main():
         default=50,
         help="Max eval queries per dataset (default: 50)",
     )
+    parser.add_argument(
+        "--query-id",
+        metavar="ID",
+        help="Evaluate a single question by id (used internally for large indexes)",
+    )
     args = parser.parse_args()
 
     if args.status:
@@ -108,8 +113,15 @@ def main():
         if args.setup or args.eval.lower() == "all":
             evaluate_all(show_progress=args.progress, force=args.force, max_queries=args.queries)
         else:
+            key = normalize_dataset_name(args.eval)
+            if args.query_id:
+                from beir.evaluator import evaluate_single_question
+
+                evaluate_single_question(key, args.query_id, show_progress=args.progress)
+                return
+
             result = run_beir_evaluation(
-                normalize_dataset_name(args.eval),
+                key,
                 show_progress=args.progress,
                 force=args.force,
                 max_queries=args.queries,

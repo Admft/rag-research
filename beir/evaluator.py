@@ -1,6 +1,8 @@
 """Run the existing pipeline on BEIR eval questions."""
 
 import json
+import subprocess
+import sys
 import time
 import types
 from datetime import datetime
@@ -32,6 +34,9 @@ from retrievers import Retriever
 from scoring import score_answer
 from config import OLLAMA_GENERATION_MAX_TOKENS
 from llm import call_ollama
+
+# Qdrant local mode becomes unstable beyond this size; use isolated subprocesses.
+LARGE_INDEX_CHUNK_THRESHOLD = 20_000
 
 
 def _checkpoint_path(result_dir):
@@ -88,6 +93,173 @@ def _retrieve_with_retry(retriever, question):
     except (TypeError, RuntimeError):
         retriever._reranker = None
         return retriever.retrieve(question)
+
+
+def _evaluate_one_question(item, retriever, config, json_output):
+    question = item["question"]
+    expected_source = item.get("expected_source") or item.get("source_pdf", "")
+    expected_answer = item.get("answer", "")
+
+    retrieve_start = time.perf_counter()
+    retrieved = _retrieve_with_retry(retriever, question)
+    retrieve_latency = time.perf_counter() - retrieve_start
+
+    found_rank = find_source_rank(retrieved, expected_source)
+    recall_hit = found_rank is not None and found_rank <= config.top_k
+
+    row = {
+        "id": item.get("id", "unknown"),
+        "question": question,
+        "question_type": item.get("question_type", "normal"),
+        "expected_source": expected_source,
+        "expected_answer": expected_answer,
+        "found_rank": found_rank,
+        "recall_hit": recall_hit,
+        "retrieve_latency_s": round(retrieve_latency, 3),
+        "retrieved": retrieved,
+    }
+
+    prompt = build_generation_prompt(question, retrieved, config.prompt)
+    gen_start = time.perf_counter()
+    if json_output:
+        raw_answer, gen_latency = call_ollama(
+            prompt,
+            model=config.generator,
+            json_schema=GENERATION_RESPONSE_SCHEMA,
+            max_tokens=OLLAMA_GENERATION_MAX_TOKENS,
+        )
+    else:
+        raw_answer, gen_latency = call_ollama(
+            prompt,
+            model=config.generator,
+            max_tokens=OLLAMA_GENERATION_MAX_TOKENS,
+        )
+    answer, answer_parsed, scratchpad = parse_generation_response(raw_answer, config.prompt)
+
+    score_start = time.perf_counter()
+    metrics = score_answer(
+        question=question,
+        expected_answer=expected_answer,
+        expected_source=expected_source,
+        answer=raw_answer,
+        retrieved=retrieved,
+        judge_model=config.judge,
+    )
+    score_latency = time.perf_counter() - score_start
+
+    row.update({
+        "raw_answer": raw_answer,
+        "answer": answer,
+        "scratchpad": scratchpad,
+        "answer_parsed": answer_parsed,
+        "has_answer_block": has_answer_block(raw_answer, config.prompt),
+        "generation_latency_s": round(gen_latency, 3),
+        "score_latency_s": round(score_latency, 3),
+        "total_latency_s": round(retrieve_latency + gen_latency + score_latency, 3),
+        "metrics": metrics,
+    })
+    return row
+
+
+def _finalize_beir_result(key, display, questions, per_question, index_meta, config, result_dir):
+    index_stats = {
+        "documents": index_meta.get("documents"),
+        "chunks": index_meta.get("chunks"),
+    }
+    summary = aggregate_summary(config, per_question, index_stats)
+
+    central_dt = datetime.now(ZoneInfo("America/Chicago"))
+    run_time_central = central_dt.strftime("%Y-%m-%d %H:%M:%S %Z")
+    result_dir.mkdir(parents=True, exist_ok=True)
+
+    report_payload = {
+        "run_folder": result_dir.name,
+        "run_mode": "full_pipeline",
+        "run_time_central": run_time_central,
+        "summary": summary,
+        "questions": per_question,
+    }
+    report_text = format_experiment_report(report_payload)
+
+    (result_dir / "REPORT.txt").write_text(report_text.rstrip() + "\n", encoding="utf-8")
+    (result_dir / "scores.json").write_text(
+        json.dumps(extract_scores(summary), indent=2) + "\n",
+        encoding="utf-8",
+    )
+    (result_dir / "config_snapshot.json").write_text(
+        json.dumps({
+            "dataset": key,
+            "display_name": display,
+            "baseline": merged_settings(),
+            "eval_questions": len(questions),
+            "result_dir": str(result_dir.relative_to(PROJECT_ROOT)),
+        }, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+    checkpoint = _checkpoint_path(result_dir)
+    if checkpoint.exists():
+        checkpoint.unlink()
+
+    return {
+        "dataset": key,
+        "display": display,
+        "questions": len(questions),
+        "summary": summary,
+        "result_dir": result_dir,
+    }
+
+
+def _run_pending_in_subprocesses(key, pending):
+    script = PROJECT_ROOT / "run_beir.py"
+    python = sys.executable
+    for item in pending:
+        subprocess.run(
+            [python, str(script), "--eval", key, "--query-id", item["id"]],
+            cwd=str(PROJECT_ROOT),
+            check=True,
+        )
+
+
+def evaluate_single_question(dataset, question_id, show_progress=False):
+    """Evaluate one question in an isolated process (used for large indexes)."""
+    require_ollama_ready()
+    key = normalize_dataset_name(dataset)
+    display = dataset_display_name(key)
+
+    questions = load_eval_questions(key)
+    item = next((q for q in questions if q["id"] == question_id), None)
+    if item is None:
+        raise KeyError(f"Question id '{question_id}' not found for dataset '{key}'")
+
+    result_dir = dataset_result_path(key)
+    completed = _load_checkpoint(result_dir)
+    if item["id"] in completed:
+        print(f"[{display}] {question_id} already in checkpoint, skipping")
+        return completed[item["id"]]
+
+    index, index_meta = load_beir_index(key)
+    release_embed_gpu(index)
+
+    settings = merged_settings()
+    config = to_experiment_config(
+        settings,
+        name=f"beir_{key}",
+        round_name="beir",
+        description=f"BEIR {display} evaluation (locked baseline config)",
+    )
+
+    retriever = _init_retriever(index, config)
+    json_output = uses_json_output(config.prompt)
+    row = _evaluate_one_question(item, retriever, config, json_output)
+    _append_checkpoint(result_dir, row)
+
+    total = len(questions)
+    position = next(i for i, q in enumerate(questions, start=1) if q["id"] == item["id"])
+    print(f"[{display}] query {position}/{total} | score: {row['metrics']['final_score']}", flush=True)
+
+    index.close()
+    return row
 
 
 def require_ollama_ready():
@@ -154,7 +326,10 @@ def aggregate_summary(config, per_question, index_stats):
     return summary
 
 
-def run_beir_evaluation(dataset, show_progress=False, force=False, max_queries=50):
+def run_beir_evaluation(dataset, show_progress=False, force=False, max_queries=50, single_query_id=None):
+    if single_query_id:
+        return evaluate_single_question(dataset, single_query_id, show_progress=show_progress)
+
     require_ollama_ready()
     key = normalize_dataset_name(dataset)
     display = dataset_display_name(key)
@@ -195,6 +370,28 @@ def run_beir_evaluation(dataset, show_progress=False, force=False, max_queries=5
     per_question = [completed[q["id"]] for q in questions if q["id"] in completed]
     pending = [q for q in questions if q["id"] not in completed]
     total = len(questions)
+    chunk_count = index_meta.get("chunks") or len(index.chunks)
+
+    if chunk_count > LARGE_INDEX_CHUNK_THRESHOLD and pending:
+        print(
+            f"Evaluating {display} on {total} questions ({len(pending)} remaining) "
+            f"using per-query subprocess isolation..."
+        )
+        index.close()
+        _run_pending_in_subprocesses(key, pending)
+        completed = _load_checkpoint(result_dir)
+        per_question = [completed[q["id"]] for q in questions if q["id"] in completed]
+        settings = merged_settings()
+        config = to_experiment_config(
+            settings,
+            name=f"beir_{key}",
+            round_name="beir",
+            description=f"BEIR {display} evaluation (locked baseline config)",
+        )
+        return _finalize_beir_result(
+            key, display, questions, per_question, index_meta, config, result_dir
+        )
+
     print(f"Evaluating {display} on {total} questions ({len(pending)} remaining)...")
 
     retriever = _init_retriever(index, config)
@@ -202,119 +399,15 @@ def run_beir_evaluation(dataset, show_progress=False, force=False, max_queries=5
 
     for item in pending:
         i = len(per_question) + 1
-        question = item["question"]
-        expected_source = item.get("expected_source") or item.get("source_pdf", "")
-        expected_answer = item.get("answer", "")
-
-        retrieve_start = time.perf_counter()
-        retrieved = _retrieve_with_retry(retriever, question)
-        retrieve_latency = time.perf_counter() - retrieve_start
-
-        found_rank = find_source_rank(retrieved, expected_source)
-        recall_hit = found_rank is not None and found_rank <= config.top_k
-
-        row = {
-            "id": item.get("id", "unknown"),
-            "question": question,
-            "question_type": item.get("question_type", "normal"),
-            "expected_source": expected_source,
-            "expected_answer": expected_answer,
-            "found_rank": found_rank,
-            "recall_hit": recall_hit,
-            "retrieve_latency_s": round(retrieve_latency, 3),
-            "retrieved": retrieved,
-        }
-
-        prompt = build_generation_prompt(question, retrieved, config.prompt)
-        gen_start = time.perf_counter()
-        if json_output:
-            raw_answer, gen_latency = call_ollama(
-                prompt,
-                model=config.generator,
-                json_schema=GENERATION_RESPONSE_SCHEMA,
-                max_tokens=OLLAMA_GENERATION_MAX_TOKENS,
-            )
-        else:
-            raw_answer, gen_latency = call_ollama(
-                prompt,
-                model=config.generator,
-                max_tokens=OLLAMA_GENERATION_MAX_TOKENS,
-            )
-        answer, answer_parsed, scratchpad = parse_generation_response(raw_answer, config.prompt)
-
-        score_start = time.perf_counter()
-        metrics = score_answer(
-            question=question,
-            expected_answer=expected_answer,
-            expected_source=expected_source,
-            answer=raw_answer,
-            retrieved=retrieved,
-            judge_model=config.judge,
-        )
-        score_latency = time.perf_counter() - score_start
-
-        row.update({
-            "raw_answer": raw_answer,
-            "answer": answer,
-            "scratchpad": scratchpad,
-            "answer_parsed": answer_parsed,
-            "has_answer_block": has_answer_block(raw_answer, config.prompt),
-            "generation_latency_s": round(gen_latency, 3),
-            "score_latency_s": round(score_latency, 3),
-            "total_latency_s": round(retrieve_latency + gen_latency + score_latency, 3),
-            "metrics": metrics,
-        })
+        row = _evaluate_one_question(item, retriever, config, json_output)
         per_question.append(row)
         _append_checkpoint(result_dir, row)
-        print(f"[{display}] query {i}/{total} | score: {metrics['final_score']}", flush=True)
-
-    index_stats = {
-        "documents": index_meta.get("documents"),
-        "chunks": index_meta.get("chunks") or len(index.chunks),
-    }
-    summary = aggregate_summary(config, per_question, index_stats)
-
-    central_dt = datetime.now(ZoneInfo("America/Chicago"))
-    run_time_central = central_dt.strftime("%Y-%m-%d %H:%M:%S %Z")
-    result_dir.mkdir(parents=True, exist_ok=True)
-
-    report_payload = {
-        "run_folder": result_dir.name,
-        "run_mode": "full_pipeline",
-        "run_time_central": run_time_central,
-        "summary": summary,
-        "questions": per_question,
-    }
-    report_text = format_experiment_report(report_payload)
-
-    (result_dir / "REPORT.txt").write_text(report_text.rstrip() + "\n", encoding="utf-8")
-    (result_dir / "scores.json").write_text(
-        json.dumps(extract_scores(summary), indent=2) + "\n",
-        encoding="utf-8",
-    )
-    (result_dir / "config_snapshot.json").write_text(
-        json.dumps({
-            "dataset": key,
-            "display_name": display,
-            "baseline": merged_settings(),
-            "eval_questions": len(questions),
-            "result_dir": str(result_dir.relative_to(PROJECT_ROOT)),
-        }, indent=2) + "\n",
-        encoding="utf-8",
-    )
-
-    checkpoint = _checkpoint_path(result_dir)
-    if checkpoint.exists():
-        checkpoint.unlink()
+        print(f"[{display}] query {i}/{total} | score: {row['metrics']['final_score']}", flush=True)
 
     index.close()
-    return {
-        "dataset": key,
-        "display": display,
-        "questions": len(questions),
-        "summary": summary,
-        "result_dir": result_dir,
-    }
+    return _finalize_beir_result(
+        key, display, questions, per_question, index_meta, config, result_dir
+    )
 
 
 def print_summary_table(results):
