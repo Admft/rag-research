@@ -2,12 +2,24 @@
 
 import json
 import shutil
+import time
+import types
 from pathlib import Path
 
-from config import PROJECT_ROOT
+from config import OLLAMA_GENERATION_MAX_TOKENS, PROJECT_ROOT
 from experiment_runner import format_experiment_report, save_experiment_result
-from indexing import build_experiment_index, close_cached_indices
-from pipeline import load_questions, run_experiment
+from indexing import build_experiment_index, close_cached_indices, release_embed_gpu
+from llm import call_ollama
+from pipeline import average, find_source_rank, load_questions
+from prompts import (
+    GENERATION_RESPONSE_SCHEMA,
+    build_generation_prompt,
+    has_answer_block,
+    parse_generation_response,
+    uses_json_output,
+)
+from retrievers import Retriever
+from scoring import score_answer
 
 from ablation.configs import (
     ABLATIONS,
@@ -74,34 +86,217 @@ def write_ablation_mirror(folder_name, condition_name, run_number, run_dir, summ
         shutil.copy2(questions_src, dest / "questions.jsonl")
 
 
+def _checkpoint_path(run_dir):
+    return run_dir / "checkpoint.jsonl"
+
+
+def _load_checkpoint(run_dir):
+    path = _checkpoint_path(run_dir)
+    if not path.exists():
+        return {}
+    completed = {}
+    with path.open("r", encoding="utf-8") as f:
+        for line in f:
+            if line.strip():
+                row = json.loads(line)
+                completed[row["id"]] = row
+    return completed
+
+
+def _append_checkpoint(run_dir, row):
+    run_dir.mkdir(parents=True, exist_ok=True)
+    with _checkpoint_path(run_dir).open("a", encoding="utf-8") as f:
+        f.write(json.dumps(row) + "\n")
+
+
+def _init_retriever(index, config):
+    """Keep reranker on CPU so it does not contend with Ollama on the GPU."""
+    retriever = Retriever(index, config)
+
+    def _get_reranker_cpu(self):
+        if self._reranker is not None:
+            return self._reranker
+        if self.config.reranker == "none":
+            return None
+        if self.config.reranker in {"cross_encoder", "bge"}:
+            from sentence_transformers import CrossEncoder
+
+            model_name = (
+                "BAAI/bge-reranker-base"
+                if self.config.reranker == "bge"
+                else "cross-encoder/ms-marco-MiniLM-L-6-v2"
+            )
+            self._reranker = CrossEncoder(model_name, device="cpu")
+            return self._reranker
+        raise ValueError(f"Unsupported reranker: {self.config.reranker}")
+
+    retriever._get_reranker = types.MethodType(_get_reranker_cpu, retriever)
+    return retriever
+
+
+def _retrieve_with_retry(retriever, question):
+    try:
+        return retriever.retrieve(question)
+    except (TypeError, RuntimeError):
+        retriever._reranker = None
+        return retriever.retrieve(question)
+
+
+def _evaluate_one_question(item, retriever, config, json_output):
+    question = item["question"]
+    expected_source = item.get("expected_source") or item.get("source_pdf", "")
+    expected_answer = item.get("answer", "")
+
+    retrieve_start = time.perf_counter()
+    retrieved = _retrieve_with_retry(retriever, question)
+    retrieve_latency = time.perf_counter() - retrieve_start
+
+    found_rank = find_source_rank(retrieved, expected_source)
+    recall_hit = found_rank is not None and found_rank <= config.top_k
+
+    row = {
+        "id": item.get("id", "unknown"),
+        "question": question,
+        "question_type": item.get("question_type", "normal"),
+        "expected_source": expected_source,
+        "expected_answer": expected_answer,
+        "found_rank": found_rank,
+        "recall_hit": recall_hit,
+        "retrieve_latency_s": round(retrieve_latency, 3),
+        "retrieved": retrieved,
+    }
+
+    prompt = build_generation_prompt(question, retrieved, config.prompt)
+    gen_start = time.perf_counter()
+    if json_output:
+        raw_answer, gen_latency = call_ollama(
+            prompt,
+            model=config.generator,
+            json_schema=GENERATION_RESPONSE_SCHEMA,
+            max_tokens=OLLAMA_GENERATION_MAX_TOKENS,
+        )
+    else:
+        raw_answer, gen_latency = call_ollama(
+            prompt,
+            model=config.generator,
+            max_tokens=OLLAMA_GENERATION_MAX_TOKENS,
+        )
+    answer, answer_parsed, scratchpad = parse_generation_response(raw_answer, config.prompt)
+
+    score_start = time.perf_counter()
+    metrics = score_answer(
+        question=question,
+        expected_answer=expected_answer,
+        expected_source=expected_source,
+        answer=raw_answer,
+        retrieved=retrieved,
+        judge_model=config.judge,
+    )
+    score_latency = time.perf_counter() - score_start
+
+    row.update({
+        "raw_answer": raw_answer,
+        "answer": answer,
+        "scratchpad": scratchpad,
+        "answer_parsed": answer_parsed,
+        "has_answer_block": has_answer_block(raw_answer, config.prompt),
+        "generation_latency_s": round(gen_latency, 3),
+        "score_latency_s": round(score_latency, 3),
+        "total_latency_s": round(retrieve_latency + gen_latency + score_latency, 3),
+        "metrics": metrics,
+    })
+    return row
+
+
+def _build_run_summary(config, per_question, index):
+    latencies = [
+        row.get("total_latency_s", row.get("retrieve_latency_s", 0.0))
+        for row in per_question
+    ]
+    prompt_token_estimates = [
+        len(row.get("raw_answer", "").split()) for row in per_question if "raw_answer" in row
+    ]
+
+    summary = {
+        "config": config.to_dict(),
+        "index_stats": {"chunks": len(index.chunks)},
+        "question_count": len(per_question),
+        "recall_at_k": average([1.0 if row["recall_hit"] else 0.0 for row in per_question]),
+        "mrr_at_k": average([
+            1.0 / row["found_rank"] if row["found_rank"] else 0.0
+            for row in per_question
+        ]),
+        "avg_latency_s": round(average(latencies), 3),
+    }
+    summary.update({
+        "final_score": round(average([row["metrics"]["final_score"] for row in per_question]), 2),
+        "answer_correctness": round(average([row["metrics"]["answer_correctness"] for row in per_question]), 2),
+        "faithfulness": round(average([row["metrics"]["faithfulness"] for row in per_question]), 2),
+        "context_recall": round(average([row["metrics"]["context_recall"] for row in per_question]), 2),
+        "context_precision": round(average([row["metrics"]["context_precision"] for row in per_question]), 2),
+        "citation_accuracy": round(average([row["metrics"]["citation_accuracy"] for row in per_question]), 2),
+        "answer_parse_rate": round(average([1.0 if row.get("answer_parsed") else 0.0 for row in per_question]), 3),
+        "avg_prompt_tokens_est": round(average(prompt_token_estimates), 0),
+    })
+    return summary
+
+
 def prepare_run_dir(folder_name, condition_name, run_number, force=False, flat=False):
     dest = condition_run_dir(folder_name, condition_name, run_number, flat=flat)
     if not dest.exists():
-        return False
+        return "fresh"
 
     if force:
         shutil.rmtree(dest)
-        return False
+        return "fresh"
 
-    scores_path = dest / "scores.json"
-    if scores_path.exists():
+    if (dest / "scores.json").exists():
         print(f"[skipped] run_{run_number} already complete")
-        return True
+        return "skip"
+
+    checkpoint = _checkpoint_path(dest)
+    if checkpoint.exists():
+        completed = _load_checkpoint(dest)
+        print(f"[resuming] run_{run_number} from checkpoint ({len(completed)} questions)")
+        return "resume"
 
     shutil.rmtree(dest)
-    return False
+    return "fresh"
 
 
-def run_single_pipeline(config, questions, index_cache, show_progress=False):
+def run_single_pipeline(config, questions, index_cache, run_dir, show_progress=False):
+    completed = _load_checkpoint(run_dir)
+    pending = [q for q in questions if q["id"] not in completed]
+    total = len(questions)
+
+    if completed:
+        print(f"Questions: {len(completed)}/{total} complete, {len(pending)} remaining")
+
     index = ensure_index(config, index_cache, show_progress=show_progress)
-    payload = run_experiment(
-        config=config,
-        questions=questions,
-        index=index,
-        retrieval_only=False,
-        show_progress=show_progress,
-    )
-    return payload
+    release_embed_gpu(index)
+    retriever = _init_retriever(index, config)
+    json_output = uses_json_output(config.prompt)
+
+    for item in pending:
+        row = _evaluate_one_question(item, retriever, config, json_output)
+        _append_checkpoint(run_dir, row)
+        done = len(_load_checkpoint(run_dir))
+        score = row["metrics"]["final_score"]
+        print(f"[{config.name}] question {done}/{total} | score: {score}", flush=True)
+
+    completed = _load_checkpoint(run_dir)
+    per_question = [completed[q["id"]] for q in questions if q["id"] in completed]
+    if len(per_question) != total:
+        raise RuntimeError(
+            f"Run incomplete: {len(per_question)}/{total} questions in checkpoint at {run_dir}"
+        )
+
+    summary = _build_run_summary(config, per_question, index)
+    checkpoint = _checkpoint_path(run_dir)
+    if checkpoint.exists():
+        checkpoint.unlink()
+
+    return {"summary": summary, "questions": per_question, "index": index}
 
 
 def save_and_mirror(config, payload, folder_name, condition_name, run_number, flat=False):
@@ -142,10 +337,13 @@ def run_condition(
     final_scores = []
 
     for run_number in range(1, runs + 1):
-        if prepare_run_dir(folder_name, condition_name, run_number, force=force, flat=flat):
-            scores_path = condition_run_dir(folder_name, condition_name, run_number, flat=flat) / "scores.json"
+        run_dir = condition_run_dir(folder_name, condition_name, run_number, flat=flat)
+        status = prepare_run_dir(folder_name, condition_name, run_number, force=force, flat=flat)
+        if status == "skip":
+            scores_path = run_dir / "scores.json"
             final_scores.append(float(json.loads(scores_path.read_text(encoding="utf-8"))["final_score"]))
             continue
+
         config = to_experiment_config(
             settings,
             name=f"ablation_{round_name}_{condition_name}_r{run_number}",
@@ -160,8 +358,14 @@ def run_condition(
         print(f"Override: {overrides or '(none — locked baseline)'}")
         print("-" * 72)
 
-        payload = run_single_pipeline(config, questions, index_cache, show_progress=show_progress)
-        run_dir, summary = save_and_mirror(
+        payload = run_single_pipeline(
+            config,
+            questions,
+            index_cache,
+            run_dir,
+            show_progress=show_progress,
+        )
+        run_dir_saved, summary = save_and_mirror(
             config,
             payload,
             folder_name,
@@ -172,8 +376,8 @@ def run_condition(
 
         score = summary["final_score"]
         final_scores.append(float(score))
-        print(f"Saved: {run_dir}")
-        print(f"Mirrored: {condition_run_dir(folder_name, condition_name, run_number, flat=flat)}")
+        print(f"Saved: {run_dir_saved}")
+        print(f"Mirrored: {run_dir}")
         print(f"Final score: {score}")
 
     return final_scores
