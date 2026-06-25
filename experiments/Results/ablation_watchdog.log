@@ -4,3 +4,25 @@
 [supervisor] progress 9/66 runs complete
 [supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
 ========================================================================
+[supervisor] child exited with code -11
+[supervisor] segfault/crash — retrying in 30s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 2 at 2026-06-25 00:41:46
+[supervisor] progress 12/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] segfault/crash — retrying in 30s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 3 at 2026-06-25 00:43:24
+[supervisor] progress 12/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+========================================================================
+
+========================================================================
+[supervisor] attempt 1 at 2026-06-25 08:45:52
+[supervisor] progress 13/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+========================================================================

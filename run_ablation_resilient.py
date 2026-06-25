@@ -16,6 +16,7 @@ Example:
 from __future__ import annotations
 
 import argparse
+import os
 import subprocess
 import sys
 import time
@@ -48,6 +49,20 @@ CRASH_EXIT_CODES = {
 }
 
 DEFAULT_STALL_TIMEOUT = 2700  # 45 min without checkpoint/scores progress
+SAFE_RETRY_DELAY = 120
+SAFE_STALL_TIMEOUT = 5400  # 90 min
+SAFE_CRASH_COOLDOWN = 60  # extra pause after segfault before retry
+
+
+def build_child_env(*, cpu_embed: bool, safe: bool) -> dict[str, str]:
+    env = os.environ.copy()
+    if cpu_embed or safe:
+        # Keep embeddings + reranker off GPU; Ollama still uses the GPU.
+        env["CUDA_VISIBLE_DEVICES"] = ""
+    if safe:
+        env.setdefault("OLLAMA_NUM_PARALLEL", "1")
+        env.setdefault("OMP_NUM_THREADS", "4")
+    return env
 
 
 def repair_venv(python: str) -> None:
@@ -81,10 +96,11 @@ def run_child_with_stall_watch(
     *,
     stall_timeout: int,
     attempts: int,
+    child_env: dict[str, str],
     log_handle,
 ) -> int:
     last_progress = max(latest_progress_mtime(), time.time())
-    proc = subprocess.Popen(cmd, cwd=ROOT)
+    proc = subprocess.Popen(cmd, cwd=ROOT, env=child_env)
 
     write_status(
         build_status_snapshot(
@@ -149,10 +165,14 @@ def run_watchdog(
     repair_on_crash: bool,
     until_complete: bool,
     stall_timeout: int,
+    crash_cooldown: int,
+    cpu_embed: bool,
+    safe: bool,
     log_path: Path | None,
 ) -> int:
     python = sys.executable
     cmd = [python, str(RUN_SCRIPT), *child_argv]
+    child_env = build_child_env(cpu_embed=cpu_embed, safe=safe)
     expected_jobs = expected_runs_for_argv(child_argv)
     attempt = 0
     log_handle = log_path.open("a", encoding="utf-8") if log_path else None
@@ -182,6 +202,8 @@ def run_watchdog(
                 log_handle,
             )
             log_line(f"[supervisor] command: {' '.join(cmd)}", log_handle)
+            if child_env.get("CUDA_VISIBLE_DEVICES") == "":
+                log_line("[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')", log_handle)
             log_line("=" * 72, log_handle)
 
             write_status(
@@ -197,6 +219,7 @@ def run_watchdog(
                 cmd,
                 stall_timeout=stall_timeout,
                 attempts=attempt,
+                child_env=child_env,
                 log_handle=log_handle,
             )
 
@@ -227,18 +250,26 @@ def run_watchdog(
             if repair_on_crash and (crashed or returncode in {1, 124}):
                 repair_venv(python)
 
+            wait = retry_delay
+            if crashed and crash_cooldown:
+                wait += crash_cooldown
+                log_line(
+                    f"[supervisor] crash cooldown +{crash_cooldown}s before retry",
+                    log_handle,
+                )
+
             if returncode == 124:
                 log_line(
-                    f"[supervisor] stall detected — retrying in {retry_delay}s",
+                    f"[supervisor] stall detected — retrying in {wait}s",
                     log_handle,
                 )
             elif crashed:
                 log_line(
-                    f"[supervisor] segfault/crash — retrying in {retry_delay}s (checkpoints resume)",
+                    f"[supervisor] segfault/crash — retrying in {wait}s (checkpoints resume)",
                     log_handle,
                 )
             else:
-                log_line(f"[supervisor] retrying in {retry_delay}s", log_handle)
+                log_line(f"[supervisor] retrying in {wait}s", log_handle)
 
             write_status(
                 build_status_snapshot(
@@ -248,7 +279,7 @@ def run_watchdog(
                     progress=progress,
                 )
             )
-            time.sleep(retry_delay)
+            time.sleep(wait)
     finally:
         if log_handle:
             log_handle.close()
@@ -280,6 +311,26 @@ def main() -> None:
         help="Reinstall scikit-learn/scipy/psutil before each retry",
     )
     parser.add_argument(
+        "--safe",
+        action="store_true",
+        help=(
+            "Conservative preset: --until-complete --repair-venv --cpu-embed, "
+            f"{SAFE_RETRY_DELAY}s retry delay, {SAFE_STALL_TIMEOUT}s stall timeout, "
+            f"+{SAFE_CRASH_COOLDOWN}s after segfaults"
+        ),
+    )
+    parser.add_argument(
+        "--cpu-embed",
+        action="store_true",
+        help="Force CPU embeddings via CUDA_VISIBLE_DEVICES='' (Ollama still uses GPU)",
+    )
+    parser.add_argument(
+        "--crash-cooldown",
+        type=int,
+        default=0,
+        help="Extra seconds to wait after a segfault before retrying (default: 0)",
+    )
+    parser.add_argument(
         "--until-complete",
         action="store_true",
         help="Keep restarting until every expected ablation run has scores.json",
@@ -308,6 +359,14 @@ def main() -> None:
     )
     args, child_argv = parser.parse_known_args()
 
+    if args.safe:
+        args.repair_venv = True
+        args.until_complete = True
+        args.cpu_embed = True
+        args.retry_delay = SAFE_RETRY_DELAY
+        args.stall_timeout = SAFE_STALL_TIMEOUT
+        args.crash_cooldown = SAFE_CRASH_COOLDOWN
+
     if args.status:
         jobs = expected_runs_for_argv(child_argv) if child_argv else None
         print(format_status_report(scan_progress(jobs)))
@@ -332,6 +391,9 @@ def main() -> None:
         repair_on_crash=args.repair_venv,
         until_complete=args.until_complete,
         stall_timeout=args.stall_timeout,
+        crash_cooldown=args.crash_cooldown,
+        cpu_embed=args.cpu_embed,
+        safe=args.safe,
         log_path=log_path,
     )
     raise SystemExit(code)
