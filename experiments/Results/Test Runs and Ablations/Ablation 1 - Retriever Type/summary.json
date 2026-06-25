@@ -1,0 +1,26 @@
+{
+  "ablation": "Ablation 1 - Retriever Type",
+  "baseline_score": 83.22,
+  "conditions": {
+    "hybrid": {
+      "runs": [
+        79.5,
+        83.03,
+        84.05
+      ],
+      "mean": 82.19,
+      "std": 2.39,
+      "delta_vs_baseline": -1.03
+    },
+    "dense": {
+      "runs": [
+        81.38,
+        82.9,
+        81.91
+      ],
+      "mean": 82.06,
+      "std": 0.77,
+      "delta_vs_baseline": -1.16
+    }
+  }
+}

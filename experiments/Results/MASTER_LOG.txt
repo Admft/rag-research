@@ -1,7 +1,7 @@
 ========================================================================
 RAG RESEARCH — MASTER LOG
 All times: Central Time (America/Chicago)
-Last updated: 2026-06-24 04:16:07 CDT
+Last updated: 2026-06-25 00:08:24 CDT
 ========================================================================
 
 WHERE THINGS LIVE
@@ -24,7 +24,73 @@ HOW TO READ SCORES
 ALL RUNS (newest first)
 ========================================================================
 
-#1  009__ablation_ablation_baseline_baseline_r3__2026-06-24_04-16-06_CDT
+#1  015__ablation_ablation_a1_dense_r3__2026-06-25_00-08-24_CDT
+     Name:   ablation_ablation_a1_dense_r3
+     Type:   ablation
+     Round:  ablation_a1
+     Mode:   Full pipeline (retrieve + generate + score)
+     Ran:    2026-06-25 00:08:24 CDT
+     Settings: chunk 256 | overlap 50 | top_k 5 | dense | reranker bge
+     Scores: final 81.91 | correctness 76.83 | faithfulness 85.17 | context recall 84.92
+     Retrieval: Recall@5 100.00% | MRR@5 93.19%
+     Folder: experiments/Results/runs/015__ablation_ablation_a1_dense_r3__2026-06-25_00-08-24_CDT/
+
+#2  014__ablation_ablation_a1_dense_r2__2026-06-24_23-58-31_CDT
+     Name:   ablation_ablation_a1_dense_r2
+     Type:   ablation
+     Round:  ablation_a1
+     Mode:   Full pipeline (retrieve + generate + score)
+     Ran:    2026-06-24 23:58:31 CDT
+     Settings: chunk 256 | overlap 50 | top_k 5 | dense | reranker bge
+     Scores: final 82.90 | correctness 78.58 | faithfulness 82.92 | context recall 88.58
+     Retrieval: Recall@5 100.00% | MRR@5 93.19%
+     Folder: experiments/Results/runs/014__ablation_ablation_a1_dense_r2__2026-06-24_23-58-31_CDT/
+
+#3  013__ablation_ablation_a1_dense_r1__2026-06-24_23-48-35_CDT
+     Name:   ablation_ablation_a1_dense_r1
+     Type:   ablation
+     Round:  ablation_a1
+     Mode:   Full pipeline (retrieve + generate + score)
+     Ran:    2026-06-24 23:48:35 CDT
+     Settings: chunk 256 | overlap 50 | top_k 5 | dense | reranker bge
+     Scores: final 81.38 | correctness 77.92 | faithfulness 82.67 | context recall 84.50
+     Retrieval: Recall@5 100.00% | MRR@5 93.19%
+     Folder: experiments/Results/runs/013__ablation_ablation_a1_dense_r1__2026-06-24_23-48-35_CDT/
+
+#4  012__ablation_ablation_a1_hybrid_r3__2026-06-24_23-38-42_CDT
+     Name:   ablation_ablation_a1_hybrid_r3
+     Type:   ablation
+     Round:  ablation_a1
+     Mode:   Full pipeline (retrieve + generate + score)
+     Ran:    2026-06-24 23:38:42 CDT
+     Settings: chunk 256 | overlap 50 | top_k 5 | hybrid | reranker bge
+     Scores: final 84.05 | correctness 81.83 | faithfulness 84.97 | context recall 88.67
+     Retrieval: Recall@5 100.00% | MRR@5 94.86%
+     Folder: experiments/Results/runs/012__ablation_ablation_a1_hybrid_r3__2026-06-24_23-38-42_CDT/
+
+#5  011__ablation_ablation_a1_hybrid_r2__2026-06-24_23-28-40_CDT
+     Name:   ablation_ablation_a1_hybrid_r2
+     Type:   ablation
+     Round:  ablation_a1
+     Mode:   Full pipeline (retrieve + generate + score)
+     Ran:    2026-06-24 23:28:40 CDT
+     Settings: chunk 256 | overlap 50 | top_k 5 | hybrid | reranker bge
+     Scores: final 83.03 | correctness 79.50 | faithfulness 83.42 | context recall 89.50
+     Retrieval: Recall@5 100.00% | MRR@5 94.86%
+     Folder: experiments/Results/runs/011__ablation_ablation_a1_hybrid_r2__2026-06-24_23-28-40_CDT/
+
+#6  010__ablation_ablation_a1_hybrid_r1__2026-06-24_23-18-43_CDT
+     Name:   ablation_ablation_a1_hybrid_r1
+     Type:   ablation
+     Round:  ablation_a1
+     Mode:   Full pipeline (retrieve + generate + score)
+     Ran:    2026-06-24 23:18:43 CDT
+     Settings: chunk 256 | overlap 50 | top_k 5 | hybrid | reranker bge
+     Scores: final 79.50 | correctness 75.92 | faithfulness 80.17 | context recall 83.50
+     Retrieval: Recall@5 100.00% | MRR@5 94.86%
+     Folder: experiments/Results/runs/010__ablation_ablation_a1_hybrid_r1__2026-06-24_23-18-43_CDT/
+
+#7  009__ablation_ablation_baseline_baseline_r3__2026-06-24_04-16-06_CDT
      Name:   ablation_ablation_baseline_baseline_r3
      Type:   ablation
      Round:  ablation_baseline
@@ -35,7 +101,7 @@ ALL RUNS (newest first)
      Retrieval: Recall@5 100.00% | MRR@5 94.86%
      Folder: experiments/Results/runs/009__ablation_ablation_baseline_baseline_r3__2026-06-24_04-16-06_CDT/
 
-#2  008__ablation_ablation_baseline_baseline_r2__2026-06-24_04-09-37_CDT
+#8  008__ablation_ablation_baseline_baseline_r2__2026-06-24_04-09-37_CDT
      Name:   ablation_ablation_baseline_baseline_r2
      Type:   ablation
      Round:  ablation_baseline
@@ -46,7 +112,7 @@ ALL RUNS (newest first)
      Retrieval: Recall@5 100.00% | MRR@5 94.86%
      Folder: experiments/Results/runs/008__ablation_ablation_baseline_baseline_r2__2026-06-24_04-09-37_CDT/
 
-#3  001__ablation_ablation_baseline_baseline_r1__2026-06-23_19-16-12_CDT
+#9  001__ablation_ablation_baseline_baseline_r1__2026-06-23_19-16-12_CDT
      Name:   ablation_ablation_baseline_baseline_r1
      Type:   ablation
      Round:  ablation_baseline

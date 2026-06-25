@@ -120,6 +120,8 @@ def main():
     print("  python run_ablation.py --ablation A1 --condition dense")
     print("  python run_ablation.py --all")
     print("  python run_ablation.py --summary A1")
+    print("  python run_ablation_resilient.py --all --repair-venv --until-complete")
+    print("  ./start_overnight_ablations.sh")
 
 
 if __name__ == "__main__":
