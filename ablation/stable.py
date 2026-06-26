@@ -11,6 +11,7 @@ CRASH_EXIT_CODES = {139, -11, 134, -6, 135, -7}
 DEFAULT_BREATHER_QUESTION_S = 10
 DEFAULT_BREATHER_RUN_S = 180
 DEFAULT_QUESTION_TIMEOUT_S = 600
+DEFAULT_QUESTION_TIMEOUT_LAST_S = 1200
 
 
 def enable_stable_mode() -> None:
@@ -22,6 +23,7 @@ def enable_stable_mode() -> None:
     os.environ.setdefault("RAG_BREATHER_QUESTION_S", str(DEFAULT_BREATHER_QUESTION_S))
     os.environ.setdefault("RAG_BREATHER_RUN_S", str(DEFAULT_BREATHER_RUN_S))
     os.environ.setdefault("RAG_QUESTION_TIMEOUT_S", str(DEFAULT_QUESTION_TIMEOUT_S))
+    os.environ.setdefault("RAG_QUESTION_TIMEOUT_LAST_S", str(DEFAULT_QUESTION_TIMEOUT_LAST_S))
 
 
 def stable_env() -> dict[str, str]:
@@ -51,7 +53,9 @@ def breather_run_seconds() -> int:
     return _env_int("RAG_BREATHER_RUN_S", 0)
 
 
-def question_timeout_seconds() -> int:
+def question_timeout_seconds(*, final_attempt: bool = False) -> int:
+    if final_attempt:
+        return _env_int("RAG_QUESTION_TIMEOUT_LAST_S", DEFAULT_QUESTION_TIMEOUT_LAST_S)
     return _env_int("RAG_QUESTION_TIMEOUT_S", 0)
 
 

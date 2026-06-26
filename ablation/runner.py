@@ -121,9 +121,8 @@ def _evaluate_one_question_isolated(config, item, run_dir, *, max_attempts=5, re
         item["id"],
     ]
 
-    timeout = question_timeout_seconds()
-
     for attempt in range(1, max_attempts + 1):
+        attempt_timeout = question_timeout_seconds(final_attempt=(attempt == max_attempts))
         try:
             proc = subprocess.run(
                 cmd,
@@ -131,11 +130,11 @@ def _evaluate_one_question_isolated(config, item, run_dir, *, max_attempts=5, re
                 capture_output=True,
                 text=True,
                 env=stable_env(),
-                timeout=timeout if timeout > 0 else None,
+                timeout=attempt_timeout if attempt_timeout > 0 else None,
             )
         except subprocess.TimeoutExpired:
             print(
-                f"[stable] timeout on {item['id']} after {timeout}s "
+                f"[stable] timeout on {item['id']} after {attempt_timeout}s "
                 f"(attempt {attempt}/{max_attempts})",
                 flush=True,
             )
@@ -143,7 +142,8 @@ def _evaluate_one_question_isolated(config, item, run_dir, *, max_attempts=5, re
                 time.sleep(retry_delay)
                 continue
             raise RuntimeError(
-                f"Question {item['id']} timed out after {max_attempts} attempts ({timeout}s each)"
+                f"Question {item['id']} timed out after {max_attempts} attempts "
+                f"(last try allowed {attempt_timeout}s)"
             )
 
         if proc.returncode == 0:
