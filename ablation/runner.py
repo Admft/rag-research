@@ -2,6 +2,8 @@
 
 import json
 import shutil
+import subprocess
+import sys
 import time
 import types
 from pathlib import Path
@@ -29,6 +31,14 @@ from ablation.configs import (
     get_ablation,
     merged_settings,
     to_experiment_config,
+)
+from ablation.stable import (
+    breather_after_question,
+    breather_after_run,
+    enable_stable_mode,
+    is_crash_exit,
+    question_timeout_seconds,
+    stable_env,
 )
 from ablation.stats import (
     build_ablation_summary,
@@ -84,6 +94,78 @@ def write_ablation_mirror(folder_name, condition_name, run_number, run_dir, summ
     questions_src = run_dir / "questions.jsonl"
     if questions_src.exists():
         shutil.copy2(questions_src, dest / "questions.jsonl")
+
+
+def _run_config_path(run_dir):
+    return run_dir / ".ablation_config.json"
+
+
+def _write_run_config(run_dir, config):
+    run_dir.mkdir(parents=True, exist_ok=True)
+    _run_config_path(run_dir).write_text(
+        json.dumps(config.to_dict(), indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+
+def _evaluate_one_question_isolated(config, item, run_dir, *, max_attempts=5, retry_delay=15):
+    """Run a single question in a fresh subprocess; retry on segfault."""
+    _write_run_config(run_dir, config)
+    script = Path(__file__).resolve().parent / "run_question.py"
+    cmd = [
+        sys.executable,
+        str(script),
+        "--config",
+        str(_run_config_path(run_dir)),
+        "--question-id",
+        item["id"],
+    ]
+
+    timeout = question_timeout_seconds()
+
+    for attempt in range(1, max_attempts + 1):
+        try:
+            proc = subprocess.run(
+                cmd,
+                cwd=PROJECT_ROOT,
+                capture_output=True,
+                text=True,
+                env=stable_env(),
+                timeout=timeout if timeout > 0 else None,
+            )
+        except subprocess.TimeoutExpired:
+            print(
+                f"[stable] timeout on {item['id']} after {timeout}s "
+                f"(attempt {attempt}/{max_attempts})",
+                flush=True,
+            )
+            if attempt < max_attempts:
+                time.sleep(retry_delay)
+                continue
+            raise RuntimeError(
+                f"Question {item['id']} timed out after {max_attempts} attempts ({timeout}s each)"
+            )
+
+        if proc.returncode == 0:
+            line = proc.stdout.strip().splitlines()[-1]
+            return json.loads(line)
+
+        if is_crash_exit(proc.returncode) and attempt < max_attempts:
+            print(
+                f"[stable] segfault on {item['id']} "
+                f"(attempt {attempt}/{max_attempts}) — retrying in {retry_delay}s",
+                flush=True,
+            )
+            time.sleep(retry_delay)
+            continue
+
+        stderr = (proc.stderr or "").strip()
+        raise RuntimeError(
+            f"Question {item['id']} failed with exit {proc.returncode}"
+            + (f": {stderr}" if stderr else "")
+        )
+
+    raise RuntimeError(f"Question {item['id']} failed after {max_attempts} attempts")
 
 
 def _checkpoint_path(run_dir):
@@ -208,7 +290,7 @@ def _evaluate_one_question(item, retriever, config, json_output):
     return row
 
 
-def _build_run_summary(config, per_question, index):
+def _build_run_summary(config, per_question, chunk_count):
     latencies = [
         row.get("total_latency_s", row.get("retrieve_latency_s", 0.0))
         for row in per_question
@@ -219,7 +301,7 @@ def _build_run_summary(config, per_question, index):
 
     summary = {
         "config": config.to_dict(),
-        "index_stats": {"chunks": len(index.chunks)},
+        "index_stats": {"chunks": chunk_count},
         "question_count": len(per_question),
         "recall_at_k": average([1.0 if row["recall_hit"] else 0.0 for row in per_question]),
         "mrr_at_k": average([
@@ -265,6 +347,8 @@ def prepare_run_dir(folder_name, condition_name, run_number, force=False, flat=F
 
 
 def run_single_pipeline(config, questions, index_cache, run_dir, show_progress=False):
+    enable_stable_mode()
+
     completed = _load_checkpoint(run_dir)
     pending = [q for q in questions if q["id"] not in completed]
     total = len(questions)
@@ -273,16 +357,20 @@ def run_single_pipeline(config, questions, index_cache, run_dir, show_progress=F
         print(f"Questions: {len(completed)}/{total} complete, {len(pending)} remaining")
 
     index = ensure_index(config, index_cache, show_progress=show_progress)
+    chunk_count = len(index.chunks)
     release_embed_gpu(index)
-    retriever = _init_retriever(index, config)
-    json_output = uses_json_output(config.prompt)
+    index.close()
+    close_cached_indices(index_cache)
+    _write_run_config(run_dir, config)
+    print("[stable] per-question subprocess isolation + CPU embeddings enabled", flush=True)
 
     for item in pending:
-        row = _evaluate_one_question(item, retriever, config, json_output)
+        row = _evaluate_one_question_isolated(config, item, run_dir)
         _append_checkpoint(run_dir, row)
         done = len(_load_checkpoint(run_dir))
         score = row["metrics"]["final_score"]
         print(f"[{config.name}] question {done}/{total} | score: {score}", flush=True)
+        breather_after_question()
 
     completed = _load_checkpoint(run_dir)
     per_question = [completed[q["id"]] for q in questions if q["id"] in completed]
@@ -291,12 +379,12 @@ def run_single_pipeline(config, questions, index_cache, run_dir, show_progress=F
             f"Run incomplete: {len(per_question)}/{total} questions in checkpoint at {run_dir}"
         )
 
-    summary = _build_run_summary(config, per_question, index)
+    summary = _build_run_summary(config, per_question, chunk_count)
     checkpoint = _checkpoint_path(run_dir)
     if checkpoint.exists():
         checkpoint.unlink()
 
-    return {"summary": summary, "questions": per_question, "index": index}
+    return {"summary": summary, "questions": per_question, "chunk_count": chunk_count}
 
 
 def save_and_mirror(config, payload, folder_name, condition_name, run_number, flat=False):
@@ -379,6 +467,7 @@ def run_condition(
         print(f"Saved: {run_dir_saved}")
         print(f"Mirrored: {run_dir}")
         print(f"Final score: {score}")
+        breather_after_run(f"{label} run_{run_number}")
 
     return final_scores
 
@@ -390,6 +479,7 @@ def run_ablation(
     force=False,
     show_progress=False,
 ):
+    enable_stable_mode()
     ablation = get_ablation(ablation_id)
     questions = load_questions()
     if not questions:
@@ -439,6 +529,7 @@ def run_ablation(
 
 
 def run_locked_baseline(runs=3, force=False, show_progress=False):
+    enable_stable_mode()
     questions = load_questions()
     if not questions:
         raise RuntimeError("No eval questions found in data/eval/questions.jsonl")

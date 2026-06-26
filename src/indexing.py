@@ -1,4 +1,5 @@
 import json
+import os
 import uuid
 
 from qdrant_client import QdrantClient
@@ -9,6 +10,24 @@ from sentence_transformers import SentenceTransformer
 from chunking import chunk_text, normalize_for_lexical
 from config import COLLECTION_NAME, PROCESSED_DIR, QDRANT_PATH
 from documents import load_raw_documents
+
+
+def index_slug(config):
+    model_tail = config.embedding_model.rsplit("/", maxsplit=1)[-1]
+    return f"cs{config.chunk_size}_ol{config.chunk_overlap}_{model_tail}"
+
+
+def chunks_path_for_config(config):
+    return PROCESSED_DIR / f"chunks_{index_slug(config)}.jsonl"
+
+
+def embedding_device():
+    """Use CPU when RAG_CPU_EMBED=1 or CUDA is hidden — avoids GPU segfaults on WSL2."""
+    if os.environ.get("RAG_CPU_EMBED", "").lower() in {"1", "true", "yes"}:
+        return "cpu"
+    if os.environ.get("CUDA_VISIBLE_DEVICES", None) == "":
+        return "cpu"
+    return None
 
 
 class ExperimentIndex:
@@ -74,12 +93,16 @@ def build_experiment_index(config, show_progress=False, qdrant_path=None):
         raise RuntimeError("Chunking produced zero chunks")
 
     PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
-    chunks_path = PROCESSED_DIR / f"chunks_{config.name}.jsonl"
+    chunks_path = chunks_path_for_config(config)
     with chunks_path.open("w", encoding="utf-8") as f:
         for chunk in chunks:
             f.write(json.dumps(chunk) + "\n")
 
-    embed_model = SentenceTransformer(config.embedding_model)
+    device = embedding_device()
+    embed_model = SentenceTransformer(
+        config.embedding_model,
+        device=device,
+    ) if device else SentenceTransformer(config.embedding_model)
     texts = [chunk["text"] for chunk in chunks]
     vectors = embed_model.encode(
         texts,
@@ -117,6 +140,36 @@ def build_experiment_index(config, show_progress=False, qdrant_path=None):
         "skipped": skipped,
         "chunks_path": str(chunks_path),
     }
+
+
+def load_experiment_index(config):
+    """Reload a previously built index from disk (for isolated per-question workers)."""
+    chunks_path = chunks_path_for_config(config)
+    if not chunks_path.exists():
+        raise FileNotFoundError(
+            f"No chunk file at {chunks_path}. Build the index in the parent process first."
+        )
+
+    chunks = []
+    with chunks_path.open("r", encoding="utf-8") as f:
+        for line in f:
+            if line.strip():
+                chunks.append(json.loads(line))
+
+    device = embedding_device()
+    embed_model = SentenceTransformer(
+        config.embedding_model,
+        device=device,
+    ) if device else SentenceTransformer(config.embedding_model)
+
+    client = QdrantClient(path=str(QDRANT_PATH))
+    if not client.collection_exists(COLLECTION_NAME):
+        raise RuntimeError(
+            f"Qdrant collection '{COLLECTION_NAME}' is missing at {QDRANT_PATH}. "
+            "Build the index in the parent process first."
+        )
+
+    return ExperimentIndex(config, chunks, embed_model, client)
 
 
 def release_embed_gpu(index):

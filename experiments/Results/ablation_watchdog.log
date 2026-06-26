@@ -26,3 +26,161 @@
 [supervisor] progress 13/66 runs complete
 [supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
 ========================================================================
+[supervisor] child exited with code -11
+[supervisor] segfault/crash — retrying in 30s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 2 at 2026-06-25 09:07:29
+[supervisor] progress 15/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 30s
+
+========================================================================
+[supervisor] attempt 3 at 2026-06-25 09:10:07
+[supervisor] progress 15/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] segfault/crash — retrying in 30s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 4 at 2026-06-25 09:11:45
+[supervisor] progress 15/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] segfault/crash — retrying in 30s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 5 at 2026-06-25 09:13:23
+[supervisor] progress 15/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 30s
+
+========================================================================
+[supervisor] attempt 6 at 2026-06-25 09:22:01
+[supervisor] progress 15/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] segfault/crash — retrying in 30s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 7 at 2026-06-25 09:23:39
+[supervisor] progress 15/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 30s
+
+========================================================================
+[supervisor] attempt 8 at 2026-06-25 09:27:17
+[supervisor] progress 15/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 30s
+
+========================================================================
+[supervisor] attempt 9 at 2026-06-25 09:34:55
+[supervisor] progress 15/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 30s
+
+========================================================================
+[supervisor] attempt 10 at 2026-06-25 09:41:33
+[supervisor] progress 15/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 30s
+
+========================================================================
+[supervisor] attempt 11 at 2026-06-25 09:44:11
+[supervisor] progress 15/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] segfault/crash — retrying in 30s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 12 at 2026-06-25 09:45:50
+[supervisor] progress 15/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] segfault/crash — retrying in 30s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 13 at 2026-06-25 09:47:28
+[supervisor] progress 15/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 30s
+
+========================================================================
+[supervisor] attempt 14 at 2026-06-25 09:55:06
+[supervisor] progress 15/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] segfault/crash — retrying in 30s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 15 at 2026-06-25 09:56:44
+[supervisor] progress 15/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 30s
+
+========================================================================
+[supervisor] attempt 16 at 2026-06-25 09:58:21
+[supervisor] progress 15/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] segfault/crash — retrying in 30s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 17 at 2026-06-25 10:00:00
+[supervisor] progress 15/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+========================================================================
+
+========================================================================
+[supervisor] attempt 1 at 2026-06-25 20:25:32
+[supervisor] progress 16/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+
+========================================================================
+[supervisor] attempt 1 at 2026-06-25 20:25:52
+[supervisor] progress 16/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+
+========================================================================
+[supervisor] attempt 1 at 2026-06-25 20:30:06
+[supervisor] progress 16/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 2 at 2026-06-25 20:40:14
+[supervisor] progress 16/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================

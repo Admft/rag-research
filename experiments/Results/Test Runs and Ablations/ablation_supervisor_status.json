@@ -1,25 +1,25 @@
 {
-  "last_update": "2026-06-25 08:49:52",
-  "attempts": 1,
-  "child_pid": 1612,
+  "last_update": "2026-06-26 03:56:16",
+  "attempts": 2,
+  "child_pid": 4517,
   "message": "progress detected",
   "progress": {
     "total_runs": 66,
-    "complete_runs": 13,
+    "complete_runs": 16,
     "in_progress": [
       {
-        "label": "Ablation 2 - Generator Model Size/llama3.1-8b/run_2",
-        "questions_done": 58,
-        "run_dir": "/home/adamm/projects/rag-research/experiments/Results/Test Runs and Ablations/Ablation 2 - Generator Model Size/llama3.1-8b/run_2"
+        "label": "Ablation 3 - Output Format/json/run_2",
+        "questions_done": 41,
+        "run_dir": "/home/adamm/projects/rag-research/experiments/Results/Test Runs and Ablations/Ablation 3 - Output Format/json/run_2"
       }
     ],
-    "pending_count": 52,
+    "pending_count": 49,
     "pending_next": [
-      "Ablation 2 - Generator Model Size/llama3.1-8b/run_3",
-      "Ablation 3 - Output Format/json/run_1",
-      "Ablation 3 - Output Format/json/run_2",
       "Ablation 3 - Output Format/json/run_3",
-      "Ablation 3 - Output Format/xml/run_1"
+      "Ablation 3 - Output Format/xml/run_1",
+      "Ablation 3 - Output Format/xml/run_2",
+      "Ablation 3 - Output Format/xml/run_3",
+      "Ablation 4 - Context Filter/none/run_1"
     ],
     "is_complete": false
   }

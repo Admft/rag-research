@@ -1,0 +1,26 @@
+{
+  "ablation": "Ablation 2 - Generator Model Size",
+  "baseline_score": 83.22,
+  "conditions": {
+    "qwen2.5-14b": {
+      "runs": [
+        84.08,
+        83.01,
+        83.69
+      ],
+      "mean": 83.59,
+      "std": 0.54,
+      "delta_vs_baseline": 0.37
+    },
+    "llama3.1-8b": {
+      "runs": [
+        72.49,
+        74.77,
+        73.94
+      ],
+      "mean": 73.73,
+      "std": 1.15,
+      "delta_vs_baseline": -9.49
+    }
+  }
+}

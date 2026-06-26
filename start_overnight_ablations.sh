@@ -26,11 +26,12 @@ fi
 if tmux has-session -t "$SESSION" 2>/dev/null; then
   echo "Supervisor already running in tmux session: $SESSION"
   echo "  attach:  tmux attach -t $SESSION"
-  echo "  status:  $PYTHON $SUPERVISOR --status"
+  echo "  status:  $PYTHON $SUPERVISOR --status --all"
+  echo "  stop:    tmux kill-session -t $SESSION"
   exit 0
 fi
 
-tmux new-session -d -s "$SESSION" "cd '$ROOT' && exec $PYTHON '$SUPERVISOR' --all --repair-venv --until-complete"
+tmux new-session -d -s "$SESSION" "cd '$ROOT' && exec $PYTHON '$SUPERVISOR' --safe --all"
 
 echo "Overnight ablation supervisor started."
 echo "  tmux session: $SESSION"
@@ -42,5 +43,11 @@ echo ""
 echo "The supervisor will:"
 echo "  - restart on segfaults (fresh Python each time)"
 echo "  - resume from checkpoint.jsonl after crashes"
-echo "  - kill and restart if stalled with no progress for 45 min"
+echo "  - kill and restart if stalled with no progress for 90 min"
 echo "  - keep going until all 66 expected runs have scores.json"
+echo "  - use safe mode (CPU embeddings, long retry delays)"
+echo ""
+echo "Each question also runs in its own subprocess (segfault-safe)."
+echo "Breathers: 10s between questions, 3min between runs (does not affect scores)."
+echo ""
+echo "To stop:  tmux kill-session -t $SESSION"
