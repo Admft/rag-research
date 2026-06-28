@@ -1,0 +1,26 @@
+{
+  "ablation": "Ablation 7 - Query Transformation",
+  "baseline_score": 83.22,
+  "conditions": {
+    "none": {
+      "runs": [
+        82.42,
+        82.43,
+        84.78
+      ],
+      "mean": 83.21,
+      "std": 1.36,
+      "delta_vs_baseline": -0.01
+    },
+    "hyde": {
+      "runs": [
+        80.87,
+        80.83,
+        82.55
+      ],
+      "mean": 81.42,
+      "std": 0.98,
+      "delta_vs_baseline": -1.8
+    }
+  }
+}

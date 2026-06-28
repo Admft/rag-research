@@ -1,25 +1,25 @@
 {
-  "last_update": "2026-06-26 03:56:16",
-  "attempts": 2,
-  "child_pid": 4517,
+  "last_update": "2026-06-27 22:39:55",
+  "attempts": 4,
+  "child_pid": 30834,
   "message": "progress detected",
   "progress": {
     "total_runs": 66,
-    "complete_runs": 16,
+    "complete_runs": 51,
     "in_progress": [
       {
-        "label": "Ablation 3 - Output Format/json/run_2",
-        "questions_done": 41,
-        "run_dir": "/home/adamm/projects/rag-research/experiments/Results/Test Runs and Ablations/Ablation 3 - Output Format/json/run_2"
+        "label": "Ablation 8 - Top-K/top7/run_1",
+        "questions_done": 11,
+        "run_dir": "/home/adamm/projects/rag-research/experiments/Results/Test Runs and Ablations/Ablation 8 - Top-K/top7/run_1"
       }
     ],
-    "pending_count": 49,
+    "pending_count": 14,
     "pending_next": [
-      "Ablation 3 - Output Format/json/run_3",
-      "Ablation 3 - Output Format/xml/run_1",
-      "Ablation 3 - Output Format/xml/run_2",
-      "Ablation 3 - Output Format/xml/run_3",
-      "Ablation 4 - Context Filter/none/run_1"
+      "Ablation 8 - Top-K/top7/run_2",
+      "Ablation 8 - Top-K/top7/run_3",
+      "Ablation 8 - Top-K/top10/run_1",
+      "Ablation 8 - Top-K/top10/run_2",
+      "Ablation 8 - Top-K/top10/run_3"
     ],
     "is_complete": false
   }

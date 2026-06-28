@@ -1,0 +1,26 @@
+{
+  "ablation": "Ablation 3 - Output Format",
+  "baseline_score": 83.22,
+  "conditions": {
+    "json": {
+      "runs": [
+        82.89,
+        83.88,
+        84.0
+      ],
+      "mean": 83.59,
+      "std": 0.61,
+      "delta_vs_baseline": 0.37
+    },
+    "xml": {
+      "runs": [
+        83.92,
+        85.68,
+        82.69
+      ],
+      "mean": 84.1,
+      "std": 1.5,
+      "delta_vs_baseline": 0.88
+    }
+  }
+}

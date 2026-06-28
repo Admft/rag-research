@@ -1,0 +1,26 @@
+{
+  "ablation": "Ablation 5 - Embedding Model",
+  "baseline_score": 83.22,
+  "conditions": {
+    "bge-small": {
+      "runs": [
+        82.75,
+        84.03,
+        82.37
+      ],
+      "mean": 83.05,
+      "std": 0.87,
+      "delta_vs_baseline": -0.17
+    },
+    "bge-large": {
+      "runs": [
+        84.46,
+        84.53,
+        83.51
+      ],
+      "mean": 84.17,
+      "std": 0.57,
+      "delta_vs_baseline": 0.95
+    }
+  }
+}

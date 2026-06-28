@@ -184,3 +184,1384 @@
 [supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
 [supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
 ========================================================================
+
+========================================================================
+[supervisor] attempt 1 at 2026-06-26 04:01:53
+[supervisor] progress 16/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 2 at 2026-06-26 04:07:00
+[supervisor] progress 16/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 3 at 2026-06-26 04:47:07
+[supervisor] progress 17/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 4 at 2026-06-26 05:05:14
+[supervisor] progress 18/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 5 at 2026-06-26 05:09:23
+[supervisor] progress 18/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 6 at 2026-06-26 05:41:30
+[supervisor] progress 18/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 7 at 2026-06-26 05:59:38
+[supervisor] progress 19/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 8 at 2026-06-26 06:03:46
+[supervisor] progress 19/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 9 at 2026-06-26 06:07:53
+[supervisor] progress 19/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 10 at 2026-06-26 06:12:00
+[supervisor] progress 19/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 11 at 2026-06-26 06:22:08
+[supervisor] progress 19/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 12 at 2026-06-26 06:26:15
+[supervisor] progress 19/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 13 at 2026-06-26 06:32:22
+[supervisor] progress 19/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 14 at 2026-06-26 06:36:30
+[supervisor] progress 19/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 15 at 2026-06-26 06:40:37
+[supervisor] progress 19/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 16 at 2026-06-26 06:44:46
+[supervisor] progress 19/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 17 at 2026-06-26 06:48:54
+[supervisor] progress 19/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 18 at 2026-06-26 06:53:01
+[supervisor] progress 19/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 19 at 2026-06-26 06:57:09
+[supervisor] progress 19/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 20 at 2026-06-26 07:05:17
+[supervisor] progress 19/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 21 at 2026-06-26 07:20:25
+[supervisor] progress 19/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 22 at 2026-06-26 07:42:32
+[supervisor] progress 20/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 23 at 2026-06-26 07:46:39
+[supervisor] progress 20/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 24 at 2026-06-26 07:50:46
+[supervisor] progress 20/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 25 at 2026-06-26 08:43:54
+[supervisor] progress 21/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 26 at 2026-06-26 08:58:01
+[supervisor] progress 21/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 27 at 2026-06-26 09:33:10
+[supervisor] progress 22/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 28 at 2026-06-26 09:55:17
+[supervisor] progress 23/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 29 at 2026-06-26 10:04:25
+[supervisor] progress 23/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 30 at 2026-06-26 10:08:34
+[supervisor] progress 23/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 31 at 2026-06-26 10:12:41
+[supervisor] progress 23/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 32 at 2026-06-26 10:16:49
+[supervisor] progress 23/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 33 at 2026-06-26 10:20:56
+[supervisor] progress 23/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 34 at 2026-06-26 10:25:05
+[supervisor] progress 23/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 35 at 2026-06-26 10:29:12
+[supervisor] progress 23/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 36 at 2026-06-26 10:45:21
+[supervisor] progress 23/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 37 at 2026-06-26 11:07:29
+[supervisor] progress 24/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 38 at 2026-06-26 11:29:36
+[supervisor] progress 24/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 39 at 2026-06-26 11:34:43
+[supervisor] progress 24/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 40 at 2026-06-26 11:38:49
+[supervisor] progress 24/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 41 at 2026-06-26 11:42:56
+[supervisor] progress 24/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 42 at 2026-06-26 11:47:02
+[supervisor] progress 24/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 43 at 2026-06-26 11:51:08
+[supervisor] progress 24/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 44 at 2026-06-26 12:01:15
+[supervisor] progress 24/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 45 at 2026-06-26 12:09:23
+[supervisor] progress 24/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 46 at 2026-06-26 12:21:30
+[supervisor] progress 25/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 47 at 2026-06-26 12:25:37
+[supervisor] progress 25/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 48 at 2026-06-26 12:29:44
+[supervisor] progress 25/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 49 at 2026-06-26 12:33:51
+[supervisor] progress 25/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 50 at 2026-06-26 12:38:01
+[supervisor] progress 25/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 51 at 2026-06-26 12:42:11
+[supervisor] progress 25/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 52 at 2026-06-26 12:46:19
+[supervisor] progress 25/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 53 at 2026-06-26 12:50:27
+[supervisor] progress 25/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 54 at 2026-06-26 12:54:38
+[supervisor] progress 25/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 55 at 2026-06-26 12:58:46
+[supervisor] progress 25/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 56 at 2026-06-26 13:02:55
+[supervisor] progress 25/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 1 at 2026-06-26 13:05:23
+[supervisor] progress 25/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 2 at 2026-06-26 13:22:30
+[supervisor] progress 25/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 3 at 2026-06-26 13:26:37
+[supervisor] progress 25/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 4 at 2026-06-26 13:30:45
+[supervisor] progress 25/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 5 at 2026-06-26 13:34:55
+[supervisor] progress 25/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 6 at 2026-06-26 13:39:04
+[supervisor] progress 25/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 7 at 2026-06-26 13:43:13
+[supervisor] progress 25/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 8 at 2026-06-26 14:01:21
+[supervisor] progress 25/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 9 at 2026-06-26 14:05:28
+[supervisor] progress 25/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 10 at 2026-06-26 14:20:38
+[supervisor] progress 26/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+
+========================================================================
+[supervisor] attempt 1 at 2026-06-26 14:31:56
+[supervisor] progress 26/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 2 at 2026-06-26 15:02:04
+[supervisor] progress 27/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 3 at 2026-06-26 15:06:12
+[supervisor] progress 27/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 4 at 2026-06-26 15:10:23
+[supervisor] progress 27/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 5 at 2026-06-26 15:15:31
+[supervisor] progress 27/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 6 at 2026-06-26 15:38:38
+[supervisor] progress 27/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 7 at 2026-06-26 15:42:46
+[supervisor] progress 27/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 8 at 2026-06-26 16:12:56
+[supervisor] progress 28/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 9 at 2026-06-26 16:39:04
+[supervisor] progress 29/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 10 at 2026-06-26 17:23:13
+[supervisor] progress 30/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 11 at 2026-06-26 17:27:21
+[supervisor] progress 30/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 12 at 2026-06-26 18:05:29
+[supervisor] progress 31/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 13 at 2026-06-26 18:11:36
+[supervisor] progress 31/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 14 at 2026-06-26 18:20:44
+[supervisor] progress 31/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 15 at 2026-06-26 18:24:51
+[supervisor] progress 31/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 16 at 2026-06-26 18:28:59
+[supervisor] progress 31/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 17 at 2026-06-26 18:33:07
+[supervisor] progress 31/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 18 at 2026-06-26 19:06:16
+[supervisor] progress 32/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 19 at 2026-06-26 19:10:23
+[supervisor] progress 32/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 20 at 2026-06-26 19:13:31
+[supervisor] progress 32/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 21 at 2026-06-26 19:33:39
+[supervisor] progress 32/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 22 at 2026-06-26 19:58:48
+[supervisor] progress 33/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+
+========================================================================
+[supervisor] attempt 1 at 2026-06-26 20:24:20
+[supervisor] progress 33/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 2 at 2026-06-26 20:28:30
+[supervisor] progress 33/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 3 at 2026-06-26 20:32:39
+[supervisor] progress 33/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 4 at 2026-06-26 20:36:48
+[supervisor] progress 33/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 5 at 2026-06-26 20:57:56
+[supervisor] progress 33/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 6 at 2026-06-26 21:02:04
+[supervisor] progress 33/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 7 at 2026-06-26 21:08:11
+[supervisor] progress 33/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 8 at 2026-06-26 21:12:19
+[supervisor] progress 33/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 9 at 2026-06-26 21:16:26
+[supervisor] progress 33/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 10 at 2026-06-26 21:36:35
+[supervisor] progress 33/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 11 at 2026-06-26 21:40:44
+[supervisor] progress 33/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 12 at 2026-06-26 21:44:51
+[supervisor] progress 33/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 13 at 2026-06-26 21:55:00
+[supervisor] progress 33/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -6
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 14 at 2026-06-26 21:59:07
+[supervisor] progress 33/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 15 at 2026-06-26 22:30:15
+[supervisor] progress 34/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -6
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 16 at 2026-06-26 22:34:23
+[supervisor] progress 34/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 17 at 2026-06-26 22:47:31
+[supervisor] progress 34/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 18 at 2026-06-26 23:15:38
+[supervisor] progress 34/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 19 at 2026-06-26 23:19:45
+[supervisor] progress 34/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 20 at 2026-06-26 23:23:53
+[supervisor] progress 34/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 21 at 2026-06-26 23:28:01
+[supervisor] progress 34/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 22 at 2026-06-26 23:40:11
+[supervisor] progress 34/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 23 at 2026-06-26 23:44:19
+[supervisor] progress 34/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 24 at 2026-06-26 23:48:27
+[supervisor] progress 34/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 25 at 2026-06-26 23:52:35
+[supervisor] progress 34/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 26 at 2026-06-26 23:56:45
+[supervisor] progress 34/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 27 at 2026-06-27 00:00:53
+[supervisor] progress 34/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 28 at 2026-06-27 00:05:03
+[supervisor] progress 34/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 29 at 2026-06-27 00:09:13
+[supervisor] progress 34/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 30 at 2026-06-27 00:23:21
+[supervisor] progress 34/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 31 at 2026-06-27 00:35:30
+[supervisor] progress 34/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 32 at 2026-06-27 00:38:37
+[supervisor] progress 34/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 33 at 2026-06-27 00:42:47
+[supervisor] progress 34/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 34 at 2026-06-27 00:46:56
+[supervisor] progress 34/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 35 at 2026-06-27 00:56:59
+[supervisor] progress 34/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 36 at 2026-06-27 01:00:06
+[supervisor] progress 34/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 37 at 2026-06-27 01:04:09
+[supervisor] progress 34/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 38 at 2026-06-27 01:08:19
+[supervisor] progress 34/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 39 at 2026-06-27 01:12:28
+[supervisor] progress 34/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 40 at 2026-06-27 01:16:37
+[supervisor] progress 34/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 41 at 2026-06-27 01:20:46
+[supervisor] progress 34/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 42 at 2026-06-27 01:24:54
+[supervisor] progress 34/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 43 at 2026-06-27 01:29:02
+[supervisor] progress 34/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 44 at 2026-06-27 01:33:10
+[supervisor] progress 34/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 45 at 2026-06-27 01:43:17
+[supervisor] progress 34/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 46 at 2026-06-27 01:55:25
+[supervisor] progress 34/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 47 at 2026-06-27 01:58:33
+[supervisor] progress 34/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 48 at 2026-06-27 02:02:40
+[supervisor] progress 34/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 49 at 2026-06-27 02:06:49
+[supervisor] progress 34/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 50 at 2026-06-27 02:10:57
+[supervisor] progress 34/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 51 at 2026-06-27 02:28:05
+[supervisor] progress 34/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+
+========================================================================
+[supervisor] attempt 1 at 2026-06-27 12:09:18
+[supervisor] progress 34/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 2 at 2026-06-27 12:12:29
+[supervisor] progress 34/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+
+========================================================================
+[supervisor] attempt 1 at 2026-06-27 12:33:25
+[supervisor] progress 35/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 2 at 2026-06-27 15:41:35
+[supervisor] progress 40/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 3 at 2026-06-27 15:45:43
+[supervisor] progress 40/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 4 at 2026-06-27 17:09:52
+[supervisor] progress 43/66 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --all
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================

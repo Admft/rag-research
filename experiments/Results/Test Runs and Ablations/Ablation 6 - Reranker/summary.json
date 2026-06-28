@@ -1,0 +1,26 @@
+{
+  "ablation": "Ablation 6 - Reranker",
+  "baseline_score": 83.22,
+  "conditions": {
+    "bge": {
+      "runs": [
+        82.77,
+        83.62,
+        84.2
+      ],
+      "mean": 83.53,
+      "std": 0.72,
+      "delta_vs_baseline": 0.31
+    },
+    "none": {
+      "runs": [
+        79.85,
+        77.88,
+        76.47
+      ],
+      "mean": 78.07,
+      "std": 1.7,
+      "delta_vs_baseline": -5.15
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "ablation": "Ablation 4 - Context Filter",
+  "baseline_score": 83.22,
+  "conditions": {
+    "none": {
+      "runs": [
+        82.09,
+        83.97,
+        82.5
+      ],
+      "mean": 82.85,
+      "std": 0.99,
+      "delta_vs_baseline": -0.37
+    },
+    "top_sentences_10": {
+      "runs": [
+        78.97,
+        79.67,
+        78.33
+      ],
+      "mean": 78.99,
+      "std": 0.67,
+      "delta_vs_baseline": -4.23
+    },
+    "top_sentences_5": {
+      "runs": [
+        69.28,
+        69.03,
+        68.37
+      ],
+      "mean": 68.89,
+      "std": 0.47,
+      "delta_vs_baseline": -14.33
+    }
+  }
+}

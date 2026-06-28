@@ -1,6 +1,7 @@
 """Run ablation conditions via the existing experiment pipeline."""
 
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -176,19 +177,48 @@ def _load_checkpoint(run_dir):
     path = _checkpoint_path(run_dir)
     if not path.exists():
         return {}
+
     completed = {}
-    with path.open("r", encoding="utf-8") as f:
-        for line in f:
-            if line.strip():
+    corrupt_lines = 0
+    with path.open("r", encoding="utf-8", errors="replace") as f:
+        for lineno, line in enumerate(f, 1):
+            line = line.strip().strip("\x00")
+            if not line:
+                corrupt_lines += 1
+                continue
+            try:
                 row = json.loads(line)
-                completed[row["id"]] = row
+            except json.JSONDecodeError:
+                corrupt_lines += 1
+                print(
+                    f"[checkpoint] skipping corrupt line {lineno} in {path}",
+                    flush=True,
+                )
+                continue
+            completed[row["id"]] = row
+
+    if corrupt_lines:
+        _rewrite_checkpoint(path, completed.values())
+
     return completed
+
+
+def _rewrite_checkpoint(path, rows):
+    """Rewrite checkpoint without corrupt trailing bytes."""
+    tmp = path.with_suffix(".jsonl.tmp")
+    with tmp.open("w", encoding="utf-8") as f:
+        for row in rows:
+            f.write(json.dumps(row) + "\n")
+    tmp.replace(path)
 
 
 def _append_checkpoint(run_dir, row):
     run_dir.mkdir(parents=True, exist_ok=True)
-    with _checkpoint_path(run_dir).open("a", encoding="utf-8") as f:
+    path = _checkpoint_path(run_dir)
+    with path.open("a", encoding="utf-8") as f:
         f.write(json.dumps(row) + "\n")
+        f.flush()
+        os.fsync(f.fileno())
 
 
 def _init_retriever(index, config):
