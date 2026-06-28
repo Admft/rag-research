@@ -1,0 +1,12 @@
+{
+  "final_score": 76.91,
+  "answer_correctness": 73.67,
+  "faithfulness": 77.33,
+  "context_recall": 78.75,
+  "context_precision": 72.58,
+  "citation_accuracy": 87.83,
+  "answer_parse_rate": 100.0,
+  "recall_at_k": 98.33,
+  "mrr_at_k": 94.72,
+  "avg_latency_s": 11.103
+}

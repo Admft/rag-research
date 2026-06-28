@@ -1,0 +1,36 @@
+{
+  "ablation": "Ablation 9 - Chunk Size",
+  "baseline_score": 83.22,
+  "conditions": {
+    "128": {
+      "runs": [
+        78.8,
+        78.47,
+        76.91
+      ],
+      "mean": 78.06,
+      "std": 1.01,
+      "delta_vs_baseline": -5.16
+    },
+    "256": {
+      "runs": [
+        83.75,
+        84.8,
+        83.2
+      ],
+      "mean": 83.92,
+      "std": 0.81,
+      "delta_vs_baseline": 0.7
+    },
+    "512": {
+      "runs": [
+        14.41,
+        14.32,
+        13.52
+      ],
+      "mean": 14.08,
+      "std": 0.49,
+      "delta_vs_baseline": -69.14
+    }
+  }
+}
