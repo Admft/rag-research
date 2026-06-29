@@ -1,0 +1,399 @@
+========================================================================
+EXPERIMENT: ablation_ablation_a8_top10_r1
+========================================================================
+Run folder: 076__ablation_ablation_a8_top10_r1__2026-06-29_02-14-10_CDT
+Round:      ablation_a8
+Mode:       full_pipeline
+Run time:   2026-06-29 02:14:10 CDT
+
+CONFIG
+----------------------------------------
+Chunk size:       256
+Overlap:          50
+Top-k:            10
+Retriever:        hybrid
+Embedding model:  BAAI/bge-small-en-v1.5
+Reranker:         bge
+Query transform:  none
+Prompt:           strict_context_json
+Context filter:   none
+Generator:        qwen2.5:14b
+Judge:            qwen2.5:14b
+
+SCORES
+----------------------------------------
+Final score:          63.65
+Answer correctness:   56.75
+Faithfulness:         58.83
+Context recall:       71.42
+Context precision:    59.67
+Citation accuracy:    88.33
+Answer parse rate:    100.0%
+Recall@10:            100.0%
+MRR@10:                92.7%
+Avg latency:          20.78s
+
+PER-QUESTION
+----------------------------------------
+
+[queryrewrite_q1] What new framework does Query Rewriting for Retrieval-Augmented Large Language Models introduce?
+  Expected source: 2305.14283v3.pdf
+  Recall hit: yes (rank 1)
+  Final score: 61.5
+  Answer: Query Rewriting for Retrieval-Augmented Large Language Models introduces the Rewrite-Retrieve-Read model which leverages LLM's capabilities to refine retrieval queries through rewriting modules and LM-feedback mechanisms [Doc 7][Doc 9].
+
+[queryrewrite_q2] Why do the authors argue that query rewriting is useful for retrieval-augmented LLMs?
+  Expected source: 2305.14283v3.pdf
+  Recall hit: yes (rank 1)
+  Final score: 74.5
+  Answer: Authors argue query rewriting is useful because it fills the gap between the given input and the actual retrieval need, improving performance of retrieval-augmented LLMs [Doc 8].
+
+[queryrewrite_q3] What are the three steps of the Rewrite-Retrieve-Read pipeline?
+  Expected source: 2305.14283v3.pdf
+  Recall hit: yes (rank 2)
+  Final score: 69.5
+  Answer: The three steps of the Rewrite-Retrieve-Read pipeline are query rewriting, retrieval using a web search engine, and reading with a large language model [Doc9].
+
+[queryrewrite_q4] How is the trainable rewriter optimized in the Query Rewriting paper?
+  Expected source: 2305.14283v3.pdf
+  Recall hit: yes (rank 1)
+  Final score: 68.5
+  Answer: The trainable rewriter is optimized through reinforcement learning using the LLM's performance as a reward. During this process, content selection uses BM25 selected URLs [Doc 10].
+
+[queryrewrite_q5] Which datasets are used to evaluate the Query Rewriting approach?
+  Expected source: 2305.14283v3.pdf
+  Recall hit: yes (rank 3)
+  Final score: 37.5
+  Answer: The Query Rewriting approach is evaluated on the HotPotQA, AmbigNQ [Doc 7], and PopQA [Doc 8] datasets.
+
+[rgb_q1] What four abilities does the RGB benchmark evaluate for retrieval-augmented generation?
+  Expected source: 2309.01431v2.pdf
+  Recall hit: yes (rank 1)
+  Final score: 85.75
+  Answer: The RGB benchmark evaluates retrieval-augmented generation for four abilities: Noise Robustness [Doc 1], Negative Rejection (referred to as negative rejection rate in the document) [Doc 1], Information Integration [Doc 1], and Counterfactual Robustness [Doc 1].
+
+[rgb_q2] What does negative rejection mean in the RGB benchmark?
+  Expected source: 2309.01431v2.pdf
+  Recall hit: yes (rank 1)
+  Final score: 42.0
+  Answer: Negative rejection means that a LLM should reject answering the question when the required knowledge is not present in any retrieved document [Doc 8].
+
+[rgb_q3] How does RGB construct its benchmark questions and documents?
+  Expected source: 2309.01431v2.pdf
+  Recall hit: yes (rank 1)
+  Final score: 46.5
+  Answer: RGB constructs its benchmark questions and documents by using external knowledge bases to retrieve relevant documents and considers the multiple abilities required of LLMs, such as noise robustness, negative rejection, and information integration [Doc 10], [Doc 7].
+
+[rgb_q4] Why does RGB use latest news articles when constructing benchmark instances?
+  Expected source: 2309.01431v2.pdf
+  Recall hit: yes (rank 1)
+  Final score: 37.5
+  Answer: RGB uses latest news articles to ensure the data remains current and avoids issues with outdated knowledge in LLMs [Doc 7], [Doc 8].
+
+[rgb_q5] What limitation did RGB find in LLMs using retrieval-augmented generation?
+  Expected source: 2309.01431v2.pdf
+  Recall hit: yes (rank 1)
+  Final score: 60.5
+  Answer: RGB found that LLMs struggle with noise robustness, unable to extract useful information from noisy documents; lack of ability to reject generation when contexts do not provide useful information; and incapability of integrating answers from multiple documents [Doc 7].
+
+[ragas_q1] What is Ragas designed to evaluate?
+  Expected source: 2309.15217v2.pdf
+  Recall hit: yes (rank 1)
+  Final score: 41.5
+  Answer: Ragas is designed to evaluate the performance of Retrieval-Augmented Generation (RAG) systems by comparing their outputs against human assessments [2, 3, 9].
+
+[ragas_q2] What three quality aspects does Ragas focus on?
+  Expected source: 2309.15217v2.pdf
+  Recall hit: yes (rank 1)
+  Final score: 80.75
+  Answer: Ragas focuses on evaluating context relevance, answer faithfulness, and answer relevance [Doc 1].
+
+[ragas_q3] How does Ragas define faithfulness?
+  Expected source: 2309.15217v2.pdf
+  Recall hit: yes (rank 1)
+  Final score: 54.5
+  Answer: Ragas defines faithfulness as ensuring the generated answer uses the provided context accurately and avoids hallucinations [Doc 6].
+
+[ragas_q4] How does Ragas estimate answer relevance?
+  Expected source: 2309.15217v2.pdf
+  Recall hit: yes (rank 1)
+  Final score: 38.5
+  Answer: Ragas estimates answer relevance by using an LLM to generate candidate answers with lower answer relevance through a specific prompt [Doc 9], then human annotators compare these answers to determine which has the highest answer relevance [Doc 8].
+
+[ragas_q5] Why is context relevance important in Ragas?
+  Expected source: 2309.15217v2.pdf
+  Recall hit: yes (rank 1)
+  Final score: 61.5
+  Answer: Context relevance is crucial as it ensures the inclusion of only necessary information to answer a question, thereby penalizing redundant data [Doc 2]. This also aids in making the entire retrieval and reasoning process more transparent and verifiable [Doc 8].
+
+[selfrag_q1] What problem does SELF-RAG address compared with standard RAG?
+  Expected source: 2310.11511v1.pdf
+  Recall hit: yes (rank 1)
+  Final score: 68.5
+  Answer: SELF-RAG addresses the issue of incorrect retrieval by selectively retrieving knowledge and introducing a critic model that decides whether retrieval is necessary, ensuring relevant and accurate information for generative LLMs [Doc 1][Doc 4].
+
+[selfrag_q2] What are reflection tokens in SELF-RAG used for?
+  Expected source: 2310.11511v1.pdf
+  Recall hit: yes (rank 1)
+  Final score: 89.75
+  Answer: Reflection tokens in SELF-RAG are used to self-evaluate the model's output, decide when to retrieve text passages, and assess the relevance and supportiveness of retrieved passages for ensuring factual accuracy [Doc 2].
+
+[selfrag_q3] What are the four reflection token types used in SELF-RAG?
+  Expected source: 2310.11511v1.pdf
+  Recall hit: yes (rank 1)
+  Final score: 89.75
+  Answer: The four reflection token types used in SELF-RAG include Retrieve to evaluate the need for retrieval, ISREL to assess passage relevance, ISSUP to check if output is supported by the retrieved information, and ISUSE to determine overall response utility [Doc 1].
+
+[selfrag_q4] How does SELF-RAG perform inference when retrieval is needed?
+  Expected source: 2310.11511v1.pdf
+  Recall hit: yes (rank 1)
+  Final score: 64.5
+  Answer: When retrieval is needed, SELF-RAG performs a fragment-level beam search across multiple paragraphs to derive the most coherent sequence and uses critic scores to update subdivision scores flexibly during inference [Doc1].
+
+[selfrag_q5] What advantage does SELF-RAG claim over conventional retrieval-augmented generation?
+  Expected source: 2310.11511v1.pdf
+  Recall hit: yes (rank 2)
+  Final score: 83.25
+  Answer: SELF-RAG claims the advantage of training an LM to learn when to retrieve and critique its generation, unlike conventional RAG which retrieves passages indiscriminately [Doc 3].
+
+[filco_q1] What is FILCO designed to improve in retrieval-augmented generation?
+  Expected source: 2311.08377v1.pdf
+  Recall hit: yes (rank 1)
+  Final score: 88.5
+  Answer: FILCO is designed to improve retrieval-augmented generation by filtering out distracting or negative content, thereby enhancing context quality which leads to better end generation results [Doc 2]. It also reduces the number of tokens in model inputs while increasing answer precision [Doc 4].
+
+[filco_q2] What three strategies does FILCO use to identify useful context?
+  Expected source: 2311.08377v1.pdf
+  Recall hit: yes (rank 1)
+  Final score: 40.25
+  Answer: FILCO uses the CXMI strategy, learning to filter contexts with silver labels [Doc 2], and filtering context by sentence level [Doc 10].
+
+[filco_q3] Why can retrieved positive passages still hurt generation quality?
+  Expected source: 2311.08377v1.pdf
+  Recall hit: yes (rank 1)
+  Final score: 62.0
+  Answer: Retrieved positive passages can still hurt generation quality because they may contain distracting content or irrelevant knowledge that introduces noise and inaccuracies, even when the passage is relevant overall. [Doc 3] [Doc 8]
+
+[filco_q4] What is the role of the context filtering model in FILCO?
+  Expected source: 2311.08377v1.pdf
+  Recall hit: yes (rank 1)
+  Final score: 65.0
+  Answer: The role of the context filtering model in FILCO is to filter the top-1 retrieved passage to generate tsilver, which is then used by another generation model (Mgen) to produce the final output [Doc 6][Doc 7].
+
+[filco_q5] Which six tasks or datasets did FILCO evaluate on?
+  Expected source: 2311.08377v1.pdf
+  Recall hit: yes (rank 1)
+  Final score: 100.0
+  Answer: FILCO evaluated on six tasks: NaturalQuestions (NQ), TriviaQA (TQA), HotpotQA, ELI5, FEVER, and WizardOfWikipedia [Doc 3]
+
+[ragsurvey_q1] What are the three major RAG paradigms described in the RAG survey?
+  Expected source: 2312.10997v5.pdf
+  Recall hit: yes (rank 1)
+  Final score: 99.5
+  Answer: The three major RAG paradigms described are naive RAG, advanced RAG, and modular RAG [Doc 2].
+
+[ragsurvey_q2] What are the main steps in Naive RAG?
+  Expected source: 2312.10997v5.pdf
+  Recall hit: yes (rank 1)
+  Final score: 92.25
+  Answer: The main steps in Naive RAG are indexing, retrieval, and generation. It directly uses the original user query for retrieval without additional optimizations [Doc 3][Doc 7].
+
+[ragsurvey_q3] What retrieval challenges does Naive RAG face?
+  Expected source: 2312.10997v5.pdf
+  Recall hit: yes (rank 1)
+  Final score: 36.5
+  Answer: Naive RAG faces challenges such as issues with precision and recall, leading to the selection of misaligned or irrelevant chunks and the missing of crucial information [Doc 8].
+
+[ragsurvey_q4] How does Advanced RAG improve on Naive RAG?
+  Expected source: 2312.10997v5.pdf
+  Recall hit: yes (rank 1)
+  Final score: 68.0
+  Answer: Advanced RAG improves on Naive RAG by refining indexing techniques with a sliding window approach and incorporating optimization methods to streamline the retrieval process [Doc 2].
+
+[ragsurvey_q5] Why is retrieval granularity important in RAG systems?
+  Expected source: 2312.10997v5.pdf
+  Recall hit: yes (rank 1)
+  Final score: 37.5
+  Answer: Retrieval granularity is important in RAG systems because it influences the ability to identify relevant and focused context passages. Additionally, larger retrieval units can preserve contextual information while reducing the likelihood of encountering inaccurate or irrelevant content [Doc 7][Doc 8
+
+[crag_q1] What is the main goal of Corrective Retrieval Augmented Generation, or CRAG?
+  Expected source: 2401.15884v3.pdf
+  Recall hit: yes (rank 1)
+  Final score: 81.25
+  Answer: The main goal of Corrective Retrieval Augmented Generation (CRAG) is to improve the effectiveness of retrieval-augmented generation approaches by addressing scenarios where the retriever returns inaccurate results [Doc1]. It aims to significantly enhance the performance of RAG-based methods through 
+
+[crag_q2] What component does CRAG use to assess retrieved documents?
+  Expected source: 2401.15884v3.pdf
+  Recall hit: yes (rank 1)
+  Final score: 100.0
+  Answer: CRAG uses a lightweight retrieval evaluator to assess the retrieved documents and estimate their relevance score to the input query [Doc 9].
+
+[crag_q3] What three confidence-based actions can CRAG trigger?
+  Expected source: 2401.15884v3.pdf
+  Recall hit: yes (rank 1)
+  Final score: 38.5
+  Answer: CRAG can trigger three confidence-based actions: accurate documents, inaccurate documents, and large-scale web searches (for the latter two actions). [Doc 1]
+
+[crag_q4] What does CRAG do when retrieved documents are judged incorrect?
+  Expected source: 2401.15884v3.pdf
+  Recall hit: yes (rank 1)
+  Final score: 92.75
+  Answer: When retrieved documents are judged incorrect, CRAG seeks new knowledge sources via web search for correction [Doc 9].
+
+[crag_q5] What is CRAG's decompose-then-recompose algorithm used for?
+  Expected source: 2401.15884v3.pdf
+  Recall hit: yes (rank 1)
+  Final score: 90.25
+  Answer: CRAG's decompose-then-recompose algorithm is used to filter out irrelevant information and concatenate relevant knowledge strips for optimal knowledge utilization [Doc 4].
+
+[adaptllm_q1] What is the purpose of ADAPT-LLM?
+  Expected source: 2404.19705v2.pdf
+  Recall hit: yes (rank 2)
+  Final score: 80.25
+  Answer: ADAPT-LLM is designed to dynamically decide whether to retrieve additional context based on the specific requirements of each question, aiming to balance between using context for enhanced understanding and delivering direct answers when sufficient [Doc 2]. It also evaluates its performance against 
+
+[adaptllm_q2] What special token does ADAPT-LLM generate when it needs retrieval?
+  Expected source: 2404.19705v2.pdf
+  Recall hit: yes (rank 1)
+  Final score: 98.5
+  Answer: ADAPT-LLM generates the special token ⟨RET⟩ when it needs retrieval [Doc 2][Doc 10].
+
+[adaptllm_q3] Why is a popularity threshold not a general solution for deciding when to retrieve?
+  Expected source: 2404.19705v2.pdf
+  Recall hit: yes (rank 1)
+  Final score: 77.0
+  Answer: A popularity threshold is not a general solution because question answering datasets often lack popularity scores, and LLMs need to learn to decide when to retrieve context autonomously [Doc 9].
+
+[adaptllm_q4] How is ADAPT-LLM training data created?
+  Expected source: 2404.19705v2.pdf
+  Recall hit: yes (rank 1)
+  Final score: 66.5
+  Answer: ADAPT-LLM training data is created by first collecting questions (Q), answers (A), and passages (P). If the LLM's answer matches the gold standard, an instance with the parametric prompt and correct answer is added; otherwise, instances with a <RET> token and context are included [Doc 7].
+
+[adaptllm_q5] What was identified as the main bottleneck for ADAPT-LLM performance?
+  Expected source: 2404.19705v2.pdf
+  Recall hit: yes (rank 1)
+  Final score: 70.75
+  Answer: The main bottleneck for ADAPT-LLM performance was identified as the inconsistency and accuracy of current Information Retrieval (IR) systems in retrieving relevant context [Doc 2][Doc 10].
+
+[longrag_q1] What problem does LongRAG identify in traditional RAG design?
+  Expected source: 2406.15319v3.pdf
+  Recall hit: yes (rank 1)
+  Final score: 84.0
+  Answer: LongRAG identifies that traditional RAG has an imbalanced design with a 'heavy' retriever and a 'light' reader [Doc 1], leading to the retriever having to scan through tens of millions of information units to find relevant pieces, significantly increasing its workload [Doc 2].
+
+[longrag_q2] What are the three main components or designs of LongRAG?
+  Expected source: 2406.15319v3.pdf
+  Recall hit: yes (rank 1)
+  Final score: 82.75
+  Answer: The three main components or designs of LongRAG are: long retrieval unit selection, long retriever, and long reader [Doc 1][Doc 3][Doc 6].
+
+[longrag_q3] How does LongRAG form long retrieval units?
+  Expected source: 2406.15319v3.pdf
+  Recall hit: yes (rank 1)
+  Final score: 85.25
+  Answer: LongRAG forms long retrieval units by using entire documents or grouping multiple related documents, resulting in units larger than 4K tokens [Doc 1].
+
+[longrag_q4] Why can long retrieval units reduce the burden on the retriever?
+  Expected source: 2406.15319v3.pdf
+  Recall hit: yes (rank 1)
+  Final score: 69.5
+  Answer: Long retrieval units reduce the burden on the retriever because they offer more complete information, making it easier for the retriever to filter texts [Doc 2]. Additionally, fewer top units (1 to 8) are utilized in LongRAG compared to hundreds of short units in traditional RAG, minimizing the like
+
+[longrag_q5] Which datasets did LongRAG evaluate on?
+  Expected source: 2406.15319v3.pdf
+  Recall hit: yes (rank 1)
+  Final score: 93.25
+  Answer: LongRAG evaluated on the NQ, HotpotQA, Qasper, and MultiFieldQA-en datasets [Doc 6].
+
+[ragbest_q1] What RAG workflow modules are studied in Searching for Best Practices in Retrieval-Augmented Generation?
+  Expected source: 2407.01219v1.pdf
+  Recall hit: yes (rank 1)
+  Final score: 33.5
+  Answer: The modules studied include query classification, retrieval, summarization, closed QA, reasoning, in-context learning, information extraction, and decision-making [Doc 5].
+
+[ragbest_q2] Why does the paper include query classification in the RAG workflow?
+  Expected source: 2407.01219v1.pdf
+  Recall hit: yes (rank 1)
+  Final score: 85.25
+  Answer: The paper includes query classification to determine whether retrieval is necessary for a given query, thereby reducing unnecessary retrievals and improving the efficiency of large language model (LLM) responses [Doc 10].
+
+[ragbest_q3] What chunk size performed best for faithfulness in the paper's chunk-size comparison?
+  Expected source: 2407.01219v1.pdf
+  Recall hit: yes (rank 1)
+  Final score: 10.0
+  Answer: The provided context does not contain the answer.
+
+[ragbest_q4] Which chunking technique performed best in the paper's comparison of chunking skills?
+  Expected source: 2407.01219v1.pdf
+  Recall hit: yes (rank 4)
+  Final score: 50.0
+  Answer: The advanced chunking techniques such as small-to-big and sliding window performed best in the comparison of chunking skills [Doc 7, Doc 8].
+
+[ragbest_q5] Which vector database did the paper identify as the most comprehensive among the evaluated open-source options?
+  Expected source: 2407.01219v1.pdf
+  Recall hit: yes (rank 1)
+  Final score: 10.0
+  Answer: The provided context does not contain the answer.
+
+[raglc_q1] What question does the paper Retrieval Augmented Generation or Long-Context LLMs investigate?
+  Expected source: 2407.16833v2.pdf
+  Recall hit: yes (rank 1)
+  Final score: 31.5
+  Answer: The paper investigates how to enhance Retrieval-Augmented Generation (RAG) by utilizing Long-Context LLMs [Doc 9].
+
+[raglc_q2] What is SELF-ROUTE?
+  Expected source: 2407.16833v2.pdf
+  Recall hit: yes (rank 1)
+  Final score: 38.0
+  Answer: SELF-ROUTE is a method that uses retrieval-augmented generation (RAG) to route queries, achieving comparable performance to long-context models while significantly reducing token usage and costs [Doc 6][Doc 9].
+
+[raglc_q3] What advantage does RAG have over long-context LLM prompting according to the paper?
+  Expected source: 2407.16833v2.pdf
+  Recall hit: yes (rank 1)
+  Final score: 38.5
+  Answer: RAG has an advantage over long-context LLM prompting in reducing computational costs while maintaining comparable performance [Doc 6]. Additionally, previous research [Doc 7] found that long-context models lag behind RAG, which contrasts with this paper's findings but supports RAG's relative efficie
+
+[raglc_q4] What did the paper find when long-context LLMs were sufficiently resourced?
+  Expected source: 2407.16833v2.pdf
+  Recall hit: yes (rank 1)
+  Final score: 93.75
+  Answer: When sufficiently resourced, long-context LLMs outperformed RAG by a significant margin [Doc 2][Doc 3].
+
+[raglc_q5] How does SELF-ROUTE decide whether to use long-context processing?
+  Expected source: 2407.16833v2.pdf
+  Recall hit: yes (rank 1)
+  Final score: 85.0
+  Answer: SELF-ROUTE decides whether to use long-context processing through model self-reflection, routing various queries to RAG or LC based on this internal assessment [Doc 3].
+
+[enhancingrag_q1] What main factors does Enhancing Retrieval-Augmented Generation study?
+  Expected source: 2501.07391v1.pdf
+  Recall hit: yes (rank 1)
+  Final score: 44.0
+  Answer: Enhancing Retrieval-Augmented Generation studies main factors such as evaluating existing RAG approaches and their combinations to identify optimal practices [Doc 1].
+
+[enhancingrag_q2] What is Focus Mode in this RAG study?
+  Expected source: 2501.07391v1.pdf
+  Recall hit: yes (rank 1)
+  Final score: 61.5
+  Answer: Focus Mode involves splitting retrieved sentences from documents and ranking them based on their relevance to the query, ensuring only the most pertinent information is provided to the model [Doc 8].
+
+[enhancingrag_q3] What does the query expansion module do in the proposed RAG framework?
+  Expected source: 2501.07391v1.pdf
+  Recall hit: yes (rank 1)
+  Final score: 41.5
+  Answer: The query expansion module modifies input queries to improve retrieval performance[Doc 8]. It is an integral part of advanced RAG system designs aimed at enhancing response quality[Doc 7].
+
+[enhancingrag_q4] Which two evaluation datasets are used in Enhancing Retrieval-Augmented Generation?
+  Expected source: 2501.07391v1.pdf
+  Recall hit: yes (rank 5)
+  Final score: 10.0
+  Answer: The evaluation datasets used in Enhancing Retrieval-Augmented Generation are RGB, which includes instances generated from latest news articles and external documents obtained from search engines [Doc 6].
+
+[enhancingrag_q5] What knowledge base does the paper use for its RAG experiments?
+  Expected source: 2501.07391v1.pdf
+  Recall hit: yes (rank 3)
+  Final score: 30.5
+  Answer: The knowledge base used in the RAG experiments includes Wikipedia Dump and verifiable information from domain-specific repositories. [Doc 7] [Doc 8]
+
+========================================================================

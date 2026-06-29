@@ -1625,3 +1625,13 @@
 [supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --ablation A8 --condition top10 --runs 3 --force
 [supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
 ========================================================================
+[supervisor] child exited with code -11
+[supervisor] crash cooldown +60s before retry
+[supervisor] segfault/crash — retrying in 180s (checkpoints resume)
+
+========================================================================
+[supervisor] attempt 5 at 2026-06-29 02:21:20
+[supervisor] progress 1/3 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --ablation A8 --condition top10 --runs 3 --force
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
