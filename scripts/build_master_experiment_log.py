@@ -193,7 +193,7 @@ to performance, and how do individual changes interact?
 STORY:
 This project built and optimized a local RAG pipeline over 12 
 academic papers on RAG itself, evaluated on 60 hand-written 
-questions across those papers.
+questions across those papers (5 questions per paper, 12 papers total).
 
 Phase 1 (Runs 000-007): Iterative baseline development.
 Starting from a vanilla baseline scoring 57.48, we made 
@@ -251,10 +251,27 @@ Judge models:
   llama3.1:8b (runs 000-005, same as generator)
 
 Corpus:
-  12 RAG academic PDFs in data/raw/
+  12 RAG academic PDFs in data/raw/ (ALL 12 indexed in every RAG-paper eval run)
+  0 documents skipped at load time (verified load_raw_documents: 12 loaded, skipped=[])
 
-Eval set:
-  60 hand-written questions in data/eval/questions.jsonl (5 per paper)
+Corpus inventory (12 PDFs, 60 eval questions = 5 per paper):
+  2305.14283v3.pdf  Query Rewriting (queryrewrite_q1-q5)
+  2309.01431v2.pdf  RGB benchmark (rgb_q1-q5)
+  2309.15217v2.pdf  Ragas (ragas_q1-q5)
+  2310.11511v1.pdf  SELF-RAG (selfrag_q1-q5)
+  2311.08377v1.pdf  FILCO (filco_q1-q5)
+  2312.10997v5.pdf  RAG survey (ragsurvey_q1-q5)
+  2401.15884v3.pdf  CRAG (crag_q1-q5)
+  2404.19705v2.pdf  ADAPT-LLM (adaptllm_q1-q5)
+  2406.15319v3.pdf  LongRAG (longrag_q1-q5)
+  2407.01219v1.pdf  RAG best practices (ragbest_q1-q5)
+  2407.16833v2.pdf  SELF-ROUTE (selfroute_q1-q5)
+  2501.07391v1.pdf  Enhancing RAG (enhancingrag_q1-q5)
+
+Note: Run 000 (OG baseline) used separate index path data/qdrant_og with 1273 chunks
+from the same 12 PDFs (documents=12, skipped=[]). Runs 002-007 and all Phase 2-4
+ablations use data/qdrant with 558 chunks (chunk_size=256, overlap=50) from same
+12 PDFs. BEIR Phase 3 uses external corpora, NOT these 12 PDFs.
 
 BEIR datasets (Phase 3):
   NFCorpus: 3633 documents, 50 eval queries sampled

@@ -22,11 +22,11 @@ Judge:            qwen2.5:14b
 
 SCORES
 ----------------------------------------
-Final score:          13.52
-Answer correctness:   5.58
-Faithfulness:         6.0
-Context recall:       6.67
-Context precision:    4.83
+Final score:          14.4
+Answer correctness:   6.5
+Faithfulness:         6.97
+Context recall:       7.83
+Context precision:    5.67
 Citation accuracy:    82.5
 Answer parse rate:    100.0%
 Recall@5:            100.0%
@@ -99,7 +99,7 @@ PER-QUESTION
 [ragas_q1] What is Ragas designed to evaluate?
   Expected source: 2309.15217v2.pdf
   Recall hit: yes (rank 1)
-  Final score: 88.75
+  Final score: 81.25
   Answer: Ragas is designed to evaluate Retrieval Augmented Generation (RAG) pipelines through automated assessment, focusing on dimensions such as retrieval quality and generation quality without relying on ground truth human annotations [Doc 1][Doc 2].
 
 [ragas_q2] What three quality aspects does Ragas focus on?
@@ -111,13 +111,13 @@ PER-QUESTION
 [ragas_q3] How does Ragas define faithfulness?
   Expected source: 2309.15217v2.pdf
   Recall hit: yes (rank 1)
-  Final score: 10.0
+  Final score: 69.0
   Answer: Ragas defines faithfulness as assessing whether claims made in an answer can be deduced from the provided context, penalizing any unsupported claims [Doc 1].
 
 [ragas_q4] How does Ragas estimate answer relevance?
   Expected source: 2309.15217v2.pdf
   Recall hit: yes (rank 1)
-  Final score: 89.25
+  Final score: 88.0
   Answer: Ragas estimates answer relevance by generating potential questions based on the given answer and calculating the cosine similarity between these questions and the original question via embeddings. [Doc 1]
 
 [ragas_q5] Why is context relevance important in Ragas?
@@ -261,7 +261,7 @@ PER-QUESTION
 [adaptllm_q3] Why is a popularity threshold not a general solution for deciding when to retrieve?
   Expected source: 2404.19705v2.pdf
   Recall hit: yes (rank 1)
-  Final score: 89.75
+  Final score: 92.25
   Answer: A popularity threshold is not a general solution for deciding when to retrieve because it relies on dataset-specific features such as popularity scores, which may not be available in other open-domain question answering datasets [Doc 2].
 
 [adaptllm_q4] How is ADAPT-LLM training data created?

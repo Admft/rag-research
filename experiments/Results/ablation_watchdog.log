@@ -1566,3 +1566,5 @@
 [supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
 ========================================================================
 [supervisor] finished successfully
+[supervisor] all expected runs complete
+[supervisor] all expected runs complete

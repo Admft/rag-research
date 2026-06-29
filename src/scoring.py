@@ -13,6 +13,10 @@ SCORE_WEIGHTS = {
     "citation_accuracy": 0.10,
 }
 
+# Judge receives capped context even when generation uses more chunks (top_k > 5 or
+# large chunk_size). Full retrieved list is still used for citation_accuracy.
+JUDGE_MAX_CONTEXT_CHUNKS = 5
+
 
 def compute_final_score(metrics):
     total = 0.0
@@ -85,9 +89,13 @@ def fallback_metric_scores(question, expected_answer, answer, retrieved):
     }
 
 
+def judge_context_chunks(retrieved):
+    return retrieved[:JUDGE_MAX_CONTEXT_CHUNKS]
+
+
 def judge_metrics(question, expected_answer, expected_source, answer, retrieved, judge_model=None):
     answer_text = extract_final_answer(answer)
-    context = format_context(retrieved)
+    context = format_context(judge_context_chunks(retrieved))
 
     judge_prompt = f"""You are a strict RAG evaluator. Do not answer the question.
 Score only the final answer content (ignore planning sections if present).
@@ -133,7 +141,9 @@ Generated answer:
         raw, _ = call_ollama(retry_prompt, json_mode=True, model=judge_model)
         return normalize_metric_scores(parse_json_response(raw))
     except (ValueError, requests.RequestException):
-        return fallback_metric_scores(question, expected_answer, answer_text, retrieved)
+        return fallback_metric_scores(
+            question, expected_answer, answer_text, judge_context_chunks(retrieved)
+        )
 
 
 def score_answer(question, expected_answer, expected_source, answer, retrieved, judge_model=None):

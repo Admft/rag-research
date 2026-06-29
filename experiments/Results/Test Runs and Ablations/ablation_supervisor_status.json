@@ -1,11 +1,11 @@
 {
-  "last_update": "2026-06-28 08:06:58",
-  "attempts": 4,
+  "last_update": "2026-06-28 22:28:23",
+  "attempts": 0,
   "child_pid": null,
-  "message": "child exited cleanly",
+  "message": "all runs complete",
   "progress": {
-    "total_runs": 66,
-    "complete_runs": 66,
+    "total_runs": 3,
+    "complete_runs": 3,
     "in_progress": [],
     "pending_count": 0,
     "pending_next": [],

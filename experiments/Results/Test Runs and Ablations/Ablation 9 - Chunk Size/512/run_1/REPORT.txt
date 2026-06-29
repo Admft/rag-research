@@ -22,10 +22,10 @@ Judge:            qwen2.5:14b
 
 SCORES
 ----------------------------------------
-Final score:          14.41
-Answer correctness:   5.92
+Final score:          14.34
+Answer correctness:   6.0
 Faithfulness:         6.0
-Context recall:       6.67
+Context recall:       6.17
 Context precision:    4.75
 Citation accuracy:    90.33
 Answer parse rate:    100.0%
@@ -99,7 +99,7 @@ PER-QUESTION
 [ragas_q1] What is Ragas designed to evaluate?
   Expected source: 2309.15217v2.pdf
   Recall hit: yes (rank 1)
-  Final score: 89.25
+  Final score: 89.75
   Answer: Ragas is designed to evaluate retrieval augmented generation pipelines, providing a suite of metrics that assess the retrieval system's ability to identify relevant context passages and the LLM's ability to use these passages faithfully without relying on ground truth human annotations [Doc 1].
 
 [ragas_q2] What three quality aspects does Ragas focus on?
@@ -117,7 +117,7 @@ PER-QUESTION
 [ragas_q4] How does Ragas estimate answer relevance?
   Expected source: 2309.15217v2.pdf
   Recall hit: yes (rank 1)
-  Final score: 89.75
+  Final score: 82.25
   Answer: Ragas estimates answer relevance by prompting an LLM to generate n potential questions based on the provided answer, then calculating cosine similarity between embeddings of these generated questions and the original question. The average of these similarities serves as the answer relevance score [D
 
 [ragas_q5] Why is context relevance important in Ragas?
@@ -261,7 +261,7 @@ PER-QUESTION
 [adaptllm_q3] Why is a popularity threshold not a general solution for deciding when to retrieve?
   Expected source: 2404.19705v2.pdf
   Recall hit: yes (rank 1)
-  Final score: 87.0
+  Final score: 89.75
   Answer: A fixed popularity threshold is not a general solution because it relies on annotated data like the PopQA dataset, which includes specific popularity scores for questions. Real-world question answering datasets often lack such detailed annotations [Doc 2].
 
 [adaptllm_q4] How is ADAPT-LLM training data created?

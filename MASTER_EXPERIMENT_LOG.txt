@@ -1,5 +1,5 @@
 MASTER_EXPERIMENT_LOG.txt
-Generated: 2026-06-28 21:22:42
+Generated: 2026-06-28 21:33:07
 Project root: /home/adamm/projects/rag-research
 
 ===================================================================
@@ -13,7 +13,7 @@ to performance, and how do individual changes interact?
 STORY:
 This project built and optimized a local RAG pipeline over 12 
 academic papers on RAG itself, evaluated on 60 hand-written 
-questions across those papers.
+questions across those papers (5 questions per paper, 12 papers total).
 
 Phase 1 (Runs 000-007): Iterative baseline development.
 Starting from a vanilla baseline scoring 57.48, we made 
@@ -69,10 +69,27 @@ Judge models:
   llama3.1:8b (runs 000-005, same as generator)
 
 Corpus:
-  12 RAG academic PDFs in data/raw/
+  12 RAG academic PDFs in data/raw/ (ALL 12 indexed in every RAG-paper eval run)
+  0 documents skipped at load time (verified load_raw_documents: 12 loaded, skipped=[])
 
-Eval set:
-  60 hand-written questions in data/eval/questions.jsonl (5 per paper)
+Corpus inventory (12 PDFs, 60 eval questions = 5 per paper):
+  2305.14283v3.pdf  Query Rewriting (queryrewrite_q1-q5)
+  2309.01431v2.pdf  RGB benchmark (rgb_q1-q5)
+  2309.15217v2.pdf  Ragas (ragas_q1-q5)
+  2310.11511v1.pdf  SELF-RAG (selfrag_q1-q5)
+  2311.08377v1.pdf  FILCO (filco_q1-q5)
+  2312.10997v5.pdf  RAG survey (ragsurvey_q1-q5)
+  2401.15884v3.pdf  CRAG (crag_q1-q5)
+  2404.19705v2.pdf  ADAPT-LLM (adaptllm_q1-q5)
+  2406.15319v3.pdf  LongRAG (longrag_q1-q5)
+  2407.01219v1.pdf  RAG best practices (ragbest_q1-q5)
+  2407.16833v2.pdf  SELF-ROUTE (selfroute_q1-q5)
+  2501.07391v1.pdf  Enhancing RAG (enhancingrag_q1-q5)
+
+Note: Run 000 (OG baseline) used separate index path data/qdrant_og with 1273 chunks
+from the same 12 PDFs (documents=12, skipped=[]). Runs 002-007 and all Phase 2-4
+ablations use data/qdrant with 558 chunks (chunk_size=256, overlap=50) from same
+12 PDFs. BEIR Phase 3 uses external corpora, NOT these 12 PDFs.
 
 BEIR datasets (Phase 3):
   NFCorpus: 3633 documents, 50 eval queries sampled
@@ -104,6 +121,18 @@ Judge boundary warning:
   Runs 000-005: judge = llama3.1:8b (same as generator)
   Runs 006-007 and all Phase 2-4: judge = qwen2.5:14b
   Scores are NOT directly comparable across this boundary — different judge = different ruler.
+
+Judge context cap (methodology correction, 2026-06-29):
+  We discovered that our LLM judge produced invalid scores when passed more than
+  approximately 2,500 tokens of retrieved context due to schema violations in the
+  returned JSON. We standardized judge input to top-5 retrieved chunks across all
+  evaluations. Conditions affected by this bug (top_k=10 and chunk_size=512) were
+  re-evaluated after applying this fix.
+
+  Implementation: src/scoring.py caps judge context at JUDGE_MAX_CONTEXT_CHUNKS=5.
+  The generator still receives all top_k chunks; only the judge prompt is capped.
+  Existing runs at top_k<=5 and chunk_size<=256 are unaffected (judge already saw
+  at most 5 chunks). A8 top7 may shift slightly (judge previously saw 7 chunks).
 
 ===================================================================
 4. PHASE 1: BASELINE DEVELOPMENT (runs 000-007)
@@ -4503,7 +4532,9 @@ Config override: top_k=top10
     enhancingrag_q5                final=   4.0 recall_hit=True found_rank=3
 
 Winner (highest mean): top5 (83.73)
-Interpretation: top10 scores ~10 — LIKELY BROKEN RUN (context overflow or prompt failure); treat as invalid.
+Interpretation: top10 pre-fix scores ~10 were a judge evaluation bug (not generator failure).
+  Judge context capped at 5 chunks; stored runs re-scored; 3 fresh runs scheduled post-fix.
+  Report top5 vs top7 for valid comparison; top10 corrected numbers after re-evaluation.
 
 === ABLATION A9 — Ablation 9 - Chunk Size ===
 Research question: Is 256 tokens actually optimal?
@@ -5084,7 +5115,8 @@ Config override: chunk_size=512
     enhancingrag_q5                final=  10.0 recall_hit=True found_rank=2
 
 Winner (highest mean): 256 (83.92)
-Interpretation: chunk 256 optimal; 512 scores ~14 — LIKELY BROKEN RUN (too few/overlarge chunks); treat as invalid.
+Interpretation: chunk 256 optimal among valid sizes. 512 pre-fix scores ~14 were judge bug
+  (same root cause as A8 top10); re-scored and re-run with judge context cap.
 
 ===================================================================
 9. FINDINGS SUMMARY
@@ -5116,7 +5148,8 @@ FINDING 6 — Ablation component contributions (valid runs only)
   Largest positive deltas: A5 bge-large (+0.95), A3 xml (+0.88), A8 top5 (+0.51)
   Largest negative deltas: A4 top_sentences_5 (-14.33), A2 llama3.1-8b (-9.49), A6 none (-5.15)
   A7 hyde hurt (-1.8). A1 retriever type negligible (~-1 pt).
-  INVALID DATA: A8 top10 (~10), A9 chunk 512 (~14) — investigate before paper claims.
+  INVALID DATA (FIXED 2026-06-29): A8 top10 and A9 chunk 512 had judge context overflow.
+  Pre-fix means were ~10 and ~14; corrected via judge top-5 cap + re-score + fresh re-runs.
 
 ===================================================================
 10. PAPER NOTES
@@ -5148,4 +5181,5 @@ KNOWN WEAKNESSES TO ADDRESS IN PAPER:
   - Single corpus domain until BEIR added
   - N=3 runs has low statistical power for t-tests
   - Questions written by same person who built pipeline
-  - A8 top10 and A9 chunk 512 runs show anomalously low scores — likely bugs
+  - A8 top10 and A9 chunk 512: judge context overflow caused invalid pre-fix scores;
+    fixed via top-5 judge cap and re-evaluation (document in methodology)

@@ -31,11 +31,11 @@
     "recall_at_k": 1.0,
     "mrr_at_k": 0.9269444444444445,
     "avg_latency_s": 23.562,
-    "final_score": 9.72,
-    "answer_correctness": 2.67,
-    "faithfulness": 1.5,
-    "context_recall": 1.67,
-    "context_precision": 1.0,
+    "final_score": 65.93,
+    "answer_correctness": 60.5,
+    "faithfulness": 61.33,
+    "context_recall": 76.25,
+    "context_precision": 61.92,
     "citation_accuracy": 79.83,
     "answer_parse_rate": 1.0,
     "avg_prompt_tokens_est": 62.0
@@ -131,14 +131,12 @@
       "score_latency_s": 2.431,
       "total_latency_s": 20.876,
       "metrics": {
-        "framework_name": "Rewrite-Retrieve-Read",
-        "document_id": "9",
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 100.0,
+        "faithfulness": 85.0,
+        "context_recall": 90.0,
+        "context_precision": 60.0,
         "citation_accuracy": 40.0,
-        "final_score": 4.0
+        "final_score": 84.25
       }
     },
     {
@@ -231,15 +229,12 @@
       "score_latency_s": 4.725,
       "total_latency_s": 23.636,
       "metrics": {
-        "page_content": "The authors argue that existing approaches in retrieval-augmented language models (RAG) often overlook the adaptation of the query itself. They note that queries are either original from datasets or directly determined by black-box generation, which can create a gap between the input text and the knowledge needed for accurate retrieval.",
-        "source": "2305.14283v3",
-        "url": "https://arxiv.org/abs/2305.14283v3",
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 60.0,
+        "faithfulness": 50.0,
+        "context_recall": 100.0,
+        "context_precision": 70.0,
         "citation_accuracy": 100.0,
-        "final_score": 10.0
+        "final_score": 70.5
       }
     },
     {
@@ -332,14 +327,12 @@
       "score_latency_s": 2.833,
       "total_latency_s": 22.836,
       "metrics": {
-        "step": "query rewriting",
-        "description": "Prompt an LLM to generate a refined query that bridges the gap between the input text and the needed knowledge.",
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 60.0,
+        "faithfulness": 50.0,
+        "context_recall": 80.0,
+        "context_precision": 70.0,
         "citation_accuracy": 40.0,
-        "final_score": 4.0
+        "final_score": 60.5
       }
     },
     {
@@ -432,14 +425,12 @@
       "score_latency_s": 4.218,
       "total_latency_s": 23.612,
       "metrics": {
-        "document_id": 2,
-        "quote": "The black-box retriever and the reader form a frozen system. To further smooth the steps of our pipeline, we apply a small, trainable language model to perform the rewriting step, denoted as the rewriter. The rewriter is trained by reinforcement learning using the LLM performance as a reward, learning to adapt the retrieval query to improve the reader on downstream tasks.",
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 80.0,
+        "faithfulness": 85.0,
+        "context_recall": 90.0,
+        "context_precision": 70.0,
         "citation_accuracy": 100.0,
-        "final_score": 10.0
+        "final_score": 84.25
       }
     },
     {
@@ -532,14 +523,12 @@
       "score_latency_s": 2.63,
       "total_latency_s": 21.487,
       "metrics": {
-        "dataset": "HotPotQA",
-        "performance": "Improved comprehension and prediction with few-shot in-context learning.",
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 20.0,
+        "faithfulness": 20.0,
+        "context_recall": 40.0,
+        "context_precision": 60.0,
         "citation_accuracy": 90.0,
-        "final_score": 9.0
+        "final_score": 35.0
       }
     },
     {
@@ -632,12 +621,12 @@
       "score_latency_s": 1.98,
       "total_latency_s": 21.053,
       "metrics": {
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 100.0,
+        "faithfulness": 100.0,
+        "context_recall": 100.0,
+        "context_precision": 100.0,
         "citation_accuracy": 100.0,
-        "final_score": 10.0
+        "final_score": 100.0
       }
     },
     {
@@ -730,13 +719,12 @@
       "score_latency_s": 3.018,
       "total_latency_s": 22.261,
       "metrics": {
-        "definition": "Negative rejection refers to the scenario where an LLM should refuse to answer a question if the necessary information is absent from all retrieved documents, instead indicating that there is insufficient information available.",
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 80.0,
+        "faithfulness": 95.0,
+        "context_recall": 100.0,
+        "context_precision": 80.0,
         "citation_accuracy": 100.0,
-        "final_score": 10.0
+        "final_score": 89.75
       }
     },
     {
@@ -829,15 +817,12 @@
       "score_latency_s": 5.151,
       "total_latency_s": 24.273,
       "metrics": {
-        "generated_answer": "RGB constructs its benchmark by generating instances from latest news articles and acquiring external documents via search engines. It evaluates four specific abilities of LLMs: Noise Robustness (extracting necessary info despite noisy docs), Negative Rejection (declining to answer when no useful context is provided), Information Integration (summarizing answers from multiple sources), and Counterfactual Robustness.",
-        "confidence": "high",
-        "explanation": "The generated answer synthesizes information from documents 3, 5, 10 to provide a comprehensive description of how RGB constructs its benchmark.",
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 20.0,
+        "faithfulness": 40.0,
+        "context_recall": 60.0,
+        "context_precision": 50.0,
         "citation_accuracy": 100.0,
-        "final_score": 10.0
+        "final_score": 44.0
       }
     },
     {
@@ -930,29 +915,12 @@
       "score_latency_s": 4.388,
       "total_latency_s": 23.352,
       "metrics": {
-        "contributions": [
-          "Evaluating four capabilities for retrieval-augmented generation of LLMs",
-          "Creating RGB - a benchmark for assessing these four capabilities in English and Chinese"
-        ],
-        "evaluation_targets": [
-          "Retrieval Quality",
-          "Generation Quality",
-          "Noise Robustness",
-          "Negative Rejection",
-          "Information Integration",
-          "Counterfactual Robustness"
-        ],
-        "metrics_used": [
-          "Accuracy",
-          "EM Accuracy",
-          "Reappearance Rate (R-Rate)"
-        ],
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 60.0,
+        "faithfulness": 50.0,
+        "context_recall": 80.0,
+        "context_precision": 60.0,
         "citation_accuracy": 0.0,
-        "final_score": 0.0
+        "final_score": 55.5
       }
     },
     {
@@ -1045,19 +1013,12 @@
       "score_latency_s": 3.297,
       "total_latency_s": 22.436,
       "metrics": {
-        "LLM Strengths and Weaknesses": {
-          "Strengths": [],
-          "Weaknesses": [
-            "Struggle with extracting useful information from noisy documents",
-            "Unable to consistently generate reliable and accurate responses when facing drawbacks in information retrieval"
-          ]
-        },
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 30.0,
+        "faithfulness": 40.0,
+        "context_recall": 50.0,
+        "context_precision": 60.0,
         "citation_accuracy": 100.0,
-        "final_score": 10.0
+        "final_score": 46.5
       }
     },
     {
@@ -1150,30 +1111,12 @@
       "score_latency_s": 5.06,
       "total_latency_s": 23.233,
       "metrics": {
-        "evaluation_metrics": [
-          {
-            "metric_name": "faithfulness",
-            "description": "Evaluates how factual or truthful the generated response is."
-          },
-          {
-            "metric_name": "answer_relevance",
-            "description": "Measures how well the answer addresses the question asked."
-          },
-          {
-            "metric_name": "context_relevance",
-            "description": "Assesses the relevance of the retrieved context to the task at hand."
-          },
-          {
-            "metric_name": "retrieval_similarity",
-            "description": "Quantifies the similarity between the retrieved documents and gold standard documents using cosine similarity."
-          }
-        ],
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 30.0,
+        "faithfulness": 40.0,
+        "context_recall": 60.0,
+        "context_precision": 50.0,
         "citation_accuracy": 0.0,
-        "final_score": 0.0
+        "final_score": 37.5
       }
     },
     {
@@ -1266,13 +1209,12 @@
       "score_latency_s": 4.717,
       "total_latency_s": 23.162,
       "metrics": {
-        "correctness": "The generated answer is mostly correct but there's a slight confusion with terminology. The terms 'faithfulness' and 'relevance' are used in different contexts within the documents provided. To align precisely with how Ragas defines its evaluation criteria, it would be clearer to state that Ragas focuses on context relevance, answer relevance (rather than faithfulness), and answer relevance. However, if interpreting 'answer faithfulness' as a synonym for 'faithful generation', then it can be correctly included.",
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 80.0,
+        "faithfulness": 75.0,
+        "context_recall": 90.0,
+        "context_precision": 60.0,
         "citation_accuracy": 100.0,
-        "final_score": 10.0
+        "final_score": 80.75
       }
     },
     {
@@ -1365,14 +1307,12 @@
       "score_latency_s": 3.542,
       "total_latency_s": 21.911,
       "metrics": {
-        "document_id": 6,
-        "quote": "First, Faithfulness refers to the idea that the an- swer should be grounded in the given context. This is important to avoid hallucinations, and to ensure that the retrieved context can act as a justification for the generated answer.",
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 50.0,
+        "faithfulness": 50.0,
+        "context_recall": 70.0,
+        "context_precision": 80.0,
         "citation_accuracy": 100.0,
-        "final_score": 10.0
+        "final_score": 62.0
       }
     },
     {
@@ -1465,13 +1405,12 @@
       "score_latency_s": 3.744,
       "total_latency_s": 23.065,
       "metrics": {
-        "answer": "Ragas estimates answer relevance by using an LLM, such as gpt-3.5-turbo-16k, with specific prompts to assess how well the generated answer addresses the actual question provided. The process involves obtaining candidate answers from ChatGPT in an incomplete manner and then evaluating their relevance.",
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 70.0,
+        "faithfulness": 50.0,
+        "context_recall": 60.0,
+        "context_precision": 30.0,
         "citation_accuracy": 100.0,
-        "final_score": 10.0
+        "final_score": 62.0
       }
     },
     {
@@ -1564,13 +1503,12 @@
       "score_latency_s": 3.6,
       "total_latency_s": 23.782,
       "metrics": {
-        "context_relevance_importance": "In Ragas, context relevance is crucial as it aims to exclude unnecessary or redundant information from the provided context, ensuring that only the essential details required to answer the question are retained. This metric evaluates whether the given context exclusively contains information pertinent to answering the question at hand.",
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 50.0,
+        "faithfulness": 40.0,
+        "context_recall": 60.0,
+        "context_precision": 20.0,
         "citation_accuracy": 100.0,
-        "final_score": 10.0
+        "final_score": 51.5
       }
     },
     {
@@ -1663,14 +1601,12 @@
       "score_latency_s": 3.136,
       "total_latency_s": 23.01,
       "metrics": {
-        "method": "SELF-RAG",
-        "description": "Introduces selective retrieval and uses a critic model to determine if retrieval is needed, addressing issues of incorrect or irrelevant retrieved documents in standard RAG.",
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 20.0,
+        "faithfulness": 30.0,
+        "context_recall": 40.0,
+        "context_precision": 50.0,
         "citation_accuracy": 40.0,
-        "final_score": 4.0
+        "final_score": 31.5
       }
     },
     {
@@ -1763,13 +1699,12 @@
       "score_latency_s": 5.868,
       "total_latency_s": 25.868,
       "metrics": {
-        "response": "In the context of the SELF-RAG model, reflection tokens serve multiple critical functions:\n\n1. **Deciding When to Retrieve Text Passages**: The model predicts whether retrieval is necessary using a 'Retrieve' token.\n2. **Evaluating Retrieved Passages**: It assesses if retrieved passages are relevant ('ISREL') and if the output statements are fully supported by the passage ('ISSUP').\n3. **Assessing Overall Utility**: A utility score ('ISUSE') is assigned to gauge how useful the generated response is.\n\nThese tokens enable SELF-RAG to tailor its behavior dynamically for different tasks, ensuring factual accuracy in tasks demanding it and maintaining overall creativity in open-ended tasks.",
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 75.0,
+        "faithfulness": 80.0,
+        "context_recall": 90.0,
+        "context_precision": 85.0,
         "citation_accuracy": 100.0,
-        "final_score": 10.0
+        "final_score": 82.75
       }
     },
     {
@@ -1862,19 +1797,12 @@
       "score_latency_s": 3.423,
       "total_latency_s": 22.405,
       "metrics": {
-        "@/generated": {
-          "sources": [
-            "Doc 5",
-            "Doc 7"
-          ]
-        },
-        "content": "The four reflection token types used in SELF-RAG are Retrieve, ISREL (Is Relevance), ISSUP (Is Supported), and ISUSE (Is Useful).",
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 100.0,
+        "faithfulness": 85.0,
+        "context_recall": 90.0,
+        "context_precision": 70.0,
         "citation_accuracy": 100.0,
-        "final_score": 10.0
+        "final_score": 91.25
       }
     },
     {
@@ -1967,13 +1895,12 @@
       "score_latency_s": 6.93,
       "total_latency_s": 25.792,
       "metrics": {
-        "_": "The generated answer does not fully capture all aspects of how SELF-RAG processes retrieved documents when retrieval is needed. Here's an improved response based on the provided documents:\n\nWhen retrieval is needed, SELF-RAG performs several key steps:\n1. **Evaluates Relevance**: The relevance of retrieved documents is assessed using critic scores.\n2. **Conducts Beam Search**: A fragment-level beam search is conducted across multiple paragraphs to derive the most coherent sequence.\n3. **Updates Scores**: Critic scores are used to adjust subdivision scores, enabling flexibility in tailoring model behavior during inference.\n4. **Assesses and Selects Outputs**: Based on these assessments, SELF-RAG critiques generated outputs and selects the best segment for coherence and accuracy.\n\nThese steps ensure that SELF-RAG can autonomously make decisions about when to engage retrieval mechanisms and generate accurate responses without relying on additional classifiers or natural language inference models.",
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 50.0,
+        "faithfulness": 60.0,
+        "context_recall": 70.0,
+        "context_precision": 80.0,
         "citation_accuracy": 100.0,
-        "final_score": 10.0
+        "final_score": 64.5
       }
     },
     {
@@ -2066,14 +1993,12 @@
       "score_latency_s": 3.626,
       "total_latency_s": 23.507,
       "metrics": {
-        "reference": "Doc 5",
-        "explanation": "In the provided context, SELF-RAG is described as offering a customizable decoding algorithm at test time. This customization involves adjusting the frequency of retrieval for different tasks and modifying model behaviors according to user preferences by leveraging reflection tokens during segment-level beam search.",
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 60.0,
+        "faithfulness": 80.0,
+        "context_recall": 100.0,
+        "context_precision": 60.0,
         "citation_accuracy": 0.0,
-        "final_score": 0.0
+        "final_score": 67.0
       }
     },
     {
@@ -2166,35 +2091,12 @@
       "score_latency_s": 6.453,
       "total_latency_s": 25.568,
       "metrics": {
-        "FILCO": {
-          "description": "Designed to enhance retrieval-augmented generation by improving the quality of context provided to the model through sentence-wise filtering.",
-          "benefits": [
-            "Reduces distracting or irrelevant information",
-            "Focuses on supportive knowledge"
-          ],
-          "evaluation_metrics": [
-            "Reduced input length",
-            "Increased answer precision"
-          ],
-          "impact_on_performance": {
-            "FEVER": "+6.2 accuracy increase with FLAN-T5, +4.3 with LLAMA-2",
-            "WoW": "+3.5 F1 increase for abstractive generation tasks"
-          },
-          "comparison_to_baselines": [
-            "Supersedes full-context and passage-filtering settings"
-          ],
-          "methods_used_for_filtering": [
-            "BASELINE (FULL) - does not filter context",
-            "PSG - filters by passage",
-            "FILCO - sentence-wise filtering"
-          ]
-        },
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 85.0,
+        "faithfulness": 90.0,
+        "context_recall": 100.0,
+        "context_precision": 90.0,
         "citation_accuracy": 0.0,
-        "final_score": 0.0
+        "final_score": 81.25
       }
     },
     {
@@ -2287,13 +2189,12 @@
       "score_latency_s": 5.113,
       "total_latency_s": 24.021,
       "metrics": {
-        "generated_answer": "FILCO uses the CXMI (Contextualized Mutual Information), FULL, and SILVER strategies to identify useful context. CXMI helps distinguish context that adds to or reduces output probability, while FULL represents providing all passages unfiltered and SILVER refers to filtering contexts using gold standard answers when available. The method is trained by creating training data where the retrieved passages P are concatenated with the query q as input, and then filtered through one of these strategies (CXMI, FULL, SILVER) to obtain the output tsilver, which serves as ground truth for training Mctx.",
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 30.0,
+        "faithfulness": 40.0,
+        "context_recall": 60.0,
+        "context_precision": 50.0,
         "citation_accuracy": 100.0,
-        "final_score": 10.0
+        "final_score": 47.5
       }
     },
     {
@@ -2386,13 +2287,12 @@
       "score_latency_s": 4.804,
       "total_latency_s": 23.899,
       "metrics": {
-        "answer": "Positive and negative retrieved passages can both negatively impact the quality of generated text. Positive passages may include distracting or irrelevant information that diverts attention from the pertinent knowledge needed for accurate generation [Doc 1]. Similarly, even top-1 retrieved negative passages can be detrimental when used, as they might introduce misinformation or tangential details that are not helpful for the task at hand [Doc 5]. This highlights the importance of filtering and refining both positive and negative passages to ensure that only relevant and supportive information is utilized in the generation process.",
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 60.0,
+        "faithfulness": 70.0,
+        "context_recall": 80.0,
+        "context_precision": 40.0,
         "citation_accuracy": 90.0,
-        "final_score": 9.0
+        "final_score": 67.5
       }
     },
     {
@@ -2485,13 +2385,12 @@
       "score_latency_s": 5.389,
       "total_latency_s": 25.112,
       "metrics": {
-        "answer": "The context filtering model (Mctx) in FILCO filters the top-1 retrieved passage P into a more refined set of text spans denoted as tsilver. Mctx operates at a finer granularity, typically sentence-level, and uses one of three measures\u2014STRINC, LEXICAL, or CXMI\u2014to select relevant content from the passages. This filtered context (tsilver) is then provided to the generation model (Mgen), which uses it to produce the final output o with improved performance and reduced prompt length compared to baseline methods like full-context augmentation or passage-wise filtering [Doc 2][Doc 7][Doc 8].",
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 60.0,
+        "faithfulness": 50.0,
+        "context_recall": 70.0,
+        "context_precision": 40.0,
         "citation_accuracy": 100.0,
-        "final_score": 10.0
+        "final_score": 61.5
       }
     },
     {
@@ -2584,21 +2483,12 @@
       "score_latency_s": 3.02,
       "total_latency_s": 23.086,
       "metrics": {
-        "method": "FILCO",
-        "tasks": [
-          "NaturalQuestions",
-          "TriviaQA",
-          "HotpotQA",
-          "ELI5",
-          "FEVER",
-          "WizardofWikipedia"
-        ],
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 100.0,
+        "faithfulness": 100.0,
+        "context_recall": 100.0,
+        "context_precision": 80.0,
         "citation_accuracy": 100.0,
-        "final_score": 10.0
+        "final_score": 98.0
       }
     },
     {
@@ -2691,14 +2581,12 @@
       "score_latency_s": 3.355,
       "total_latency_s": 25.52,
       "metrics": {
-        "rating": "4",
-        "feedback": "The answer is accurate, but the format of citing references as '[Doc X]' seems unusual. It would be clearer to mention the document numbers directly in a more natural language or provide an actual citation style for these documents.",
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 85.0,
+        "faithfulness": 90.0,
+        "context_recall": 100.0,
+        "context_precision": 70.0,
         "citation_accuracy": 100.0,
-        "final_score": 10.0
+        "final_score": 89.25
       }
     },
     {
@@ -2791,13 +2679,12 @@
       "score_latency_s": 2.538,
       "total_latency_s": 21.265,
       "metrics": {
-        "answer": "Naive RAG consists of three main steps: indexing, retrieval, and generation.",
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 80.0,
+        "faithfulness": 60.0,
+        "context_recall": 100.0,
+        "context_precision": 50.0,
         "citation_accuracy": 100.0,
-        "final_score": 10.0
+        "final_score": 78.0
       }
     },
     {
@@ -2890,12 +2777,12 @@
       "score_latency_s": 3.141,
       "total_latency_s": 22.981,
       "metrics": {
-        "answer_correctness": 80.0,
-        "faithfulness": 90.0,
-        "context_recall": 100.0,
-        "context_precision": 60.0,
+        "answer_correctness": 30.0,
+        "faithfulness": 20.0,
+        "context_recall": 10.0,
+        "context_precision": 5.0,
         "citation_accuracy": 100.0,
-        "final_score": 86.5
+        "final_score": 28.0
       }
     },
     {
@@ -2988,25 +2875,12 @@
       "score_latency_s": 7.237,
       "total_latency_s": 26.44,
       "metrics": {
-        "score": 4,
-        "feedback": "The generated answer is partially correct but lacks comprehensive details. It mentions the refinement of indexing techniques with a sliding window approach and the use of pre-retrieval and post-retrieval strategies for optimization, which are accurate points from Document [Doc 2]. However, it fails to mention other important aspects such as re-ranking methods or additional modules introduced in Advanced RAG. Additionally, the answer should reference more documents to provide a well-rounded response.",
-        "details": {
-          "correct_points": [
-            "Refinement of indexing techniques with a sliding window approach is mentioned.",
-            "Use of pre-retrieval and post-retrieval strategies for optimization is noted."
-          ],
-          "missing_points": [
-            "Additional details on re-ranking methods or further optimizations are not included.",
-            "Mentions of new modules or enhancements specific to Advanced RAG are missing.",
-            "References from multiple documents should be used to provide a comprehensive answer."
-          ]
-        },
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 80.0,
+        "faithfulness": 75.0,
+        "context_recall": 100.0,
+        "context_precision": 60.0,
         "citation_accuracy": 100.0,
-        "final_score": 10.0
+        "final_score": 82.75
       }
     },
     {
@@ -3099,13 +2973,12 @@
       "score_latency_s": 5.154,
       "total_latency_s": 24.514,
       "metrics": {
-        "answer": "Retrieval granularity plays a critical role in Retrieval-Augmented Generation (RAG) systems as it influences their ability to identify relevant and focused context passages. On one hand, larger retrieval units can better preserve contextual information, reducing the likelihood of encountering hard negatives compared to traditional short units [Doc 8]. However, achieving an optimal balance is essential since very large units might also include less relevant parts of documents. This highlights the importance of carefully selecting retrieval unit sizes and considering various levels of granularity for different retrieval strategies, as studied in comprehensive benchmarks such as those described in [Doc 9].",
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 40.0,
+        "faithfulness": 30.0,
+        "context_recall": 50.0,
+        "context_precision": 20.0,
         "citation_accuracy": 40.0,
-        "final_score": 4.0
+        "final_score": 37.5
       }
     },
     {
@@ -3198,27 +3071,12 @@
       "score_latency_s": 8.116,
       "total_latency_s": 29.045,
       "metrics": {
-        "task": "To summarize, CRAG introduces a method that improves retrieval-augmented generation by handling scenarios where retrieved documents are inaccurate or irrelevant. This is achieved through three key mechanisms: (1) A retrieval evaluator that assesses the relevance and accuracy of retrieved documents; (2) Knowledge refinement to extract critical knowledge from relevant documents; and (3) Integration of large-scale web searches for additional external knowledge when necessary.",
-        "details": [
-          {
-            "mechanism": "Retrieval Evaluator",
-            "description": "Assesses the relevance and accuracy of retrieved documents, providing a confidence score that determines whether the information should be used or discarded."
-          },
-          {
-            "mechanism": "Knowledge Refinement",
-            "description": "Involves segmenting relevant documents into smaller units (strips), evaluating each strip's relevance, and concatenating only the most pertinent segments to form refined internal knowledge."
-          },
-          {
-            "mechanism": "Web Search Integration",
-            "description": "When the retrieved results are deemed irrelevant, CRAG initiates large-scale web searches using a commercial API to gather supplementary external knowledge that can enhance the accuracy of generation tasks."
-          }
-        ],
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 85.0,
+        "faithfulness": 90.0,
+        "context_recall": 75.0,
+        "context_precision": 80.0,
         "citation_accuracy": 100.0,
-        "final_score": 10.0
+        "final_score": 85.25
       }
     },
     {
@@ -3311,22 +3169,12 @@
       "score_latency_s": 4.288,
       "total_latency_s": 22.432,
       "metrics": {
-        "document": "Doc 9",
-        "pages": 1,
-        "offsets": [
-          {
-            "start": 78,
-            "end": 105
-          }
-        ],
-        "text": "Given an input query and the retrieved documents from any retriever, a lightweight retrieval evaluator is constructed to estimate the relevance score of retrieved documents to the input query (Sec- tion 4.2).",
-        "type": "Direct quotation",
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 100.0,
+        "faithfulness": 100.0,
+        "context_recall": 100.0,
+        "context_precision": 100.0,
         "citation_accuracy": 100.0,
-        "final_score": 10.0
+        "final_score": 100.0
       }
     },
     {
@@ -3419,17 +3267,12 @@
       "score_latency_s": 3.43,
       "total_latency_s": 23.334,
       "metrics": {
-        "document_id": "7",
-        "confidence_intervals": {
-          "accurate_documents_threshold": "above 0.59 (PopQA) or similar",
-          "inaccurate_documents_threshold": "below -0.99 (PopQA) or comparable value"
-        },
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 20.0,
+        "faithfulness": 30.0,
+        "context_recall": 40.0,
+        "context_precision": 50.0,
         "citation_accuracy": 100.0,
-        "final_score": 10.0
+        "final_score": 37.5
       }
     },
     {
@@ -3522,21 +3365,12 @@
       "score_latency_s": 3.598,
       "total_latency_s": 23.693,
       "metrics": {
-        "event": "CRAG Response",
-        "details": {
-          "judgment": "incorrect",
-          "action": "introduce web search",
-          "reasoning": "All retrieved documents are considered irrelevant and unhelpful, necessitating new sources of knowledge from the Internet.",
-          "source_documents": [
-            7
-          ]
-        },
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 80.0,
+        "faithfulness": 75.0,
+        "context_recall": 100.0,
+        "context_precision": 60.0,
         "citation_accuracy": 100.0,
-        "final_score": 10.0
+        "final_score": 82.75
       }
     },
     {
@@ -3629,13 +3463,12 @@
       "score_latency_s": 4.11,
       "total_latency_s": 24.662,
       "metrics": {
-        "message": "The decompose-then-recompose algorithm in CRAG works by first breaking down retrieved documents into smaller segments or 'knowledge strips' that are easier to evaluate individually. Each segment is assessed using a retrieval evaluator which calculates its relevance score. Irrelevant segments are discarded, and the relevant ones are reassembled (concatenated) to form a refined set of information for the generation process.",
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 80.0,
+        "faithfulness": 90.0,
+        "context_recall": 100.0,
+        "context_precision": 85.0,
         "citation_accuracy": 100.0,
-        "final_score": 10.0
+        "final_score": 89.0
       }
     },
     {
@@ -3728,15 +3561,12 @@
       "score_latency_s": 3.19,
       "total_latency_s": 21.454,
       "metrics": {
-        "answer_correctness": 80.0,
-        "relevance_of_sources": 100,
-        "completeness_of_answer": 75,
-        "clarity_of_presentation": 90,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 75.0,
+        "faithfulness": 80.0,
+        "context_recall": 90.0,
+        "context_precision": 60.0,
         "citation_accuracy": 0.0,
-        "final_score": 28.0
+        "final_score": 70.25
       }
     },
     {
@@ -3829,14 +3659,12 @@
       "score_latency_s": 4.118,
       "total_latency_s": 22.268,
       "metrics": {
-        "event": "Generation of RET token",
-        "description": "When evaluating an LLM on an open-domain QA dataset, for questions where the LLM's response is incorrect, a special token \u27e8RET\u27e9 is annotated indicating the need for additional context. During training, ADAPT-LLM learns to generate this \u27e8RET\u27e9 token when it needs extra information from an IR system to accurately answer the question.",
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 100.0,
+        "faithfulness": 100.0,
+        "context_recall": 100.0,
+        "context_precision": 95.0,
         "citation_accuracy": 100.0,
-        "final_score": 10.0
+        "final_score": 99.5
       }
     },
     {
@@ -3929,13 +3757,12 @@
       "score_latency_s": 5.307,
       "total_latency_s": 24.382,
       "metrics": {
-        "answer": "To address the issue of deciding when an LLM needs additional context for accurate responses without relying on popularity thresholds, researchers have developed a method where they train an LLM with annotations indicating whether a question can be answered directly or requires additional context. Specifically, questions that the LLM cannot answer correctly are annotated with a special token (\u27e8RET\u27e9) to indicate the need for extra information [Doc 9]. This approach allows the LLM to learn when it needs to retrieve more context through an IR system during inference, thereby improving its performance in open-domain question answering tasks without needing pre-defined popularity scores [Doc 3].",
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 80.0,
+        "faithfulness": 75.0,
+        "context_recall": 100.0,
+        "context_precision": 60.0,
         "citation_accuracy": 100.0,
-        "final_score": 10.0
+        "final_score": 82.75
       }
     },
     {
@@ -4028,20 +3855,12 @@
       "score_latency_s": 3.662,
       "total_latency_s": 24.697,
       "metrics": {
-        "training_data_creation": {
-          "initialization": "Initialize an empty dataset DSAdapt",
-          "for_each_triplet": [
-            {
-              "if_prediction_matches_gold_standard_answer": "If the model's prediction matches the gold standard answer, add an instance with the parametric prompt to DSAdapt"
-            }
-          ]
-        },
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 70.0,
+        "faithfulness": 85.0,
+        "context_recall": 90.0,
+        "context_precision": 80.0,
         "citation_accuracy": 100.0,
-        "final_score": 10.0
+        "final_score": 81.75
       }
     },
     {
@@ -4134,16 +3953,12 @@
       "score_latency_s": 4.228,
       "total_latency_s": 24.775,
       "metrics": {
-        "The main bottleneck for ADAPT-LLM's performance was identified as the ineffectiveness of the information retrieval (IR) system in consistently retrieving the most relevant passages. As documented, there is a significant performance drop when using the best passage retrieved by Contriever compared to the gold standard passages [Doc 10]. This highlights the critical role of accurate context retrieval in enhancing question answering accuracy.": [
-          9,
-          10
-        ],
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 75.0,
+        "faithfulness": 85.0,
+        "context_recall": 90.0,
+        "context_precision": 60.0,
         "citation_accuracy": 100.0,
-        "final_score": 10.0
+        "final_score": 81.5
       }
     },
     {
@@ -4236,13 +4051,12 @@
       "score_latency_s": 4.364,
       "total_latency_s": 23.834,
       "metrics": {
-        "generated_answer": "In traditional RAG systems, the use of short retrieval units creates an imbalance where the retriever bears a heavy workload while the reader has a comparatively lighter task. This setup requires the retriever to scan through extensive amounts of information to identify relevant pieces, often necessitating additional ranking mechanisms and high recall costs to achieve optimal performance. LongRAG addresses this by utilizing longer retrieval units that significantly reduce the retriever's workload and improve its efficiency.",
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 80.0,
+        "faithfulness": 75.0,
+        "context_recall": 100.0,
+        "context_precision": 60.0,
         "citation_accuracy": 100.0,
-        "final_score": 10.0
+        "final_score": 82.75
       }
     },
     {
@@ -4335,17 +4149,12 @@
       "score_latency_s": 2.493,
       "total_latency_s": 21.294,
       "metrics": {
-        "three_designs": [
-          "long retrieval units",
-          "long retriever",
-          "long reader"
-        ],
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 100.0,
+        "faithfulness": 100.0,
+        "context_recall": 100.0,
+        "context_precision": 85.0,
         "citation_accuracy": 100.0,
-        "final_score": 10.0
+        "final_score": 98.5
       }
     },
     {
@@ -4438,13 +4247,12 @@
       "score_latency_s": 3.291,
       "total_latency_s": 23.942,
       "metrics": {
-        "generated_answer": "LongRAG forms long retrieval units by using entire documents or grouping multiple related documents together, resulting in units that are typically larger than 4K tokens. This approach reduces the total number of retrieval units and helps preserve contextual integrity.",
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 85.0,
+        "faithfulness": 90.0,
+        "context_recall": 100.0,
+        "context_precision": 70.0,
         "citation_accuracy": 100.0,
-        "final_score": 10.0
+        "final_score": 89.25
       }
     },
     {
@@ -4537,13 +4345,12 @@
       "score_latency_s": 3.293,
       "total_latency_s": 23.007,
       "metrics": {
-        "generated_answer": "Long retrieval units reduce the burden on the retriever by enabling the use of only a few top retrieval units without needing to re-rank them, thus minimizing the chance of encountering hard negatives and reducing noise in the retrieved information.",
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 60.0,
+        "faithfulness": 50.0,
+        "context_recall": 80.0,
+        "context_precision": 70.0,
         "citation_accuracy": 100.0,
-        "final_score": 10.0
+        "final_score": 66.5
       }
     },
     {
@@ -4636,34 +4443,12 @@
       "score_latency_s": 5.945,
       "total_latency_s": 24.931,
       "metrics": {
-        "datasets": [
-          "NQ",
-          "HotpotQA",
-          "Qasper",
-          "MultiFieldQA-en"
-        ],
-        "performance_metrics": {
-          "NQ_EM": 62.7,
-          "HotpotQA_EM": 64.3,
-          "Qasper_F1": 25.9,
-          "MultiFieldQA_en_F1": 57.5
-        },
-        "reader_models": [
-          "GPT-4o",
-          "Gemini-1.5-pro",
-          "Claude-3-Sonnet"
-        ],
-        "retrieval_unit_impact": {
-          "NQ_recall@1_improvement_with_long_units": 19,
-          "HotpotQA_recall@2_improvement_with_long_units": 25
-        },
-        "alias_ground_truth_accuracy": true,
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 80.0,
+        "faithfulness": 75.0,
+        "context_recall": 100.0,
+        "context_precision": 80.0,
         "citation_accuracy": 100.0,
-        "final_score": 10.0
+        "final_score": 84.75
       }
     },
     {
@@ -4756,14 +4541,12 @@
       "score_latency_s": 3.944,
       "total_latency_s": 22.846,
       "metrics": {
-        "module": "Query Classification",
-        "description": "Determines whether a given query requires retrieval-augmented generation based on the task type. If a query does not need external knowledge beyond what an LLM trained up to a certain point (e.g., 2023) can provide, it is handled directly by the LLM without retrieval.",
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 30.0,
+        "faithfulness": 20.0,
+        "context_recall": 10.0,
+        "context_precision": 5.0,
         "citation_accuracy": 100.0,
-        "final_score": 10.0
+        "final_score": 28.0
       }
     },
     {
@@ -4856,16 +4639,12 @@
       "score_latency_s": 4.683,
       "total_latency_s": 23.778,
       "metrics": {
-        "@context": "https://schema.org",
-        "@type": "QuestionAnswerPair",
-        "question": "Why does the paper include query classification in the RAG workflow?",
-        "answer": "The paper includes query classification in the RAG workflow to determine whether retrieval is needed for enhancing information accuracy while avoiding unnecessary delays due to frequent retrievals. Specifically, not all queries require retrieval because of the inherent capabilities of LLMs; however, retrieval is generally recommended when knowledge beyond the model's parameters is necessary [Doc 10].",
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 85.0,
+        "faithfulness": 70.0,
+        "context_recall": 60.0,
+        "context_precision": 40.0,
         "citation_accuracy": 100.0,
-        "final_score": 10.0
+        "final_score": 73.25
       }
     },
     {
@@ -4958,13 +4737,12 @@
       "score_latency_s": 2.452,
       "total_latency_s": 20.445,
       "metrics": {
-        "error": "The requested information or question is not present in the given documents.",
         "answer_correctness": 0.0,
         "faithfulness": 0.0,
         "context_recall": 0.0,
-        "context_precision": 0.0,
+        "context_precision": 100.0,
         "citation_accuracy": 0.0,
-        "final_score": 0.0
+        "final_score": 10.0
       }
     },
     {
@@ -5057,17 +4835,12 @@
       "score_latency_s": 3.043,
       "total_latency_s": 21.66,
       "metrics": {
-        "chunkTechnique": "sliding_window",
-        "metrics": {
-          "faithfulness": 0.9759,
-          "relevancy": 0.9741
-        },
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 100.0,
+        "faithfulness": 100.0,
+        "context_recall": 100.0,
+        "context_precision": 85.0,
         "citation_accuracy": 0.0,
-        "final_score": 0.0
+        "final_score": 88.5
       }
     },
     {
@@ -5160,13 +4933,12 @@
       "score_latency_s": 4.072,
       "total_latency_s": 22.43,
       "metrics": {
-        "The provided context does not contain the direct question's answer related to how RAG improves retrieval quality and efficiency by maintaining context. However, based on the given information, we can infer that RAG enhances retrieval quality through advanced chunking techniques like small-to-big and sliding window approaches which help in preserving context within chunks and ensuring relevant information is retrieved efficiently from vector databases.": -1.0,
         "answer_correctness": 0.0,
         "faithfulness": 0.0,
         "context_recall": 0.0,
-        "context_precision": 0.0,
+        "context_precision": 100.0,
         "citation_accuracy": 0.0,
-        "final_score": 0.0
+        "final_score": 10.0
       }
     },
     {
@@ -5259,9 +5031,6 @@
       "score_latency_s": 10.229,
       "total_latency_s": 29.413,
       "metrics": {
-        "paper": "LongRAG: Enhancing Retrieval-Augmented Generation with Long-context LLMs",
-        "document_id": "Doc 9",
-        "summary": "The paper explores improving the traditional RAG (Retrieval-Augmented Generation) framework by utilizing longer retrieval units and leveraging long-context language models. The authors argue that in conventional RAG systems, retrievers work on short units such as 100-word Wikipedia paragraphs which necessitates searching through a vast corpus to find relevant information. This design leads to an imbalance where the retriever's workload is heavy while the reader's (language model) task remains light despite recent advancements in LLM capabilities.\n\nTo address this, they introduce 'LongRAG', a framework comprising a 'long retriever' and a 'long reader'. For datasets like NQ and HotpotQA, where average document sizes are less than 1K tokens, LongRAG processes the entire Wikipedia corpus into units of around 4K tokens by grouping related documents. This results in retrieval units that are approximately 30 times longer compared to typical short retrievals, thereby significantly reducing the total number of units from millions to hundreds of thousands.\n\nThe increased unit size reduces the likelihood of retrieving hard negatives while preserving semantic integrity, and feeding these larger units (~30K tokens) to long-context LLMs for zero-shot generation leads to performance comparable to state-of-the-art models. The authors also test LongRAG on datasets with already large document sizes (>4K tokens), demonstrating that treating each document as a single unit further improves performance.",
         "answer_correctness": 0.0,
         "faithfulness": 0.0,
         "context_recall": 0.0,
@@ -5360,17 +5129,12 @@
       "score_latency_s": 7.033,
       "total_latency_s": 26.031,
       "metrics": {
-        "method": "SELF-ROUTE",
-        "description": "A method that uses retrieval-augmented generation (RAG) predictions to route queries towards either RAG or long context (LC) based on top-k retrieved text chunks, achieving comparable performance to LC while significantly reducing token usage and computation cost.",
-        "performance_comparison": "Comparable to LC in terms of performance but with substantial reduction in token count. GPT-4O uses 61% tokens compared to LC, Gemini-1.5-Pro uses 38.6% tokens.",
-        "token_savings": "SELF-ROUTE significantly reduces token usage; for example, it achieves comparable results using only 61% of the tokens used by LC with GPT-4O and 38.6% with Gemini-1.5-Pro.",
-        "cost_reduction": "Since the computation cost of transformer-based LLMs is quadratic to token count, reducing token usage leads to substantial cost savings.",
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 50.0,
+        "faithfulness": 60.0,
+        "context_recall": 70.0,
+        "context_precision": 30.0,
         "citation_accuracy": 90.0,
-        "final_score": 9.0
+        "final_score": 58.5
       }
     },
     {
@@ -5463,13 +5227,12 @@
       "score_latency_s": 3.492,
       "total_latency_s": 22.607,
       "metrics": {
-        "answer": "RAG has a significant advantage in terms of lower computation cost because it relies on shorter retrieved chunks rather than the entire context. This reduces the computational load substantially, making RAG more efficient for tasks where external knowledge is crucial but full-context processing would be too costly.",
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 80.0,
+        "faithfulness": 75.0,
+        "context_recall": 100.0,
+        "context_precision": 50.0,
         "citation_accuracy": 100.0,
-        "final_score": 10.0
+        "final_score": 81.75
       }
     },
     {
@@ -5562,18 +5325,12 @@
       "score_latency_s": 5.143,
       "total_latency_s": 25.708,
       "metrics": {
-        "result": {
-          "gemini_1.5_pro": "+7.6%",
-          "gpt-4o": "+13.1%",
-          "gpt-3.5-turbo": "+3.6%"
-        },
-        "context": "When long-context LLMs were sufficiently resourced, they outperformed RAG by a significant margin: LC surpassed RAG by 7.6% for Gemini-1.5-Pro, 13.1% for GPT-4O, and 3.6% for GPT-3.5-Turbo.",
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 50.0,
+        "faithfulness": 70.0,
+        "context_recall": 80.0,
+        "context_precision": 90.0,
         "citation_accuracy": 100.0,
-        "final_score": 10.0
+        "final_score": 70.0
       }
     },
     {
@@ -5666,14 +5423,12 @@
       "score_latency_s": 2.52,
       "total_latency_s": 21.162,
       "metrics": {
-        "model": "SELF-ROUTE",
-        "decision_criterion": "model's self-reflection",
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 50.0,
+        "faithfulness": 50.0,
+        "context_recall": 100.0,
+        "context_precision": 80.0,
         "citation_accuracy": 100.0,
-        "final_score": 10.0
+        "final_score": 68.0
       }
     },
     {
@@ -5766,14 +5521,12 @@
       "score_latency_s": 2.944,
       "total_latency_s": 21.675,
       "metrics": {
-        "document": "Doc 1",
-        "extraction": "Through extensive experimentation, we thoroughly investigated existing RAG approaches and their combinations to identify and recommend optimal RAG practices.",
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 20.0,
+        "faithfulness": 30.0,
+        "context_recall": 50.0,
+        "context_precision": 40.0,
         "citation_accuracy": 90.0,
-        "final_score": 9.0
+        "final_score": 37.5
       }
     },
     {
@@ -5866,12 +5619,12 @@
       "score_latency_s": 2.003,
       "total_latency_s": 21.391,
       "metrics": {
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 80.0,
+        "faithfulness": 75.0,
+        "context_recall": 100.0,
+        "context_precision": 60.0,
         "citation_accuracy": 40.0,
-        "final_score": 4.0
+        "final_score": 76.75
       }
     },
     {
@@ -5964,13 +5717,12 @@
       "score_latency_s": 5.449,
       "total_latency_s": 23.702,
       "metrics": {
-        "response": "The generated answer does not fully capture the essence of what a query expansion technique entails in the context of RAG systems. Based on the provided documents, specifically Doc 1 (Document ID 0), which is an abstract of the paper discussing enhancements to Retrieval-Augmented Generation (RAG) systems, and Doc 8 (Document ID 5), which discusses methods for optimizing the RAG pipeline through query transformations, a more accurate answer would be: The query expansion module in RAG systems uses techniques such as generating pseudo-documents or sub-queries from original queries to enhance retrieval performance by making input queries clearer and more detailed [Doc 8].",
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 30.0,
+        "faithfulness": 40.0,
+        "context_recall": 50.0,
+        "context_precision": 60.0,
         "citation_accuracy": 100.0,
-        "final_score": 10.0
+        "final_score": 46.5
       }
     },
     {
@@ -6063,19 +5815,12 @@
       "score_latency_s": 4.396,
       "total_latency_s": 24.687,
       "metrics": {
-        "evaluation_datasets": [
-          {
-            "name": "Not explicitly named",
-            "details": "The document mentions the use of specific datasets for evaluating advanced RAG system designs, but does not provide explicit names or descriptions of these datasets. The study evaluates factors such as language model size, prompt design, document chunk size, knowledge base size, retrieval stride, query expansion techniques, and more to assess their influence on response quality.",
-            "document_id": 6
-          }
-        ],
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 20.0,
+        "faithfulness": 30.0,
+        "context_recall": 100.0,
+        "context_precision": 50.0,
         "citation_accuracy": 100.0,
-        "final_score": 10.0
+        "final_score": 49.5
       }
     },
     {
@@ -6168,20 +5913,12 @@
       "score_latency_s": 4.301,
       "total_latency_s": 24.5,
       "metrics": {
-        "primary_knowledge_base": "Wikipedia Dump",
-        "additional_sources": "corpus text chunks",
-        "challenges_with_semi_structured_data": [
-          "text splitting processes may separate tables leading to corruption during retrieval; incorporating tables complicates semantic similarity searches"
-        ],
-        "approaches_for_semi_structured_data": [
-          "execute Text-2-SQL queries on tables within databases using LLMs capabilities; transform tables into text format for further analysis"
-        ],
-        "answer_correctness": 0.0,
-        "faithfulness": 0.0,
-        "context_recall": 0.0,
-        "context_precision": 0.0,
+        "answer_correctness": 20.0,
+        "faithfulness": 30.0,
+        "context_recall": 100.0,
+        "context_precision": 60.0,
         "citation_accuracy": 90.0,
-        "final_score": 9.0
+        "final_score": 49.5
       }
     }
   ]
