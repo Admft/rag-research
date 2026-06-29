@@ -1,22 +1,25 @@
 {
-  "last_update": "2026-06-29 01:33:12",
-  "attempts": 3,
-  "child_pid": null,
-  "message": "retrying after exit 1",
+  "last_update": "2026-06-29 01:38:12",
+  "attempts": 4,
+  "child_pid": 180187,
+  "message": "progress detected",
   "progress": {
-    "total_runs": 3,
-    "complete_runs": 0,
+    "total_runs": 66,
+    "complete_runs": 60,
     "in_progress": [
       {
         "label": "Ablation 8 - Top-K/top10/run_1",
-        "questions_done": 13,
+        "questions_done": 2,
         "run_dir": "/home/adamm/projects/rag-research/experiments/Results/Test Runs and Ablations/Ablation 8 - Top-K/top10/run_1"
       }
     ],
-    "pending_count": 2,
+    "pending_count": 5,
     "pending_next": [
       "Ablation 8 - Top-K/top10/run_2",
-      "Ablation 8 - Top-K/top10/run_3"
+      "Ablation 8 - Top-K/top10/run_3",
+      "Ablation 9 - Chunk Size/512/run_1",
+      "Ablation 9 - Chunk Size/512/run_2",
+      "Ablation 9 - Chunk Size/512/run_3"
     ],
     "is_complete": false
   }
