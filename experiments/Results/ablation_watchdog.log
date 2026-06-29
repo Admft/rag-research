@@ -1713,3 +1713,47 @@
 [supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --ablation A8 --condition top10 --runs 3
 [supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
 ========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 2 at 2026-06-29 06:57:24
+[supervisor] progress 0/3 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --ablation A8 --condition top10 --runs 3
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 3 at 2026-06-29 07:16:32
+[supervisor] progress 0/3 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --ablation A8 --condition top10 --runs 3
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 4 at 2026-06-29 07:35:41
+[supervisor] progress 0/3 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --ablation A8 --condition top10 --runs 3
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] child exited with code 1
+[supervisor] retrying in 120s
+
+========================================================================
+[supervisor] attempt 5 at 2026-06-29 08:18:50
+[supervisor] progress 1/3 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --ablation A8 --condition top10 --runs 3
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================
+[supervisor] finished successfully
+
+========================================================================
+[supervisor] attempt 1 at 2026-06-29 10:38:05
+[supervisor] progress 0/3 runs complete
+[supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --ablation A9 --condition 512 --runs 3
+[supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
+========================================================================

@@ -66,6 +66,12 @@ def build_child_env(*, cpu_embed: bool, safe: bool) -> dict[str, str]:
 
 
 def repair_venv(python: str) -> None:
+    """Full venv repair — partial sklearn/scipy reinstall often makes WSL2 corruption worse."""
+    script = ROOT / "scripts" / "repair_venv_full.sh"
+    if script.exists():
+        print("[supervisor] running full venv repair (scripts/repair_venv_full.sh)...", flush=True)
+        subprocess.run(["bash", str(script)], cwd=ROOT, check=False)
+        return
     print("[supervisor] repairing venv packages (scikit-learn, scipy, psutil)...", flush=True)
     subprocess.run(
         [

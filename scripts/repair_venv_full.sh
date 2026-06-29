@@ -7,17 +7,20 @@ VENV="$ROOT/.venv"
 PY="$VENV/bin/python"
 SITE="$VENV/lib/python3.12/site-packages"
 
-echo "=== Stopping ablation processes (if any) ==="
-pkill -f "run_ablation_resilient.py.*top10" 2>/dev/null || true
+echo "=== Stopping ablation worker processes (if any) ==="
 pkill -f "run_ablation.py.*top10" 2>/dev/null || true
 sleep 2
 
 echo "=== Removing corrupted partial installs (~cipy, ~umpy, etc.) ==="
 find "$SITE" -maxdepth 1 \( -name '~*' -o -name '_~*' \) -exec rm -rf {} + 2>/dev/null || true
 
+echo "=== Clearing stale bytecode in crash-sensitive packages ==="
+find "$SITE"/scipy "$SITE"/sklearn "$SITE"/numpy -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
+
 echo "=== Reinstalling crash-sensitive packages ==="
 "$PY" -m pip install --force-reinstall --no-cache-dir \
-  numpy scipy scikit-learn psutil sympy pydantic qdrant-client
+  "sympy==1.13.1" \
+  numpy scipy scikit-learn psutil pydantic qdrant-client
 
 echo "=== Verifying imports ==="
 "$PY" -c "

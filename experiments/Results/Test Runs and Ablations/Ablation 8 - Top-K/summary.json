@@ -2,15 +2,15 @@
   "ablation": "Ablation 8 - Top-K",
   "baseline_score": 83.22,
   "conditions": {
-    "top7": {
+    "top10": {
       "runs": [
-        82.61,
-        83.08,
-        85.48
+        66.56,
+        63.23,
+        62.62
       ],
-      "mean": 83.72,
-      "std": 1.54,
-      "delta_vs_baseline": 0.5
+      "mean": 64.14,
+      "std": 2.12,
+      "delta_vs_baseline": -19.08
     }
   }
 }
