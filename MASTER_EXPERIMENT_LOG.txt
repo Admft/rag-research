@@ -129,10 +129,11 @@ Judge context cap (methodology correction, 2026-06-29):
   evaluations. Conditions affected by this bug (top_k=10 and chunk_size=512) were
   re-evaluated after applying this fix.
 
-  Implementation: src/scoring.py caps judge context at JUDGE_MAX_CONTEXT_CHUNKS=5.
-  The generator still receives all top_k chunks; only the judge prompt is capped.
-  Existing runs at top_k<=5 and chunk_size<=256 are unaffected (judge already saw
-  at most 5 chunks). A8 top7 may shift slightly (judge previously saw 7 chunks).
+  Implementation: src/scoring.py caps judge context at JUDGE_MAX_CONTEXT_CHUNKS=5 and
+  JUDGE_MAX_CONTEXT_WORDS=1920. The generator still receives all top_k chunks; only the
+  judge prompt is capped. Existing runs at top_k<=5 and chunk_size<=256 are unaffected.
+  A8 top7 may shift slightly (judge previously saw 7 chunks). A9 chunk512 needs the word
+  cap because retrieval is already top_k=5 at 512 words/chunk (~2,560 words total).
 
 ===================================================================
 4. PHASE 1: BASELINE DEVELOPMENT (runs 000-007)

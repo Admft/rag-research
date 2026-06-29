@@ -84,6 +84,10 @@ def load_summary_json(path):
         return json.load(f)
 
 
+def _is_active_condition_dir(path: Path) -> bool:
+    return path.is_dir() and not path.name.endswith("_PRE_FIX")
+
+
 def collect_condition_scores(ablation_root, condition_name):
     condition_dir = ablation_root / condition_name
     if not condition_dir.exists():
@@ -118,7 +122,7 @@ def rebuild_summary_from_disk(ablation_folder, ablation_name):
         return build_ablation_summary(ablation_name, {"baseline": flat_scores})
 
     condition_results = {}
-    for condition_dir in sorted(p for p in ablation_folder.iterdir() if p.is_dir()):
+    for condition_dir in sorted(p for p in ablation_folder.iterdir() if _is_active_condition_dir(p)):
         run_scores = collect_condition_scores(ablation_folder, condition_dir.name)
         if run_scores:
             condition_results[condition_dir.name] = run_scores

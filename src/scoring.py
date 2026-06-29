@@ -16,6 +16,33 @@ SCORE_WEIGHTS = {
 # Judge receives capped context even when generation uses more chunks (top_k > 5 or
 # large chunk_size). Full retrieved list is still used for citation_accuracy.
 JUDGE_MAX_CONTEXT_CHUNKS = 5
+# Word budget keeps judge input below the ~2,500-token failure zone (top7 at 1,792
+# words was fine; top10 / chunk512 at ~2,560 broke). Five 512-word chunks still
+# exceed this, so the word cap applies in addition to the chunk cap.
+JUDGE_MAX_CONTEXT_WORDS = 1920
+
+
+def judge_context_chunks(retrieved):
+    selected = []
+    word_count = 0
+
+    for chunk in retrieved[:JUDGE_MAX_CONTEXT_CHUNKS]:
+        chunk_words = chunk["text"].split()
+        chunk_word_count = len(chunk_words)
+
+        if word_count + chunk_word_count <= JUDGE_MAX_CONTEXT_WORDS:
+            selected.append(chunk)
+            word_count += chunk_word_count
+            continue
+
+        remaining = JUDGE_MAX_CONTEXT_WORDS - word_count
+        if remaining > 0:
+            trimmed = dict(chunk)
+            trimmed["text"] = " ".join(chunk_words[:remaining])
+            selected.append(trimmed)
+        break
+
+    return selected
 
 
 def compute_final_score(metrics):
@@ -87,10 +114,6 @@ def fallback_metric_scores(question, expected_answer, answer, retrieved):
         "context_precision": 60.0 if retrieved else 0.0,
         "judge_fallback": True,
     }
-
-
-def judge_context_chunks(retrieved):
-    return retrieved[:JUDGE_MAX_CONTEXT_CHUNKS]
 
 
 def judge_metrics(question, expected_answer, expected_source, answer, retrieved, judge_model=None):
