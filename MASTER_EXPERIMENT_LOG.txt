@@ -1,9 +1,9 @@
 MASTER_EXPERIMENT_LOG.txt
-Generated: 2026-06-28 21:33:07
+Generated: 2026-06-29 (updated with full project narrative + re-evaluation status)
 Project root: /home/adamm/projects/rag-research
 
 ===================================================================
-1. THE STORY
+1. THE STORY (EXECUTIVE SUMMARY)
 ===================================================================
 ---
 PROJECT: Local RAG Pipeline Optimization for Academic Paper
@@ -36,6 +36,161 @@ Phase 4 (Ablations A1-A9): Nine isolated ablations, each
 changing exactly one variable from the locked baseline, run 
 3 times each to measure individual component contributions 
 with variance.
+
+Phase 5 (Re-evaluation, 2026-06-29): Judge context cap fix applied.
+A8 top7, top10, and A9 chunk512 re-run with corrected judge.
+Pre-fix broken runs archived as *_PRE_FIX folders for paper evidence.
+---
+
+===================================================================
+1B. FULL PROJECT NARRATIVE (CHRONOLOGICAL, HONEST)
+===================================================================
+
+THE BEGINNING — BUILDING THE BASELINE
+-------------------------------------
+The project started with a simple question: can you build a RAG pipeline
+that runs entirely locally on consumer hardware and actually score well
+on academic questions? Setup: i9-14900K, 64GB RAM, RTX 4070 Ti 12GB VRAM.
+Ollama for local inference, Qdrant for vector storage.
+
+The corpus was deliberate: 12 academic papers about RAG itself — the
+pipeline studying the literature that describes it. 60 hand-written
+questions, 5 per paper.
+
+Run 000 — vanilla floor. 120-token chunks, dense only, no reranker, no
+citations, llama3.1:8b. Score 57.48. Citation accuracy 0.0% (no mechanism).
+
+Run 001 — retrieval smoke test on 2 questions. Plumbing verified.
+
+FIRST MISTAKE — Run 002 stacked 3 changes: chunk 512→256, BGE reranker
+added, citation prompt rewritten. Score 66.04, citation 38.67% — but no
+attribution possible. Anti-pattern for publishable science. Secondary
+problem: scratchpad chain-of-thought leaked into scored answers.
+
+Run 003 — clean single-variable fix: XML <scratchpad>/<answer> tags.
+Citation 38%→94%. Score 70.53. One parse failure (scratchpad hit token limit).
+
+Run 004 — token budget + scratchpad brevity. Score 74.39. Llama ceiling.
+Two parse failures persisted.
+
+Run 005 — identical re-run of 004 for variance. Score 74.03 (Δ 0.36).
+Only properly controlled variance measurement in baseline phase.
+
+SECOND MAJOR MISTAKE — Run 006 stacked 4 changes: hybrid retrieval,
+JSON prompt, qwen2.5:14b generator, top_sentences_5 context filter.
+Score collapsed 74→67.08. Diagnostic work identified the filter as
+catastrophic — it stripped answer-bearing sentences before generation.
+Model correctly refused; evaluation punished correct refusals.
+
+Run 007 — filter removed + citation format normalization. Score 83.22.
++9 pts over llama ceiling. Still 2 stacked changes (defensible but confounded).
+
+LOCKED BASELINE (Phase 2): Run 007 config frozen, 3 replication runs.
+Scores: 83.07, 82.20, 80.11 → mean 81.79 ± 1.52. Confirmed stability
+and established sampling variance for all subsequent ablation deltas.
+------------------------
+selfrag_q1: failed retrieval in 7 consecutive dense runs. Fixed when
+hybrid retrieval introduced (run 006/007).
+
+adaptllm_q5: scored 10–67 across runs, correlating with judge model.
+llama hallucinated wrong answers (30–67); qwen correctly refused (10.0).
+100% Recall@5 every time — retrieval seemed fine. Root cause: pypdf broke
+chunk boundaries in 2404.19705v2.pdf. Answer in chunk 5; chunk 4 ends
+mid-word ("even withou") and wins retrieval. Document-level recall masked
+passage-level failure. Key methodological finding.
+
+BUILDING THE INFRASTRUCTURE
+---------------------------
+Ablation framework built on existing pipeline without modifying core eval.
+
+Infrastructure problems encountered and fixed:
+  1. FileExistsError on baseline run_1 — skip logic now checks scores.json
+     for completion before erroring.
+  2. User ran --force without understanding it — nearly overwrote locked
+     baseline run_1 (83.07). Caught in time; data preserved.
+  3. qdrant_client missing from venv — pip install fixed.
+  4. WSL2 GPU segfaults (exit -11) during long overnight runs — mitigated
+     with: subprocess-per-question isolation, CPU embeddings, checkpoint.jsonl
+     resume, run_ablation_resilient.py supervisor (--safe mode), 10s question
+     breathers, 3min run breathers, tmux for detach survival.
+  5. Venv corruption after segfault during pip repair (~cipy, ~umpy junk
+     dirs in site-packages) — partial --repair-venv insufficient; full repair
+     via scripts/repair_venv_full.sh (sympy, pydantic, qdrant-client).
+
+THE BEIR INTEGRATION
+--------------------
+Three datasets: NFCorpus (medical), SciFact (scientific), FiQA (financial).
+
+NFCorpus source ID mismatch: BEIR doc IDs (e.g. MED-10) vs sequential
+numeric chunk IDs — Recall@5 was 0% until indexing preserved original IDs.
+
+FiQA indexing: 57,638 docs, ~35 minutes.
+
+NFCorpus query format revelation: score 32.21, 10% Recall@5. Not domain
+failure — keyword queries ("deafness", "DHA") vs natural-language design.
+Pattern: RAG NL 83.22 > SciFact 56.73 > FiQA 45.15 > NFCorpus 32.21.
+Performance degrades with query format distance from training conditions.
+
+THE ABLATION RUNS
+-----------------
+Nine ablations, 3 runs each, mostly clean overnight with safe supervisor.
+
+Notable results:
+  A3 surprise: XML (84.10) slightly beat JSON (83.59) — unexpected direction.
+  A4 context filter: top_sentences_5 -14.33 pts — strongest negative delta.
+  A5 bge-large: +0.95 pts — modest embedding upgrade.
+  A6 reranker: -5.15 without reranker — reranker matters.
+  A7 HyDE: -1.8 pts — hurts when retrieval already at 100% Recall@5.
+  A1 hybrid vs dense: tied aggregate (~82) but hybrid fixes selfrag_q1 class.
+
+A8 AND A9 — THE BROKEN RUNS (JUDGE BUG, NOT PIPELINE FAILURE)
+------------------------------------------------------------
+A8 top_k=10: mean 9.94. A9 chunk_size=512: mean 14.08. Looked catastrophic.
+
+Real diagnosis: generator answers were reasonable (100% JSON parse rate).
+Judge (qwen2.5:14b) failed silently when context exceeded ~2,500 tokens.
+Returned parseable JSON with extra keys; scoring code read explicit 0.0
+metrics. Citation accuracy stayed ~80% (deterministic, no judge).
+Final ≈ 0.10 × 80 ≈ 8–10. Confirmed by re-judging single questions with
+capped context — scores recovered to 50–80 immediately.
+
+Fix (2026-06-29): src/scoring.py — JUDGE_MAX_CONTEXT_CHUNKS=5,
+JUDGE_MAX_CONTEXT_WORDS=1920. Generator unchanged. Methodology sentence
+for paper documented in Section 3.
+
+Pre-fix runs archived (not deleted):
+  Ablation 8 - Top-K/top7_PRE_FIX/   (original judge saw 7 chunks)
+  Ablation 8 - Top-K/top10_PRE_FIX/  (broken: 9.72, 10.2, 9.89)
+  Ablation 9 - Chunk Size/512_PRE_FIX/ (broken: 14.41, 14.32, 13.52)
+
+Re-evaluation runs (post-fix):
+  A8 top7: COMPLETE — 82.61, 83.08, 85.48 → mean 83.72 ± 1.54
+    (original pre-fix mean was 82.64; judge cap had minimal effect on top7)
+  A8 top7_PRE_FIX re-scored with fixed judge: 85.45, 82.02, 83.30 → 83.59
+  A8 top10: IN PROGRESS (supervisor attempt 4+, WSL2 segfault/venv issues)
+  A9 chunk512: PENDING (after top10 completes)
+
+WHAT IS ORIGINAL vs KNOWN
+-------------------------
+Clearly original with numbers:
+  • Context filter regression after BGE reranker: -14.33 pts quantified
+    interaction (filter undoes reranker work).
+  • Judge context sensitivity: LLM-as-judge silently fails >~2,500 tokens —
+    returns valid JSON with zeros; methodological hazard for variable top-k.
+  • Passage-level recall failure (adaptllm_q5): 100% Recall@5 + consistent 10.0
+    scores; pypdf chunk boundary break; concrete reproducible case.
+
+Interesting but partially known:
+  • Hybrid fixes dense term-specific failures (selfrag_q1) — BM25 vs dense
+    is established; contribution is clean single-question demonstration.
+  • Generator size gap llama 8B vs qwen 14B (~9.5 pts) — calibration number.
+  • BEIR query format sensitivity — keyword vs NL QA is not new observation.
+
+Honest summary: No new algorithm invented. Contribution is careful empirical
+characterization of component interactions and failure modes on consumer
+hardware, with reproducible numbers. Judge context bug may save other
+researchers from publishing invalid scores for large-context configs.
+
 ---
 
 ===================================================================
@@ -5149,8 +5304,15 @@ FINDING 6 — Ablation component contributions (valid runs only)
   Largest positive deltas: A5 bge-large (+0.95), A3 xml (+0.88), A8 top5 (+0.51)
   Largest negative deltas: A4 top_sentences_5 (-14.33), A2 llama3.1-8b (-9.49), A6 none (-5.15)
   A7 hyde hurt (-1.8). A1 retriever type negligible (~-1 pt).
-  INVALID DATA (FIXED 2026-06-29): A8 top10 and A9 chunk 512 had judge context overflow.
-  Pre-fix means were ~10 and ~14; corrected via judge top-5 cap + re-score + fresh re-runs.
+  A8 top7 post-fix: 83.72 ± 1.54 (vs 82.64 pre-fix — judge cap minimal effect).
+
+FINDING 7 — Judge context overflow (methodological discovery)
+  A8 top10 pre-fix mean ~9.94 and A9 512 pre-fix ~14.08 were evaluation bugs, not
+  pipeline failures. Judge returns schema-violating JSON when context >~2,500 tokens;
+  LLM-judged metrics zero out while citation_accuracy (~80%) remains.
+  Fix: cap judge input at 5 chunks / 1920 words. Pre-fix runs in *_PRE_FIX folders.
+  Re-runs in progress for top10 and 512. Broadly applicable hazard for LLM-as-judge
+  papers using variable top-k or large chunk sizes.
 
 ===================================================================
 10. PAPER NOTES
@@ -5173,8 +5335,16 @@ FRAMING:
   "We conduct a controlled ablation of nine RAG pipeline components and document
   underreported failure modes including: post-retrieval filtering negating reranker
   gains, dense retrieval systematically failing on specific query types that BM25
-  trivially handles, small LLM judges introducing variance that masks real improvements,
-  and document-level recall metrics masking passage-level retrieval failures."
+  trivially handles, LLM-as-judge evaluation silently failing when judge context
+  exceeds ~2,500 tokens (returning valid JSON with zero scores), and document-level
+  recall metrics masking passage-level retrieval failures."
+
+METHODOLOGY TEXT (judge fix, for paper):
+  "We discovered that our LLM judge produced invalid scores when passed more than
+  approximately 2,500 tokens of retrieved context due to schema violations in the
+  returned JSON. We standardized judge input to top-5 retrieved chunks across all
+  evaluations. Conditions affected by this bug (top_k=10 and chunk_size=512) were
+  re-evaluated after applying this fix."
 
 KNOWN WEAKNESSES TO ADDRESS IN PAPER:
   - Judge model changed mid-experiment (runs 000-005 vs 006+)
@@ -5184,3 +5354,50 @@ KNOWN WEAKNESSES TO ADDRESS IN PAPER:
   - Questions written by same person who built pipeline
   - A8 top10 and A9 chunk 512: judge context overflow caused invalid pre-fix scores;
     fixed via top-5 judge cap and re-evaluation (document in methodology)
+  - Early runs 002 and 006 stacked multiple changes (confounded attribution)
+  - WSL2 stability required extensive infrastructure (not all environments reproducible)
+
+===================================================================
+11. RE-EVALUATION STATUS & OPERATIONAL NOTES (2026-06-29)
+===================================================================
+
+JUDGE FIX (src/scoring.py):
+  JUDGE_MAX_CONTEXT_CHUNKS = 5
+  JUDGE_MAX_CONTEXT_WORDS = 1920
+  Generator receives full top_k; judge and fallback heuristics use capped context.
+  citation_accuracy still uses full retrieved list.
+
+ARCHIVED PRE-FIX CONDITIONS (for before/after paper evidence):
+  Ablation 8 - Top-K/top7_PRE_FIX/    original runs + re-scored comparison
+  Ablation 8 - Top-K/top10_PRE_FIX/   broken judge: 9.72, 10.2, 9.89
+  Ablation 9 - Chunk Size/512_PRE_FIX/ broken judge: 14.41, 14.32, 13.52
+  Original data also in experiments/Results/runs/061-063 (top10), 070-072 (512).
+
+POST-FIX RE-RUN STATUS:
+  A8 top7:  DONE — 82.61, 83.08, 85.48 (mean 83.72)
+  A8 top10: IN PROGRESS — supervisor safe mode, WSL2 segfaults during run
+  A9 512:   PENDING
+
+SAFE OVERNIGHT COMMANDS (Ubuntu terminal, tmux recommended):
+  .venv/bin/python run_ablation_resilient.py --safe --repair-venv --until-complete \
+    --ablation A8 --condition top10 --runs 3
+  # Resume without --force to keep checkpoint.jsonl progress
+
+MONITORING:
+  .venv/bin/python run_ablation_resilient.py --status --all
+  tail -f experiments/Results/ablation_watchdog.log
+  tail -f experiments/Results/.../top10/run_1/checkpoint.jsonl
+
+SCRIPTS ADDED DURING RE-EVALUATION:
+  scripts/rescore_run.py          — re-score stored answers without re-running RAG
+  scripts/prepare_prefix_reruns.sh — rename to *_PRE_FIX + restore archives
+  scripts/restore_prefix_archives.sh — restore broken scores from runs/ archive
+  scripts/compare_top7_rescore.py  — PRE_FIX vs fresh top7 comparison
+  scripts/repair_venv_full.sh      — full venv repair after WSL2 segfault corruption
+  scripts/rerun_a8_a9_worker.sh    — chained safe re-runs for top7/top10/512
+
+STABLE MODE DEFAULTS (ablation/stable.py, all ablation runs):
+  10s breather between questions, 3min between runs
+  10min question timeout (20min on 5th attempt)
+  CPU embeddings (RAG_CPU_EMBED=1), subprocess per question
+  Supervisor --safe adds: 120s retry, +60s post-segfault cooldown, 90min stall timeout

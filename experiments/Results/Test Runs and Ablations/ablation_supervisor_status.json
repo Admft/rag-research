@@ -1,5 +1,5 @@
 {
-  "last_update": "2026-06-29 01:38:12",
+  "last_update": "2026-06-29 01:55:12",
   "attempts": 4,
   "child_pid": 180187,
   "message": "progress detected",
@@ -9,7 +9,7 @@
     "in_progress": [
       {
         "label": "Ablation 8 - Top-K/top10/run_1",
-        "questions_done": 2,
+        "questions_done": 29,
         "run_dir": "/home/adamm/projects/rag-research/experiments/Results/Test Runs and Ablations/Ablation 8 - Top-K/top10/run_1"
       }
     ],
