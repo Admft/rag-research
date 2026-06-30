@@ -24,17 +24,18 @@ We report three evaluation and grounding failures discovered while running a con
 First, an LLM-as-judge silently returns schema-valid zero scores once its input context exceeds ${\sim}$2,500 tokens, producing apparent pipeline collapses (${\sim}$10/100) that are evaluation artifacts rather than generation failures; after diagnosis and a context cap, affected conditions still regress substantially ($-$19.1 and $-$17.3 points for top-$k{=}10$ and 512-word chunks).
 Second, a naive post-reranking sentence filter---motivated by learned context filtering \citep{wang2023filco}---costs 14.3 points when restricted to five sentences per chunk, with context recall falling 23.6 points despite unchanged retrieval.
 Third, document-level Recall@5 remains 100\% on a question where PDF chunking splits the answer across a boundary, masking a passage-level failure that only surfaced under faithful generation.
-We release all 66 ablation runs (three replications per condition) with pre- and post-fix judge scores to support replication.
+We release all 66 ablation runs (three replications per condition) with pre- and post-fix judge scores; code and data in an anonymized repository (link upon acceptance).
 \end{abstract}
 
 \section{Introduction}
 
 Retrieval-augmented generation (RAG) pipelines combine interchangeable components---retrievers, rerankers, context filters, and generators---each with hyperparameters that affect whether a model can ground answers in retrieved evidence \citep{lewis2020rag,gao2023survey}.
 End-to-end benchmarks \citep{chen2024rgb,es2024ragas} and best-practice studies \citep{wang2024bestpractices,li2025bestpractices} typically report aggregate scores over fixed configurations, but iterative development often stacks multiple edits between measurements, and evaluation itself can mislead when judges or metrics fail silently.
+Unlike these aggregate comparisons, we isolate single-variable effects with three replications per condition against a locked baseline.
 
 We built a fully local RAG pipeline (Qdrant, Ollama, consumer GPU), locked its best configuration (composite score 83.22 on our development set), and ran nine single-variable ablations with three replications each---66 runs total, every condition complete.
 Rather than catalog all nine components, this short paper focuses on three findings that bear directly on \emph{faithful} RAG evaluation: an LLM-judge context-overflow failure mode, a destructive interaction between reranking and heuristic context filtering, and a passage-level blind spot in document-level recall.
-We treat expected effects (larger generators help, rerankers help, smaller chunks help) as background; the complete 21-condition grid is in our released experiment log.
+We treat expected effects (larger generators help, rerankers help, smaller chunks help) as background; the complete 21-condition grid and run artifacts are available in an anonymized repository (link upon acceptance).
 
 \section{Experimental Setup}
 
@@ -86,6 +87,14 @@ Any RAG evaluation that pipes variable-length retrieved context into an LLM judg
   \caption{Judge overflow artifact vs.\ corrected scores (means over 3 runs; $\Delta$ vs.\ baseline 83.22). Pre-fix archives retained for audit.}
   \label{tab:judge-fix}
 \end{table}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\columnwidth]{fig1_judge_overflow.pdf}
+  \caption{Mean final score vs.\ judge input context length (A8 top-$k$).
+  Pre-fix scores collapse past the ${\sim}$2,500-token threshold; post-fix (capped) scores reveal the true regression from context dilution at generation time.}
+  \label{fig:overflow}
+\end{figure}
 
 \subsection{Post-Reranking Context Filter Regression}
 \label{sec:filter}
@@ -144,12 +153,20 @@ Expected larger effects appear for generator size ($-$9.5, 8B vs.\ 14B) and rera
   \label{tab:key-results}
 \end{table}
 
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\columnwidth]{fig2_ablation_deltas.pdf}
+  \caption{$\Delta$ from locked baseline across conditions, ordered by magnitude.
+  Headline findings (red) exceed the $\pm$1.52 noise band (shaded); background findings (gray) confirm expected effects.}
+  \label{fig:deltas}
+\end{figure}
+
 \section{Conclusion}
 
 Faithful RAG evaluation requires checking not only whether models ground answers in retrieved text, but whether the evaluation stack itself fails silently.
 We found an LLM judge that returns valid zeros above a context threshold, a post-reranking filter that destroys grounding despite perfect retrieval, and a recall metric that certifies success at document level while the answer-bearing passage is unavailable.
 These issues surfaced only because we ran replicated ablations at scale and audited anomalous scores rather than accepting them as pipeline failure.
-We release the complete experiment log (66 ablation runs, pre- and post-fix judge traces) to help others avoid the same traps.
+Code and data: anonymized repository (link upon acceptance).
 
 \section*{Limitations}
 \label{sec:limitations}

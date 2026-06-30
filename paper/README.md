@@ -10,22 +10,53 @@
 |------|---------|
 | `groundlm2026.tex` | Main paper (≤4 pages content) |
 | `custom.bib` | Bibliography |
-| `acl.sty` | ACL 2026 style (review mode) |
-| `acl_natbib.bst` | Bibliography style |
+| `fig1_judge_overflow.py` | Generates Figure 1 (judge overflow cliff) |
+| `fig2_ablation_deltas.py` | Generates Figure 2 (ablation deltas bar chart) |
+| `fig1_judge_overflow.pdf` | Figure 1 output (upload to Overleaf with .tex) |
+| `fig2_ablation_deltas.pdf` | Figure 2 output (upload to Overleaf with .tex) |
+| `build.sh` | Full pdflatex + bibtex build script |
 
 ## Build
 
-Requires a TeX distribution with `pdflatex` and `bibtex`:
+**Citations show as `(??)` and References are empty if you only run `pdflatex` once.** You must run BibTeX in between.
+
+Requires a TeX distribution with `pdflatex` and `bibtex` (install [MacTeX](https://www.tug.org/mactex/) on Mac).
+
+```bash
+cd paper
+./build.sh
+```
+
+Or manually (must run from the `paper/` folder so `custom.bib` is found):
 
 ```bash
 cd paper
 pdflatex groundlm2026
-bibtex groundlm2026
+bibtex groundlm2026      # <-- this step creates the References section
 pdflatex groundlm2026
 pdflatex groundlm2026
 ```
 
 Output: `groundlm2026.pdf`
+
+## Figures
+
+Generate both PDFs before compiling (requires `matplotlib`):
+
+```bash
+cd paper
+pip3 install matplotlib   # or use your project venv
+python3 fig1_judge_overflow.py
+python3 fig2_ablation_deltas.py
+```
+
+Upload the two `.pdf` files to Overleaf alongside the `.tex` file.
+
+**If you're tight on space after compile:** keep Figure 1 (judge cliff); comment out the `fig2_ablation_deltas` figure block in `groundlm2026.tex` first.
+
+**Overleaf:** Upload `groundlm2026.tex`, `custom.bib`, `acl.sty`, and `acl_natbib.bst` into one project; Overleaf runs BibTeX automatically.
+
+**VS Code LaTeX Workshop:** Use a recipe that includes `bibtex`, or set `"latex-workshop.latex.recipes"` to include bibtex between pdflatex runs.
 
 ## Submission checklist
 
