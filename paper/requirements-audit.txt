@@ -1,0 +1,10 @@
+# Minimal dependencies for auditing supplement artifacts (not full pipeline rerun).
+# Full end-to-end reproduction also requires: Ollama (qwen2.5:14b), Qdrant, local GPU,
+# the 12-paper PDF corpus, and index build — none of which are bundled here.
+pandas>=2.0
+qdrant-client>=1.7
+rank-bm25>=0.2.2
+sentence-transformers>=2.2
+pypdf>=4.0
+requests>=2.31
+python-dotenv>=1.0

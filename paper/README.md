@@ -83,7 +83,20 @@ Do **not** upload: `README.md`, `build.sh`, `*.py`, `supplementary_ablations.tex
 - [x] Anonymous (no author names or acknowledgments)
 - [x] Limitations section before references
 - [ ] Verify main body ≤4 pages (references unlimited after)
-- [ ] Build supplement: `./build_supplement.sh` → upload zip to OpenReview
+## Supplementary material (OpenReview upload)
+
+```bash
+cd paper
+./build_supplement.sh
+```
+
+Creates **`groundlm2026_supplement_anonymous.zip`** (~72KB) with:
+- `paper_reported_runs.csv` — exactly **66** paper-cited runs
+- `summary.csv` — **76** total ablation rows (66 + 10 audit/pre-fix/superseded)
+- Full README with verification steps for each table/figure claim
+- Anonymity grep runs automatically (fails build if submitter paths/names found)
+
+Upload the zip to OpenReview **Supplementary Material**.
 - [ ] Submit PDF to GroundLM OpenReview before deadline
 
 ## OpenReview fields (copy-paste)
