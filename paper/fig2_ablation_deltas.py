@@ -9,7 +9,7 @@ matplotlib.rcParams.update({
     "axes.linewidth": 0.8,
 })
 
-fig, ax = plt.subplots(figsize=(3.3, 3.0))
+fig, ax = plt.subplots(figsize=(3.3, 3.3))
 
 conditions = [
     ("A8 top-k=10 (post-fix)", -19.1, 2.12, "headline"),
@@ -49,14 +49,21 @@ ax.invert_yaxis()
 ax.axvline(x=0, color="black", linewidth=0.8)
 ax.axvspan(-1.52, 1.52, color="gray", alpha=0.12, zorder=0)
 
-ax.set_xlabel("$\Delta$ vs. locked baseline (83.22)")
+ax.set_xlabel(r"$\Delta$ vs. locked baseline (83.22)")
 ax.spines["top"].set_visible(False)
 ax.spines["right"].set_visible(False)
 ax.spines["left"].set_visible(False)
 
-red_patch = mlines.Line2D([], [], color="#d62728", lw=4, label="Headline findings")
-gray_patch = mlines.Line2D([], [], color="#7f7f7f", lw=4, label="Background (expected)")
-ax.legend(handles=[red_patch, gray_patch], fontsize=6.5, loc="lower right", frameon=False)
+red_patch = mlines.Line2D([0], [0], color="#d62728", lw=4, label="Headline findings")
+gray_patch = mlines.Line2D([0], [0], color="#7f7f7f", lw=4, label="Background (expected)")
+ax.legend(
+    handles=[red_patch, gray_patch],
+    fontsize=6.5,
+    loc="upper center",
+    bbox_to_anchor=(0.5, -0.18),
+    ncol=2,
+    frameon=False,
+)
 
 plt.tight_layout()
 plt.savefig("fig2_ablation_deltas.pdf", bbox_inches="tight")

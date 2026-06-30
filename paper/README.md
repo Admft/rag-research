@@ -54,7 +54,26 @@ Upload the two `.pdf` files to Overleaf alongside the `.tex` file.
 
 **If you're tight on space after compile:** keep Figure 1 (judge cliff); comment out the `fig2_ablation_deltas` figure block in `groundlm2026.tex` first.
 
-**Overleaf:** Upload `groundlm2026.tex`, `custom.bib`, `acl.sty`, and `acl_natbib.bst` into one project; Overleaf runs BibTeX automatically.
+**Overleaf:** Upload the 6 files listed below into one blank Overleaf project (drag into the file tree). Set `groundlm2026.tex` as the main document (Menu → Main document). Click **Recompile**. Overleaf runs BibTeX automatically.
+
+| Upload to Overleaf | Required? |
+|--------------------|-------------|
+| `groundlm2026.tex` | Yes (main document) |
+| `custom.bib` | Yes |
+| `acl.sty` | Yes |
+| `acl_natbib.bst` | Yes |
+| `fig1_judge_overflow.pdf` | Yes |
+| `fig2_ablation_deltas.pdf` | Yes (comment out Fig.~2 in `.tex` if over 4 pages) |
+
+Do **not** upload: `README.md`, `build.sh`, `*.py`, `supplementary_ablations.tex` (optional extra only).
+
+**Steps:**
+1. Go to [overleaf.com](https://www.overleaf.com) → New Project → Blank Project
+2. Delete the default `main.tex` (or replace it)
+3. Upload all 6 files above into the project root (same folder)
+4. Menu (top left) → **Main document** → select `groundlm2026.tex`
+5. Click **Recompile** (green button)
+6. Download PDF when citations and References look correct
 
 **VS Code LaTeX Workshop:** Use a recipe that includes `bibtex`, or set `"latex-workshop.latex.recipes"` to include bibtex between pdflatex runs.
 
@@ -64,7 +83,22 @@ Upload the two `.pdf` files to Overleaf alongside the `.tex` file.
 - [x] Anonymous (no author names or acknowledgments)
 - [x] Limitations section before references
 - [ ] Verify main body ≤4 pages (references unlimited after)
+- [ ] Build supplement: `./build_supplement.sh` → upload zip to OpenReview
 - [ ] Submit PDF to GroundLM OpenReview before deadline
+
+## OpenReview fields (copy-paste)
+
+| Field | Value |
+|-------|-------|
+| **Submission Track** | Track 1: Direct Submission |
+| **Submission Type** | Archival Short Paper (4 pages limitation for the main body) |
+| **TL;DR** | We show that faithful RAG evaluation can fail silently through LLM-judge context overflow, harmful post-reranking context filtering, and document-level recall metrics that miss answer-bearing passage failures. |
+| **Keywords** | retrieval-augmented generation, RAG evaluation, grounded generation, faithfulness, LLM-as-judge, hallucination, context filtering, passage-level recall |
+| **Voluntary Reviewer** | Nominate at least one author (OpenReview profile ID) |
+| **License** | Select CC BY 4.0 (or option offered by OpenReview) |
+| **Supplementary Material** | `groundlm2026_supplement_anonymous.zip` from `./build_supplement.sh` |
+
+**Deadline:** GroundLM site lists June 29, 2026 (AoE); OpenReview may show a later date—submit as soon as possible and treat the portal deadline as authoritative.
 
 ## Framing
 

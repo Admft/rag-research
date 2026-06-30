@@ -20,11 +20,11 @@ Judge Overflow, Context-Filter Interactions, and Passage-Level Recall Blind Spot
 \maketitle
 
 \begin{abstract}
-We report three evaluation and grounding failures discovered while running a controlled, replicated ablation of a local retrieval-augmented generation (RAG) pipeline over 60 hand-written questions on 12 RAG papers.
+We identify three concrete, reproducible failure modes in faithful retrieval-augmented generation (RAG) evaluation, discovered through a controlled ablation of a local pipeline over 60 hand-written questions on 12 RAG papers.
 First, an LLM-as-judge silently returns schema-valid zero scores once its input context exceeds ${\sim}$2,500 tokens, producing apparent pipeline collapses (${\sim}$10/100) that are evaluation artifacts rather than generation failures; after diagnosis and a context cap, affected conditions still regress substantially ($-$19.1 and $-$17.3 points for top-$k{=}10$ and 512-word chunks).
 Second, a naive post-reranking sentence filter---motivated by learned context filtering \citep{wang2023filco}---costs 14.3 points when restricted to five sentences per chunk, with context recall falling 23.6 points despite unchanged retrieval.
-Third, document-level Recall@5 remains 100\% on a question where PDF chunking splits the answer across a boundary, masking a passage-level failure that only surfaced under faithful generation.
-We release all 66 ablation runs (three replications per condition) with pre- and post-fix judge scores; code and data in an anonymized repository (link upon acceptance).
+Third, document-level Recall@5 remains 100\% in a case study where PDF chunking splits the answer across a boundary, masking a passage-level failure that only surfaced under faithful generation.
+We release 66 ablation runs with pre- and post-fix judge traces; an anonymized supplementary archive accompanies this submission.
 \end{abstract}
 
 \section{Introduction}
@@ -32,10 +32,12 @@ We release all 66 ablation runs (three replications per condition) with pre- and
 Retrieval-augmented generation (RAG) pipelines combine interchangeable components---retrievers, rerankers, context filters, and generators---each with hyperparameters that affect whether a model can ground answers in retrieved evidence \citep{lewis2020rag,gao2023survey}.
 End-to-end benchmarks \citep{chen2024rgb,es2024ragas} and best-practice studies \citep{wang2024bestpractices,li2025bestpractices} typically report aggregate scores over fixed configurations, but iterative development often stacks multiple edits between measurements, and evaluation itself can mislead when judges or metrics fail silently.
 Unlike these aggregate comparisons, we isolate single-variable effects with three replications per condition against a locked baseline.
+We identify three concrete, reproducible failure modes in faithful RAG evaluation and provide audit checks for detecting them.
 
 We built a fully local RAG pipeline (Qdrant, Ollama, consumer GPU), locked its best configuration (composite score 83.22 on our development set), and ran nine single-variable ablations with three replications each---66 runs total, every condition complete.
 Rather than catalog all nine components, this short paper focuses on three findings that bear directly on \emph{faithful} RAG evaluation: an LLM-judge context-overflow failure mode, a destructive interaction between reranking and heuristic context filtering, and a passage-level blind spot in document-level recall.
-We treat expected effects (larger generators help, rerankers help, smaller chunks help) as background; the complete 21-condition grid and run artifacts are available in an anonymized repository (link upon acceptance).
+We treat expected effects (larger generators help, rerankers help, smaller chunks help) as background; the complete 21-condition grid and run artifacts are in the anonymized supplementary archive.
+Practitioners can mitigate these risks by capping judge context, auditing schema-valid zero-score judgments, evaluating answer-bearing passages rather than documents alone, and avoiding unvalidated post-reranking truncation.
 
 \section{Experimental Setup}
 
@@ -111,17 +113,19 @@ Our own development trajectory had bundled this filter with other changes in an 
 Reranking surfaces high-scoring but sentence-sparse chunks; truncating to five sentences then removes the evidence the reranker selected.
 Learned filters may succeed where fixed heuristics fail, but our result warns against assuming post-reranking truncation is safe.
 
-\subsection{Document Recall Masks Passage-Level Failure}
+\subsection{Case Study: Document Recall Masks Passage-Level Failure}
 \label{sec:recall}
 
+We highlight one recurring failure as a \textbf{case study}, not a corpus-wide prevalence claim.
 Question \texttt{adaptllm\_q5} asks for the main bottleneck in ADAPT-LLM performance; the answer states that information retrieval is the bottleneck, supported by gold-vs.-retrieved passage comparisons.
-Across 12+ full-pipeline runs with hybrid retrieval, Recall@5 is \textbf{100\%}---the correct PDF is always retrieved---yet final score is \textbf{10.0} whenever the generator correctly refuses to answer from insufficient context.
+With hybrid retrieval and top-$k{=}5$, the generator receives five chunks; rank-1 is chunk~4 from the gold PDF---so document-level Recall@5 is \textbf{100\%}---yet final score is \textbf{10.0} whenever the generator correctly refuses to answer from insufficient context.
 
-Diagnosis: \texttt{pypdf} extraction splits the answer-bearing sentence across a chunk boundary; chunk~4 ends mid-word (\emph{``even withou\ldots''}) and chunk~5 holds the answer.
-The retriever ranks chunk~4 second and chunk~5 first by file, but the surfaced passage in chunk~4 is topically similar yet answer-free.
-The judge correctly scores the faithful refusal as wrong; an earlier 8B generator had scored 28--67 by hallucinating from the wrong chunk---higher scores, less grounding.
+Diagnosis: \texttt{pypdf} extraction splits the answer-bearing sentence across a chunk boundary.
+Chunk~4 (passed to the generator as [Doc~1]) ends mid-word (\emph{``even withou\ldots''}) and omits the bottleneck conclusion; the completing span sits in chunk~5, which ranks outside the top-5 window.
+The model therefore sees a misleading partial passage from the correct file but not the answer-bearing span.
+The judge correctly scores the faithful refusal as wrong; an earlier 8B generator had scored 28--67 by hallucinating from the truncated chunk---higher scores, less grounding.
 
-Document-level recall cannot distinguish retrieval of the right \emph{file} from retrieval of the right \emph{passage}.
+Document-level recall cannot distinguish retrieval of the right \emph{file} from retrieval of the right \emph{passage}; this case study illustrates a class of blind spot worth auditing in any faithful RAG benchmark.
 For faithful RAG evaluation, passage-level or answer-bearing-span metrics are needed alongside aggregate ablation means.
 
 \paragraph{Other ablations (background).}
@@ -164,9 +168,10 @@ Expected larger effects appear for generator size ($-$9.5, 8B vs.\ 14B) and rera
 \section{Conclusion}
 
 Faithful RAG evaluation requires checking not only whether models ground answers in retrieved text, but whether the evaluation stack itself fails silently.
-We found an LLM judge that returns valid zeros above a context threshold, a post-reranking filter that destroys grounding despite perfect retrieval, and a recall metric that certifies success at document level while the answer-bearing passage is unavailable.
+We found an LLM judge that returns valid zeros above a context threshold, a post-reranking filter that destroys grounding despite perfect retrieval, and a recall metric that certifies success at document level while the answer-bearing passage is unavailable---the \texttt{adaptllm\_q5} case study exemplifies this last blind spot.
+These failures arise from common design choices---variable-length judge inputs, heuristic context compression, and document-level retrieval metrics---rather than from idiosyncratic model behavior alone.
 These issues surfaced only because we ran replicated ablations at scale and audited anomalous scores rather than accepting them as pipeline failure.
-Code and data: anonymized repository (link upon acceptance).
+We release the complete experiment log (66 ablation runs, pre- and post-fix judge traces); an anonymized supplementary archive accompanies this submission, and a public repository will follow acceptance.
 
 \section*{Limitations}
 \label{sec:limitations}
@@ -174,7 +179,7 @@ Code and data: anonymized repository (link upon acceptance).
 Each condition uses $n{=}3$ replications; we report means and standard deviations but cannot claim statistical significance---only direction and magnitude.
 The 60 questions were written by the pipeline author over a self-selected paper set, a convenience benchmark we acknowledge openly.
 Our judge model changed during early development (Llama3.1-8B $\rightarrow$ Qwen2.5-14B); all reported ablations use the fixed later regime.
-Findings describe one local pipeline and one academic-QA corpus; we expect the \emph{qualitative} patterns---silent judge failure, filter--reranker interaction, passage-level recall gaps---to generalize to other setups using LLM judges and document-level metrics, but not necessarily the exact point deltas.
+Findings describe one local pipeline and one academic-QA corpus; we expect the \emph{qualitative} patterns---silent judge failure, filter--reranker interaction, passage-level recall gaps---to generalize because they stem from common evaluation design choices (variable-length judge inputs, heuristic context compression, document-level metrics), not from idiosyncratic model behavior alone, though exact point deltas may not transfer.
 No human subjects or sensitive data were involved.
 
 \bibliography{custom}
