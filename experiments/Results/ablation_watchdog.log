@@ -1757,3 +1757,4 @@
 [supervisor] command: /home/adamm/projects/rag-research/.venv/bin/python /home/adamm/projects/rag-research/run_ablation.py --ablation A9 --condition 512 --runs 3
 [supervisor] CPU-only embeddings (CUDA_VISIBLE_DEVICES='')
 ========================================================================
+[supervisor] finished successfully

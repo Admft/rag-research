@@ -1,18 +1,14 @@
 {
-  "last_update": "2026-06-29 10:38:05",
+  "last_update": "2026-06-29 12:27:05",
   "attempts": 1,
-  "child_pid": 14221,
-  "message": "child running",
+  "child_pid": null,
+  "message": "child exited cleanly",
   "progress": {
-    "total_runs": 66,
-    "complete_runs": 63,
+    "total_runs": 3,
+    "complete_runs": 3,
     "in_progress": [],
-    "pending_count": 3,
-    "pending_next": [
-      "Ablation 9 - Chunk Size/512/run_1",
-      "Ablation 9 - Chunk Size/512/run_2",
-      "Ablation 9 - Chunk Size/512/run_3"
-    ],
-    "is_complete": false
+    "pending_count": 0,
+    "pending_next": [],
+    "is_complete": true
   }
 }

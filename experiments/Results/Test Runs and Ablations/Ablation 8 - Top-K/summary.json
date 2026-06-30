@@ -11,6 +11,26 @@
       "mean": 64.14,
       "std": 2.12,
       "delta_vs_baseline": -19.08
+    },
+    "top5": {
+      "runs": [
+        82.71,
+        85.22,
+        83.27
+      ],
+      "mean": 83.73,
+      "std": 1.32,
+      "delta_vs_baseline": 0.51
+    },
+    "top7": {
+      "runs": [
+        82.61,
+        83.08,
+        85.48
+      ],
+      "mean": 83.72,
+      "std": 1.54,
+      "delta_vs_baseline": 0.5
     }
   }
 }

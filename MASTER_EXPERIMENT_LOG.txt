@@ -1,5 +1,5 @@
 MASTER_EXPERIMENT_LOG.txt
-Generated: 2026-06-29 (updated with full project narrative + re-evaluation status)
+Generated: 2026-06-29 19:44:13 (validated complete — post-fix A8/A9)
 Project root: /home/adamm/projects/rag-research
 
 ===================================================================
@@ -38,7 +38,7 @@ changing exactly one variable from the locked baseline, run
 with variance.
 
 Phase 5 (Re-evaluation, 2026-06-29): Judge context cap fix applied.
-A8 top7, top10, and A9 chunk512 re-run with corrected judge.
+A8 top7, top10, and A9 chunk512 re-run with corrected judge — ALL COMPLETE.
 Pre-fix broken runs archived as *_PRE_FIX folders for paper evidence.
 ---
 
@@ -167,8 +167,8 @@ Re-evaluation runs (post-fix):
   A8 top7: COMPLETE — 82.61, 83.08, 85.48 → mean 83.72 ± 1.54
     (original pre-fix mean was 82.64; judge cap had minimal effect on top7)
   A8 top7_PRE_FIX re-scored with fixed judge: 85.45, 82.02, 83.30 → 83.59
-  A8 top10: IN PROGRESS (supervisor attempt 4+, WSL2 segfault/venv issues)
-  A9 chunk512: PENDING (after top10 completes)
+  A8 top10: COMPLETE — 66.56, 63.23, 62.62 → mean 64.14 ± 2.12
+  A9 chunk512: COMPLETE — 66.73, 66.08, 64.94 → mean 65.92 ± 0.91
 
 WHAT IS ORIGINAL vs KNOWN
 -------------------------
@@ -4116,9 +4116,198 @@ Everything else: locked baseline (frozen)
 
 Summary table:
 Condition | Mean | Std | Delta | Run1 | Run2 | Run3
+top10 | 64.14 | 2.12 | -19.08 | 66.56 | 63.23 | 62.62
 top5 | 83.73 | 1.32 | +0.51 | 82.71 | 85.22 | 83.27
-top7 | 82.64 | 0.62 | -0.58 | 83.09 | 81.93 | 82.9
-top10 | 9.94 | 0.24 | -73.28 | 9.72 | 10.2 | 9.89
+top7 | 83.72 | 1.54 | +0.5 | 82.61 | 83.08 | 85.48
+
+--- Condition: top10 ---
+Config override: top_k=top10
+  Run 1 scores: final_score=66.56 | answer_correctness=59.0 | faithfulness=62.75 | context_recall=77.75 | context_precision=59.58 | citation_accuracy=87.17 | answer_parse_rate=100.0 | recall_at_k=100.0 | mrr_at_k=92.69 | avg_latency_s=21.841
+  Run 1 per-question:
+    queryrewrite_q1                final= 82.25 recall_hit=True found_rank=1
+    queryrewrite_q2                final=  74.0 recall_hit=True found_rank=1
+    queryrewrite_q3                final= 82.75 recall_hit=True found_rank=2
+    queryrewrite_q4                final=  67.5 recall_hit=True found_rank=1
+    queryrewrite_q5                final=  77.0 recall_hit=True found_rank=3
+    rgb_q1                         final= 100.0 recall_hit=True found_rank=1
+    rgb_q2                         final=  99.5 recall_hit=True found_rank=1
+    rgb_q3                         final= 49.75 recall_hit=True found_rank=1
+    rgb_q4                         final=  38.5 recall_hit=True found_rank=1
+    rgb_q5                         final=  50.5 recall_hit=True found_rank=1
+    ragas_q1                       final=  55.0 recall_hit=True found_rank=1
+    ragas_q2                       final=  53.0 recall_hit=True found_rank=1
+    ragas_q3                       final= 72.75 recall_hit=True found_rank=1
+    ragas_q4                       final=  29.0 recall_hit=True found_rank=1
+    ragas_q5                       final=  43.0 recall_hit=True found_rank=1
+    selfrag_q1                     final=  58.0 recall_hit=True found_rank=1
+    selfrag_q2                     final=  67.0 recall_hit=True found_rank=1
+    selfrag_q3                     final=  76.0 recall_hit=True found_rank=1
+    selfrag_q4                     final=  69.5 recall_hit=True found_rank=1
+    selfrag_q5                     final=  65.5 recall_hit=True found_rank=2
+    filco_q1                       final= 80.75 recall_hit=True found_rank=1
+    filco_q2                       final=  46.5 recall_hit=True found_rank=1
+    filco_q3                       final=  78.0 recall_hit=True found_rank=1
+    filco_q4                       final=  74.5 recall_hit=True found_rank=1
+    filco_q5                       final=  44.0 recall_hit=True found_rank=1
+    ragsurvey_q1                   final= 100.0 recall_hit=True found_rank=1
+    ragsurvey_q2                   final=  76.0 recall_hit=True found_rank=1
+    ragsurvey_q3                   final=  28.0 recall_hit=True found_rank=1
+    ragsurvey_q4                   final=  69.5 recall_hit=True found_rank=1
+    ragsurvey_q5                   final=  48.5 recall_hit=True found_rank=1
+    crag_q1                        final= 89.25 recall_hit=True found_rank=1
+    crag_q2                        final= 100.0 recall_hit=True found_rank=1
+    crag_q3                        final=  69.5 recall_hit=True found_rank=1
+    crag_q4                        final= 85.25 recall_hit=True found_rank=1
+    crag_q5                        final= 90.25 recall_hit=True found_rank=1
+    adaptllm_q1                    final=  85.5 recall_hit=True found_rank=2
+    adaptllm_q2                    final= 90.25 recall_hit=True found_rank=1
+    adaptllm_q3                    final=  77.0 recall_hit=True found_rank=1
+    adaptllm_q4                    final= 84.75 recall_hit=True found_rank=1
+    adaptllm_q5                    final=  82.5 recall_hit=True found_rank=1
+    longrag_q1                     final= 89.75 recall_hit=True found_rank=1
+    longrag_q2                     final= 95.75 recall_hit=True found_rank=1
+    longrag_q3                     final= 89.25 recall_hit=True found_rank=1
+    longrag_q4                     final= 73.75 recall_hit=True found_rank=1
+    longrag_q5                     final= 89.75 recall_hit=True found_rank=1
+    ragbest_q1                     final=  47.5 recall_hit=True found_rank=1
+    ragbest_q2                     final= 89.75 recall_hit=True found_rank=1
+    ragbest_q3                     final=  25.5 recall_hit=True found_rank=1
+    ragbest_q4                     final=  63.5 recall_hit=True found_rank=4
+    ragbest_q5                     final=  10.0 recall_hit=True found_rank=1
+    raglc_q1                       final=   4.0 recall_hit=True found_rank=1
+    raglc_q2                       final=  34.5 recall_hit=True found_rank=1
+    raglc_q3                       final=  74.5 recall_hit=True found_rank=1
+    raglc_q4                       final=  89.5 recall_hit=True found_rank=1
+    raglc_q5                       final=  58.5 recall_hit=True found_rank=1
+    enhancingrag_q1                final=  36.5 recall_hit=True found_rank=1
+    enhancingrag_q2                final= 82.25 recall_hit=True found_rank=1
+    enhancingrag_q3                final=  37.5 recall_hit=True found_rank=1
+    enhancingrag_q4                final=  38.5 recall_hit=True found_rank=5
+    enhancingrag_q5                final=  53.0 recall_hit=True found_rank=3
+  Run 2 scores: final_score=63.23 | answer_correctness=57.33 | faithfulness=58.72 | context_recall=74.75 | context_precision=59.0 | citation_accuracy=76.33 | answer_parse_rate=100.0 | recall_at_k=100.0 | mrr_at_k=92.69 | avg_latency_s=21.241
+  Run 2 per-question:
+    queryrewrite_q1                final=  71.0 recall_hit=True found_rank=1
+    queryrewrite_q2                final= 73.75 recall_hit=True found_rank=1
+    queryrewrite_q3                final= 73.75 recall_hit=True found_rank=2
+    queryrewrite_q4                final=  63.5 recall_hit=True found_rank=1
+    queryrewrite_q5                final=  60.0 recall_hit=True found_rank=3
+    rgb_q1                         final= 97.25 recall_hit=True found_rank=1
+    rgb_q2                         final=  52.5 recall_hit=True found_rank=1
+    rgb_q3                         final=  46.5 recall_hit=True found_rank=1
+    rgb_q4                         final=  46.5 recall_hit=True found_rank=1
+    rgb_q5                         final=  43.5 recall_hit=True found_rank=1
+    ragas_q1                       final=  54.5 recall_hit=True found_rank=1
+    ragas_q2                       final= 74.75 recall_hit=True found_rank=1
+    ragas_q3                       final= 79.75 recall_hit=True found_rank=1
+    ragas_q4                       final=  17.0 recall_hit=True found_rank=1
+    ragas_q5                       final=  62.5 recall_hit=True found_rank=1
+    selfrag_q1                     final=  43.5 recall_hit=True found_rank=1
+    selfrag_q2                     final= 73.25 recall_hit=True found_rank=1
+    selfrag_q3                     final= 91.25 recall_hit=True found_rank=1
+    selfrag_q4                     final=  39.5 recall_hit=True found_rank=1
+    selfrag_q5                     final= 85.75 recall_hit=True found_rank=2
+    filco_q1                       final= 85.25 recall_hit=True found_rank=1
+    filco_q2                       final=  30.5 recall_hit=True found_rank=1
+    filco_q3                       final=  69.5 recall_hit=True found_rank=1
+    filco_q4                       final=  61.5 recall_hit=True found_rank=1
+    filco_q5                       final= 93.25 recall_hit=True found_rank=1
+    ragsurvey_q1                   final= 88.75 recall_hit=True found_rank=1
+    ragsurvey_q2                   final= 81.25 recall_hit=True found_rank=1
+    ragsurvey_q3                   final=  53.5 recall_hit=True found_rank=1
+    ragsurvey_q4                   final=  71.5 recall_hit=True found_rank=1
+    ragsurvey_q5                   final=  34.0 recall_hit=True found_rank=1
+    crag_q1                        final= 80.75 recall_hit=True found_rank=1
+    crag_q2                        final= 93.75 recall_hit=True found_rank=1
+    crag_q3                        final=  43.0 recall_hit=True found_rank=1
+    crag_q4                        final= 83.25 recall_hit=True found_rank=1
+    crag_q5                        final= 93.75 recall_hit=True found_rank=1
+    adaptllm_q1                    final=  88.0 recall_hit=True found_rank=2
+    adaptllm_q2                    final=  98.5 recall_hit=True found_rank=1
+    adaptllm_q3                    final=  47.5 recall_hit=True found_rank=1
+    adaptllm_q4                    final= 81.75 recall_hit=True found_rank=1
+    adaptllm_q5                    final=  62.0 recall_hit=True found_rank=1
+    longrag_q1                     final= 89.25 recall_hit=True found_rank=1
+    longrag_q2                     final= 80.75 recall_hit=True found_rank=1
+    longrag_q3                     final=  90.0 recall_hit=True found_rank=1
+    longrag_q4                     final=  55.0 recall_hit=True found_rank=1
+    longrag_q5                     final= 93.75 recall_hit=True found_rank=1
+    ragbest_q1                     final=  29.5 recall_hit=True found_rank=1
+    ragbest_q2                     final=  82.5 recall_hit=True found_rank=1
+    ragbest_q3                     final=  10.0 recall_hit=True found_rank=1
+    ragbest_q4                     final=  62.0 recall_hit=True found_rank=4
+    ragbest_q5                     final=  10.0 recall_hit=True found_rank=1
+    raglc_q1                       final=   4.0 recall_hit=True found_rank=1
+    raglc_q2                       final=  34.5 recall_hit=True found_rank=1
+    raglc_q3                       final=  69.0 recall_hit=True found_rank=1
+    raglc_q4                       final= 79.75 recall_hit=True found_rank=1
+    raglc_q5                       final= 83.75 recall_hit=True found_rank=1
+    enhancingrag_q1                final=  31.5 recall_hit=True found_rank=1
+    enhancingrag_q2                final= 65.25 recall_hit=True found_rank=1
+    enhancingrag_q3                final=  56.5 recall_hit=True found_rank=1
+    enhancingrag_q4                final=  19.0 recall_hit=True found_rank=5
+    enhancingrag_q5                final=  56.5 recall_hit=True found_rank=3
+  Run 3 scores: final_score=62.62 | answer_correctness=55.83 | faithfulness=57.17 | context_recall=73.42 | context_precision=61.42 | citation_accuracy=79.67 | answer_parse_rate=100.0 | recall_at_k=100.0 | mrr_at_k=92.69 | avg_latency_s=21.929
+  Run 3 per-question:
+    queryrewrite_q1                final=  71.0 recall_hit=True found_rank=1
+    queryrewrite_q2                final=  66.0 recall_hit=True found_rank=1
+    queryrewrite_q3                final= 83.25 recall_hit=True found_rank=2
+    queryrewrite_q4                final=  48.0 recall_hit=True found_rank=1
+    queryrewrite_q5                final=  73.5 recall_hit=True found_rank=3
+    rgb_q1                         final= 83.75 recall_hit=True found_rank=1
+    rgb_q2                         final= 72.25 recall_hit=True found_rank=1
+    rgb_q3                         final=  46.5 recall_hit=True found_rank=1
+    rgb_q4                         final=  34.0 recall_hit=True found_rank=1
+    rgb_q5                         final=  46.5 recall_hit=True found_rank=1
+    ragas_q1                       final=  38.5 recall_hit=True found_rank=1
+    ragas_q2                       final=  43.0 recall_hit=True found_rank=1
+    ragas_q3                       final= 83.75 recall_hit=True found_rank=1
+    ragas_q4                       final=  31.5 recall_hit=True found_rank=1
+    ragas_q5                       final= 82.25 recall_hit=True found_rank=1
+    selfrag_q1                     final=  52.0 recall_hit=True found_rank=1
+    selfrag_q2                     final= 89.75 recall_hit=True found_rank=1
+    selfrag_q3                     final= 83.75 recall_hit=True found_rank=1
+    selfrag_q4                     final=  46.5 recall_hit=True found_rank=1
+    selfrag_q5                     final= 90.75 recall_hit=True found_rank=2
+    filco_q1                       final=  89.5 recall_hit=True found_rank=1
+    filco_q2                       final=  46.5 recall_hit=True found_rank=1
+    filco_q3                       final= 81.75 recall_hit=True found_rank=1
+    filco_q4                       final=  42.5 recall_hit=True found_rank=1
+    filco_q5                       final=  92.0 recall_hit=True found_rank=1
+    ragsurvey_q1                   final=  98.5 recall_hit=True found_rank=1
+    ragsurvey_q2                   final=  78.0 recall_hit=True found_rank=1
+    ragsurvey_q3                   final=  27.0 recall_hit=True found_rank=1
+    ragsurvey_q4                   final=  70.0 recall_hit=True found_rank=1
+    ragsurvey_q5                   final=  32.5 recall_hit=True found_rank=1
+    crag_q1                        final= 81.75 recall_hit=True found_rank=1
+    crag_q2                        final= 100.0 recall_hit=True found_rank=1
+    crag_q3                        final=  37.5 recall_hit=True found_rank=1
+    crag_q4                        final= 86.75 recall_hit=True found_rank=1
+    crag_q5                        final=  88.5 recall_hit=True found_rank=1
+    adaptllm_q1                    final=  87.5 recall_hit=True found_rank=2
+    adaptllm_q2                    final= 89.75 recall_hit=True found_rank=1
+    adaptllm_q3                    final= 82.75 recall_hit=True found_rank=1
+    adaptllm_q4                    final=  80.0 recall_hit=True found_rank=1
+    adaptllm_q5                    final= 81.25 recall_hit=True found_rank=1
+    longrag_q1                     final= 85.25 recall_hit=True found_rank=1
+    longrag_q2                     final=  81.5 recall_hit=True found_rank=1
+    longrag_q3                     final= 86.25 recall_hit=True found_rank=1
+    longrag_q4                     final=  46.5 recall_hit=True found_rank=1
+    longrag_q5                     final=  82.0 recall_hit=True found_rank=1
+    ragbest_q1                     final=  41.0 recall_hit=True found_rank=1
+    ragbest_q2                     final= 81.75 recall_hit=True found_rank=1
+    ragbest_q3                     final=  10.0 recall_hit=True found_rank=1
+    ragbest_q4                     final=  32.0 recall_hit=True found_rank=4
+    ragbest_q5                     final=  10.0 recall_hit=True found_rank=1
+    raglc_q1                       final=  10.0 recall_hit=True found_rank=1
+    raglc_q2                       final=  54.5 recall_hit=True found_rank=1
+    raglc_q3                       final=  46.5 recall_hit=True found_rank=1
+    raglc_q4                       final=  86.5 recall_hit=True found_rank=1
+    raglc_q5                       final=  55.0 recall_hit=True found_rank=1
+    enhancingrag_q1                final=  41.0 recall_hit=True found_rank=1
+    enhancingrag_q2                final=  52.5 recall_hit=True found_rank=1
+    enhancingrag_q3                final=  41.5 recall_hit=True found_rank=1
+    enhancingrag_q4                final= 63.25 recall_hit=True found_rank=5
+    enhancingrag_q5                final=  10.0 recall_hit=True found_rank=3
 
 --- Condition: top5 ---
 Config override: top_k=top5
@@ -4311,386 +4500,195 @@ Config override: top_k=top5
 
 --- Condition: top7 ---
 Config override: top_k=top7
-  Run 1 scores: final_score=83.09 | answer_correctness=78.67 | faithfulness=82.67 | context_recall=90.33 | context_precision=71.25 | citation_accuracy=97.0 | answer_parse_rate=100.0 | recall_at_k=100.0 | mrr_at_k=92.78 | avg_latency_s=18.144
+  Run 1 scores: final_score=82.61 | answer_correctness=80.92 | faithfulness=83.5 | context_recall=86.08 | context_precision=70.0 | citation_accuracy=92.0 | answer_parse_rate=100.0 | recall_at_k=100.0 | mrr_at_k=92.78 | avg_latency_s=20.287
   Run 1 per-question:
-    queryrewrite_q1                final= 82.75 recall_hit=True found_rank=1
-    queryrewrite_q2                final= 81.75 recall_hit=True found_rank=1
-    queryrewrite_q3                final=  87.5 recall_hit=True found_rank=2
-    queryrewrite_q4                final= 80.75 recall_hit=True found_rank=1
-    queryrewrite_q5                final=  58.5 recall_hit=True found_rank=3
-    rgb_q1                         final= 100.0 recall_hit=True found_rank=1
+    queryrewrite_q1                final= 82.25 recall_hit=True found_rank=1
+    queryrewrite_q2                final=  58.0 recall_hit=True found_rank=1
+    queryrewrite_q3                final=  79.5 recall_hit=True found_rank=2
+    queryrewrite_q4                final=  71.5 recall_hit=True found_rank=1
+    queryrewrite_q5                final=  66.5 recall_hit=True found_rank=3
+    rgb_q1                         final=  98.5 recall_hit=True found_rank=1
     rgb_q2                         final= 90.25 recall_hit=True found_rank=1
-    rgb_q3                         final=  83.5 recall_hit=True found_rank=1
-    rgb_q4                         final= 82.75 recall_hit=True found_rank=1
-    rgb_q5                         final=  62.5 recall_hit=True found_rank=1
-    ragas_q1                       final= 75.25 recall_hit=True found_rank=1
-    ragas_q2                       final= 91.75 recall_hit=True found_rank=1
-    ragas_q3                       final=  87.5 recall_hit=True found_rank=1
-    ragas_q4                       final= 82.75 recall_hit=True found_rank=1
-    ragas_q5                       final=  79.5 recall_hit=True found_rank=1
-    selfrag_q1                     final=  35.5 recall_hit=True found_rank=1
-    selfrag_q2                     final= 80.75 recall_hit=True found_rank=1
-    selfrag_q3                     final=  99.5 recall_hit=True found_rank=1
-    selfrag_q4                     final=  30.5 recall_hit=True found_rank=1
-    selfrag_q5                     final= 89.25 recall_hit=True found_rank=2
-    filco_q1                       final= 89.25 recall_hit=True found_rank=1
-    filco_q2                       final= 84.25 recall_hit=True found_rank=1
-    filco_q3                       final= 82.25 recall_hit=True found_rank=1
-    filco_q4                       final=  84.5 recall_hit=True found_rank=1
-    filco_q5                       final=  79.5 recall_hit=True found_rank=1
-    ragsurvey_q1                   final=  98.5 recall_hit=True found_rank=1
-    ragsurvey_q2                   final= 80.75 recall_hit=True found_rank=1
-    ragsurvey_q3                   final= 82.25 recall_hit=True found_rank=1
-    ragsurvey_q4                   final= 81.75 recall_hit=True found_rank=1
-    ragsurvey_q5                   final= 79.75 recall_hit=True found_rank=1
-    crag_q1                        final=  82.0 recall_hit=True found_rank=1
-    crag_q2                        final= 100.0 recall_hit=True found_rank=1
-    crag_q3                        final=  88.5 recall_hit=True found_rank=1
-    crag_q4                        final= 88.25 recall_hit=True found_rank=1
-    crag_q5                        final= 90.25 recall_hit=True found_rank=1
-    adaptllm_q1                    final=  88.0 recall_hit=True found_rank=2
-    adaptllm_q2                    final= 100.0 recall_hit=True found_rank=1
-    adaptllm_q3                    final=  79.5 recall_hit=True found_rank=1
-    adaptllm_q4                    final= 81.75 recall_hit=True found_rank=1
-    adaptllm_q5                    final=  81.5 recall_hit=True found_rank=1
-    longrag_q1                     final= 89.75 recall_hit=True found_rank=1
-    longrag_q2                     final= 89.75 recall_hit=True found_rank=1
-    longrag_q3                     final= 89.25 recall_hit=True found_rank=1
-    longrag_q4                     final= 89.25 recall_hit=True found_rank=1
-    longrag_q5                     final= 89.75 recall_hit=True found_rank=1
-    ragbest_q1                     final=  62.0 recall_hit=True found_rank=1
-    ragbest_q2                     final= 72.75 recall_hit=True found_rank=1
-    ragbest_q3                     final=  79.5 recall_hit=True found_rank=1
-    ragbest_q4                     final= 82.25 recall_hit=True found_rank=4
-    ragbest_q5                     final=  98.5 recall_hit=True found_rank=1
-    raglc_q1                       final= 80.25 recall_hit=True found_rank=1
-    raglc_q2                       final=  70.5 recall_hit=True found_rank=1
-    raglc_q3                       final=  67.0 recall_hit=True found_rank=1
-    raglc_q4                       final= 89.75 recall_hit=True found_rank=1
-    raglc_q5                       final= 89.25 recall_hit=True found_rank=1
-    enhancingrag_q1                final= 89.25 recall_hit=True found_rank=1
-    enhancingrag_q2                final=  87.0 recall_hit=True found_rank=1
-    enhancingrag_q3                final= 88.75 recall_hit=True found_rank=1
-    enhancingrag_q4                final=  98.0 recall_hit=True found_rank=4
-    enhancingrag_q5                final=  98.0 recall_hit=True found_rank=3
-  Run 2 scores: final_score=81.93 | answer_correctness=77.42 | faithfulness=81.83 | context_recall=88.83 | context_precision=69.92 | citation_accuracy=96.17 | answer_parse_rate=100.0 | recall_at_k=100.0 | mrr_at_k=92.78 | avg_latency_s=17.995
-  Run 2 per-question:
-    queryrewrite_q1                final= 80.75 recall_hit=True found_rank=1
-    queryrewrite_q2                final=  87.5 recall_hit=True found_rank=1
-    queryrewrite_q3                final=  81.5 recall_hit=True found_rank=2
-    queryrewrite_q4                final=  79.5 recall_hit=True found_rank=1
-    queryrewrite_q5                final=  59.5 recall_hit=True found_rank=3
-    rgb_q1                         final= 100.0 recall_hit=True found_rank=1
-    rgb_q2                         final= 82.75 recall_hit=True found_rank=1
-    rgb_q3                         final=  74.0 recall_hit=True found_rank=1
-    rgb_q4                         final=  84.5 recall_hit=True found_rank=1
-    rgb_q5                         final= 52.25 recall_hit=True found_rank=1
-    ragas_q1                       final= 81.75 recall_hit=True found_rank=1
-    ragas_q2                       final=  98.5 recall_hit=True found_rank=1
-    ragas_q3                       final= 91.25 recall_hit=True found_rank=1
-    ragas_q4                       final=  98.5 recall_hit=True found_rank=1
-    ragas_q5                       final= 82.25 recall_hit=True found_rank=1
-    selfrag_q1                     final=  36.0 recall_hit=True found_rank=1
-    selfrag_q2                     final= 80.75 recall_hit=True found_rank=1
-    selfrag_q3                     final= 80.75 recall_hit=True found_rank=1
-    selfrag_q4                     final=  69.5 recall_hit=True found_rank=1
-    selfrag_q5                     final= 89.25 recall_hit=True found_rank=2
+    rgb_q3                         final=  59.5 recall_hit=True found_rank=1
+    rgb_q4                         final=  79.5 recall_hit=True found_rank=1
+    rgb_q5                         final=  73.0 recall_hit=True found_rank=1
+    ragas_q1                       final= 85.75 recall_hit=True found_rank=1
+    ragas_q2                       final= 81.75 recall_hit=True found_rank=1
+    ragas_q3                       final=  97.0 recall_hit=True found_rank=1
+    ragas_q4                       final= 91.25 recall_hit=True found_rank=1
+    ragas_q5                       final=  80.5 recall_hit=True found_rank=1
+    selfrag_q1                     final=  46.0 recall_hit=True found_rank=1
+    selfrag_q2                     final=  64.5 recall_hit=True found_rank=1
+    selfrag_q3                     final= 90.75 recall_hit=True found_rank=1
+    selfrag_q4                     final= 84.25 recall_hit=True found_rank=1
+    selfrag_q5                     final= 81.75 recall_hit=True found_rank=2
     filco_q1                       final= 80.75 recall_hit=True found_rank=1
-    filco_q2                       final= 94.75 recall_hit=True found_rank=1
-    filco_q3                       final=  88.0 recall_hit=True found_rank=1
-    filco_q4                       final= 66.25 recall_hit=True found_rank=1
-    filco_q5                       final=  88.0 recall_hit=True found_rank=1
-    ragsurvey_q1                   final= 100.0 recall_hit=True found_rank=1
-    ragsurvey_q2                   final=  98.5 recall_hit=True found_rank=1
-    ragsurvey_q3                   final=  87.5 recall_hit=True found_rank=1
-    ragsurvey_q4                   final= 83.25 recall_hit=True found_rank=1
-    ragsurvey_q5                   final=  42.0 recall_hit=True found_rank=1
-    crag_q1                        final=  78.5 recall_hit=True found_rank=1
+    filco_q2                       final= 92.25 recall_hit=True found_rank=1
+    filco_q3                       final= 84.25 recall_hit=True found_rank=1
+    filco_q4                       final=  48.5 recall_hit=True found_rank=1
+    filco_q5                       final= 100.0 recall_hit=True found_rank=1
+    ragsurvey_q1                   final= 84.25 recall_hit=True found_rank=1
+    ragsurvey_q2                   final=  79.5 recall_hit=True found_rank=1
+    ragsurvey_q3                   final=  42.5 recall_hit=True found_rank=1
+    ragsurvey_q4                   final= 82.25 recall_hit=True found_rank=1
+    ragsurvey_q5                   final= 79.75 recall_hit=True found_rank=1
+    crag_q1                        final= 89.75 recall_hit=True found_rank=1
     crag_q2                        final= 100.0 recall_hit=True found_rank=1
-    crag_q3                        final=  89.5 recall_hit=True found_rank=1
-    crag_q4                        final= 97.75 recall_hit=True found_rank=1
-    crag_q5                        final= 91.25 recall_hit=True found_rank=1
-    adaptllm_q1                    final=  81.5 recall_hit=True found_rank=2
-    adaptllm_q2                    final= 89.25 recall_hit=True found_rank=1
-    adaptllm_q3                    final=  86.0 recall_hit=True found_rank=1
-    adaptllm_q4                    final=  88.0 recall_hit=True found_rank=1
-    adaptllm_q5                    final=  88.5 recall_hit=True found_rank=1
+    crag_q3                        final= 91.75 recall_hit=True found_rank=1
+    crag_q4                        final= 83.25 recall_hit=True found_rank=1
+    crag_q5                        final= 80.75 recall_hit=True found_rank=1
+    adaptllm_q1                    final= 89.25 recall_hit=True found_rank=2
+    adaptllm_q2                    final= 100.0 recall_hit=True found_rank=1
+    adaptllm_q3                    final=  91.0 recall_hit=True found_rank=1
+    adaptllm_q4                    final= 88.75 recall_hit=True found_rank=1
+    adaptllm_q5                    final=  78.0 recall_hit=True found_rank=1
+    longrag_q1                     final=  82.0 recall_hit=True found_rank=1
+    longrag_q2                     final= 73.75 recall_hit=True found_rank=1
+    longrag_q3                     final= 90.25 recall_hit=True found_rank=1
+    longrag_q4                     final= 85.25 recall_hit=True found_rank=1
+    longrag_q5                     final=  98.5 recall_hit=True found_rank=1
+    ragbest_q1                     final= 70.25 recall_hit=True found_rank=1
+    ragbest_q2                     final= 86.75 recall_hit=True found_rank=1
+    ragbest_q3                     final=  91.0 recall_hit=True found_rank=1
+    ragbest_q4                     final=  70.0 recall_hit=True found_rank=4
+    ragbest_q5                     final=  99.5 recall_hit=True found_rank=1
+    raglc_q1                       final= 88.25 recall_hit=True found_rank=1
+    raglc_q2                       final=  81.5 recall_hit=True found_rank=1
+    raglc_q3                       final= 82.25 recall_hit=True found_rank=1
+    raglc_q4                       final= 93.75 recall_hit=True found_rank=1
+    raglc_q5                       final= 84.75 recall_hit=True found_rank=1
+    enhancingrag_q1                final= 88.75 recall_hit=True found_rank=1
+    enhancingrag_q2                final=  90.0 recall_hit=True found_rank=1
+    enhancingrag_q3                final=  81.0 recall_hit=True found_rank=1
+    enhancingrag_q4                final=  97.5 recall_hit=True found_rank=4
+    enhancingrag_q5                final= 93.25 recall_hit=True found_rank=3
+  Run 2 scores: final_score=83.08 | answer_correctness=79.75 | faithfulness=81.58 | context_recall=90.0 | context_precision=71.17 | citation_accuracy=96.5 | answer_parse_rate=100.0 | recall_at_k=100.0 | mrr_at_k=92.78 | avg_latency_s=18.551
+  Run 2 per-question:
+    queryrewrite_q1                final= 83.25 recall_hit=True found_rank=1
+    queryrewrite_q2                final= 90.25 recall_hit=True found_rank=1
+    queryrewrite_q3                final= 89.25 recall_hit=True found_rank=2
+    queryrewrite_q4                final= 81.25 recall_hit=True found_rank=1
+    queryrewrite_q5                final=  43.5 recall_hit=True found_rank=3
+    rgb_q1                         final= 100.0 recall_hit=True found_rank=1
+    rgb_q2                         final= 74.25 recall_hit=True found_rank=1
+    rgb_q3                         final=  87.5 recall_hit=True found_rank=1
+    rgb_q4                         final=  71.5 recall_hit=True found_rank=1
+    rgb_q5                         final=  51.0 recall_hit=True found_rank=1
+    ragas_q1                       final= 80.25 recall_hit=True found_rank=1
+    ragas_q2                       final= 92.75 recall_hit=True found_rank=1
+    ragas_q3                       final=  87.5 recall_hit=True found_rank=1
+    ragas_q4                       final= 89.75 recall_hit=True found_rank=1
+    ragas_q5                       final= 81.25 recall_hit=True found_rank=1
+    selfrag_q1                     final=  51.5 recall_hit=True found_rank=1
+    selfrag_q2                     final=  80.5 recall_hit=True found_rank=1
+    selfrag_q3                     final= 89.25 recall_hit=True found_rank=1
+    selfrag_q4                     final=  74.0 recall_hit=True found_rank=1
+    selfrag_q5                     final= 82.25 recall_hit=True found_rank=2
+    filco_q1                       final=  65.5 recall_hit=True found_rank=1
+    filco_q2                       final=  91.5 recall_hit=True found_rank=1
+    filco_q3                       final= 82.75 recall_hit=True found_rank=1
+    filco_q4                       final=  43.0 recall_hit=True found_rank=1
+    filco_q5                       final= 90.75 recall_hit=True found_rank=1
+    ragsurvey_q1                   final= 83.25 recall_hit=True found_rank=1
+    ragsurvey_q2                   final=  98.5 recall_hit=True found_rank=1
+    ragsurvey_q3                   final=  79.5 recall_hit=True found_rank=1
+    ragsurvey_q4                   final= 77.75 recall_hit=True found_rank=1
+    ragsurvey_q5                   final=  76.0 recall_hit=True found_rank=1
+    crag_q1                        final= 89.75 recall_hit=True found_rank=1
+    crag_q2                        final=  90.0 recall_hit=True found_rank=1
+    crag_q3                        final= 93.75 recall_hit=True found_rank=1
+    crag_q4                        final= 91.25 recall_hit=True found_rank=1
+    crag_q5                        final= 89.25 recall_hit=True found_rank=1
+    adaptllm_q1                    final=  77.5 recall_hit=True found_rank=2
+    adaptllm_q2                    final= 89.75 recall_hit=True found_rank=1
+    adaptllm_q3                    final=  84.5 recall_hit=True found_rank=1
+    adaptllm_q4                    final= 89.75 recall_hit=True found_rank=1
+    adaptllm_q5                    final= 84.25 recall_hit=True found_rank=1
     longrag_q1                     final= 90.75 recall_hit=True found_rank=1
-    longrag_q2                     final= 82.75 recall_hit=True found_rank=1
-    longrag_q3                     final= 89.75 recall_hit=True found_rank=1
-    longrag_q4                     final=  83.5 recall_hit=True found_rank=1
-    longrag_q5                     final= 97.75 recall_hit=True found_rank=1
-    ragbest_q1                     final=  71.5 recall_hit=True found_rank=1
-    ragbest_q2                     final=  63.5 recall_hit=True found_rank=1
-    ragbest_q3                     final=  10.0 recall_hit=True found_rank=1
+    longrag_q2                     final= 93.75 recall_hit=True found_rank=1
+    longrag_q3                     final= 89.25 recall_hit=True found_rank=1
+    longrag_q4                     final= 96.75 recall_hit=True found_rank=1
+    longrag_q5                     final= 82.75 recall_hit=True found_rank=1
+    ragbest_q1                     final= 71.25 recall_hit=True found_rank=1
+    ragbest_q2                     final= 83.75 recall_hit=True found_rank=1
+    ragbest_q3                     final=  99.0 recall_hit=True found_rank=1
     ragbest_q4                     final=  65.5 recall_hit=True found_rank=4
     ragbest_q5                     final= 100.0 recall_hit=True found_rank=1
     raglc_q1                       final= 82.25 recall_hit=True found_rank=1
-    raglc_q2                       final=  70.5 recall_hit=True found_rank=1
-    raglc_q3                       final= 80.75 recall_hit=True found_rank=1
-    raglc_q4                       final= 89.75 recall_hit=True found_rank=1
-    raglc_q5                       final= 89.25 recall_hit=True found_rank=1
-    enhancingrag_q1                final=  69.5 recall_hit=True found_rank=1
-    enhancingrag_q2                final=  86.5 recall_hit=True found_rank=1
-    enhancingrag_q3                final= 86.25 recall_hit=True found_rank=1
-    enhancingrag_q4                final=  97.5 recall_hit=True found_rank=4
-    enhancingrag_q5                final=  98.5 recall_hit=True found_rank=3
-  Run 3 scores: final_score=82.9 | answer_correctness=79.17 | faithfulness=82.25 | context_recall=90.58 | context_precision=71.67 | citation_accuracy=93.5 | answer_parse_rate=100.0 | recall_at_k=100.0 | mrr_at_k=92.78 | avg_latency_s=18.088
+    raglc_q2                       final=  79.5 recall_hit=True found_rank=1
+    raglc_q3                       final=  79.5 recall_hit=True found_rank=1
+    raglc_q4                       final= 100.0 recall_hit=True found_rank=1
+    raglc_q5                       final=  80.5 recall_hit=True found_rank=1
+    enhancingrag_q1                final= 80.75 recall_hit=True found_rank=1
+    enhancingrag_q2                final= 82.75 recall_hit=True found_rank=1
+    enhancingrag_q3                final=  79.5 recall_hit=True found_rank=1
+    enhancingrag_q4                final= 100.0 recall_hit=True found_rank=4
+    enhancingrag_q5                final=  98.0 recall_hit=True found_rank=3
+  Run 3 scores: final_score=85.48 | answer_correctness=81.0 | faithfulness=86.83 | context_recall=91.33 | context_precision=74.92 | citation_accuracy=96.67 | answer_parse_rate=100.0 | recall_at_k=100.0 | mrr_at_k=92.78 | avg_latency_s=18.194
   Run 3 per-question:
     queryrewrite_q1                final= 87.75 recall_hit=True found_rank=1
-    queryrewrite_q2                final=  79.5 recall_hit=True found_rank=1
-    queryrewrite_q3                final=  77.0 recall_hit=True found_rank=2
-    queryrewrite_q4                final=  79.5 recall_hit=True found_rank=1
-    queryrewrite_q5                final=  65.5 recall_hit=True found_rank=3
+    queryrewrite_q2                final= 90.75 recall_hit=True found_rank=1
+    queryrewrite_q3                final=  77.5 recall_hit=True found_rank=2
+    queryrewrite_q4                final= 80.75 recall_hit=True found_rank=1
+    queryrewrite_q5                final=  70.0 recall_hit=True found_rank=3
     rgb_q1                         final= 100.0 recall_hit=True found_rank=1
-    rgb_q2                         final= 89.25 recall_hit=True found_rank=1
-    rgb_q3                         final=  90.0 recall_hit=True found_rank=1
-    rgb_q4                         final=  77.5 recall_hit=True found_rank=1
-    rgb_q5                         final=  73.5 recall_hit=True found_rank=1
-    ragas_q1                       final=  71.5 recall_hit=True found_rank=1
-    ragas_q2                       final=  76.5 recall_hit=True found_rank=1
+    rgb_q2                         final= 93.75 recall_hit=True found_rank=1
+    rgb_q3                         final= 80.75 recall_hit=True found_rank=1
+    rgb_q4                         final=  90.0 recall_hit=True found_rank=1
+    rgb_q5                         final= 81.75 recall_hit=True found_rank=1
+    ragas_q1                       final=  63.5 recall_hit=True found_rank=1
+    ragas_q2                       final= 82.75 recall_hit=True found_rank=1
     ragas_q3                       final=  87.5 recall_hit=True found_rank=1
-    ragas_q4                       final= 82.25 recall_hit=True found_rank=1
-    ragas_q5                       final=  69.0 recall_hit=True found_rank=1
-    selfrag_q1                     final=  44.5 recall_hit=True found_rank=1
-    selfrag_q2                     final= 79.75 recall_hit=True found_rank=1
-    selfrag_q3                     final= 100.0 recall_hit=True found_rank=1
-    selfrag_q4                     final=  47.5 recall_hit=True found_rank=1
-    selfrag_q5                     final= 80.25 recall_hit=True found_rank=2
-    filco_q1                       final= 89.75 recall_hit=True found_rank=1
-    filco_q2                       final= 97.75 recall_hit=True found_rank=1
-    filco_q3                       final=  90.5 recall_hit=True found_rank=1
-    filco_q4                       final= 89.75 recall_hit=True found_rank=1
-    filco_q5                       final=  96.0 recall_hit=True found_rank=1
-    ragsurvey_q1                   final=  98.0 recall_hit=True found_rank=1
+    ragas_q4                       final= 80.75 recall_hit=True found_rank=1
+    ragas_q5                       final=  78.5 recall_hit=True found_rank=1
+    selfrag_q1                     final=  38.0 recall_hit=True found_rank=1
+    selfrag_q2                     final=  73.5 recall_hit=True found_rank=1
+    selfrag_q3                     final= 92.25 recall_hit=True found_rank=1
+    selfrag_q4                     final=  84.5 recall_hit=True found_rank=1
+    selfrag_q5                     final= 89.25 recall_hit=True found_rank=2
+    filco_q1                       final=  74.5 recall_hit=True found_rank=1
+    filco_q2                       final= 100.0 recall_hit=True found_rank=1
+    filco_q3                       final= 82.75 recall_hit=True found_rank=1
+    filco_q4                       final= 89.25 recall_hit=True found_rank=1
+    filco_q5                       final=  99.5 recall_hit=True found_rank=1
+    ragsurvey_q1                   final=  99.5 recall_hit=True found_rank=1
     ragsurvey_q2                   final=  98.5 recall_hit=True found_rank=1
-    ragsurvey_q3                   final= 82.25 recall_hit=True found_rank=1
-    ragsurvey_q4                   final= 72.25 recall_hit=True found_rank=1
-    ragsurvey_q5                   final=  80.5 recall_hit=True found_rank=1
-    crag_q1                        final= 89.75 recall_hit=True found_rank=1
-    crag_q2                        final=  90.0 recall_hit=True found_rank=1
-    crag_q3                        final= 83.25 recall_hit=True found_rank=1
-    crag_q4                        final= 94.25 recall_hit=True found_rank=1
-    crag_q5                        final= 89.75 recall_hit=True found_rank=1
-    adaptllm_q1                    final= 82.75 recall_hit=True found_rank=2
-    adaptllm_q2                    final=  92.0 recall_hit=True found_rank=1
-    adaptllm_q3                    final=  86.0 recall_hit=True found_rank=1
-    adaptllm_q4                    final= 79.75 recall_hit=True found_rank=1
-    adaptllm_q5                    final= 73.75 recall_hit=True found_rank=1
-    longrag_q1                     final= 89.75 recall_hit=True found_rank=1
-    longrag_q2                     final=  84.5 recall_hit=True found_rank=1
-    longrag_q3                     final=  92.5 recall_hit=True found_rank=1
-    longrag_q4                     final= 91.25 recall_hit=True found_rank=1
-    longrag_q5                     final=  86.5 recall_hit=True found_rank=1
-    ragbest_q1                     final=  66.5 recall_hit=True found_rank=1
-    ragbest_q2                     final=  71.5 recall_hit=True found_rank=1
-    ragbest_q3                     final=  98.0 recall_hit=True found_rank=1
-    ragbest_q4                     final= 94.25 recall_hit=True found_rank=4
-    ragbest_q5                     final= 89.25 recall_hit=True found_rank=1
-    raglc_q1                       final= 70.75 recall_hit=True found_rank=1
-    raglc_q2                       final=  71.5 recall_hit=True found_rank=1
-    raglc_q3                       final=  81.5 recall_hit=True found_rank=1
-    raglc_q4                       final= 97.25 recall_hit=True found_rank=1
-    raglc_q5                       final=  68.0 recall_hit=True found_rank=1
-    enhancingrag_q1                final=  55.0 recall_hit=True found_rank=1
-    enhancingrag_q2                final=  87.5 recall_hit=True found_rank=1
+    ragsurvey_q3                   final= 78.75 recall_hit=True found_rank=1
+    ragsurvey_q4                   final= 84.75 recall_hit=True found_rank=1
+    ragsurvey_q5                   final= 79.75 recall_hit=True found_rank=1
+    crag_q1                        final= 91.25 recall_hit=True found_rank=1
+    crag_q2                        final= 100.0 recall_hit=True found_rank=1
+    crag_q3                        final= 94.25 recall_hit=True found_rank=1
+    crag_q4                        final= 100.0 recall_hit=True found_rank=1
+    crag_q5                        final= 84.25 recall_hit=True found_rank=1
+    adaptllm_q1                    final= 83.75 recall_hit=True found_rank=2
+    adaptllm_q2                    final=  77.5 recall_hit=True found_rank=1
+    adaptllm_q3                    final=  88.5 recall_hit=True found_rank=1
+    adaptllm_q4                    final= 89.25 recall_hit=True found_rank=1
+    adaptllm_q5                    final= 88.75 recall_hit=True found_rank=1
+    longrag_q1                     final=  90.0 recall_hit=True found_rank=1
+    longrag_q2                     final=  65.5 recall_hit=True found_rank=1
+    longrag_q3                     final= 90.25 recall_hit=True found_rank=1
+    longrag_q4                     final= 88.75 recall_hit=True found_rank=1
+    longrag_q5                     final= 85.75 recall_hit=True found_rank=1
+    ragbest_q1                     final=  70.0 recall_hit=True found_rank=1
+    ragbest_q2                     final= 87.25 recall_hit=True found_rank=1
+    ragbest_q3                     final=  98.5 recall_hit=True found_rank=1
+    ragbest_q4                     final=  98.0 recall_hit=True found_rank=4
+    ragbest_q5                     final=  98.5 recall_hit=True found_rank=1
+    raglc_q1                       final= 89.25 recall_hit=True found_rank=1
+    raglc_q2                       final=  80.5 recall_hit=True found_rank=1
+    raglc_q3                       final= 89.25 recall_hit=True found_rank=1
+    raglc_q4                       final= 90.75 recall_hit=True found_rank=1
+    raglc_q5                       final= 84.75 recall_hit=True found_rank=1
+    enhancingrag_q1                final=  47.0 recall_hit=True found_rank=1
+    enhancingrag_q2                final= 89.25 recall_hit=True found_rank=1
     enhancingrag_q3                final=  79.5 recall_hit=True found_rank=1
-    enhancingrag_q4                final= 92.75 recall_hit=True found_rank=4
-    enhancingrag_q5                final= 91.75 recall_hit=True found_rank=3
-
---- Condition: top10 ---
-Config override: top_k=top10
-  Run 1 scores: final_score=9.72 | answer_correctness=2.67 | faithfulness=1.5 | context_recall=1.67 | context_precision=1.0 | citation_accuracy=79.83 | answer_parse_rate=100.0 | recall_at_k=100.0 | mrr_at_k=92.69 | avg_latency_s=23.562
-  Run 1 per-question:
-    queryrewrite_q1                final=   4.0 recall_hit=True found_rank=1
-    queryrewrite_q2                final=  10.0 recall_hit=True found_rank=1
-    queryrewrite_q3                final=   4.0 recall_hit=True found_rank=2
-    queryrewrite_q4                final=  10.0 recall_hit=True found_rank=1
-    queryrewrite_q5                final=   9.0 recall_hit=True found_rank=3
-    rgb_q1                         final=  10.0 recall_hit=True found_rank=1
-    rgb_q2                         final=  10.0 recall_hit=True found_rank=1
-    rgb_q3                         final=  10.0 recall_hit=True found_rank=1
-    rgb_q4                         final=   0.0 recall_hit=True found_rank=1
-    rgb_q5                         final=  10.0 recall_hit=True found_rank=1
-    ragas_q1                       final=   0.0 recall_hit=True found_rank=1
-    ragas_q2                       final=  10.0 recall_hit=True found_rank=1
-    ragas_q3                       final=  10.0 recall_hit=True found_rank=1
-    ragas_q4                       final=  10.0 recall_hit=True found_rank=1
-    ragas_q5                       final=  10.0 recall_hit=True found_rank=1
-    selfrag_q1                     final=   4.0 recall_hit=True found_rank=1
-    selfrag_q2                     final=  10.0 recall_hit=True found_rank=1
-    selfrag_q3                     final=  10.0 recall_hit=True found_rank=1
-    selfrag_q4                     final=  10.0 recall_hit=True found_rank=1
-    selfrag_q5                     final=   0.0 recall_hit=True found_rank=2
-    filco_q1                       final=   0.0 recall_hit=True found_rank=1
-    filco_q2                       final=  10.0 recall_hit=True found_rank=1
-    filco_q3                       final=   9.0 recall_hit=True found_rank=1
-    filco_q4                       final=  10.0 recall_hit=True found_rank=1
-    filco_q5                       final=  10.0 recall_hit=True found_rank=1
-    ragsurvey_q1                   final=  10.0 recall_hit=True found_rank=1
-    ragsurvey_q2                   final=  10.0 recall_hit=True found_rank=1
-    ragsurvey_q3                   final=  86.5 recall_hit=True found_rank=1
-    ragsurvey_q4                   final=  10.0 recall_hit=True found_rank=1
-    ragsurvey_q5                   final=   4.0 recall_hit=True found_rank=1
-    crag_q1                        final=  10.0 recall_hit=True found_rank=1
-    crag_q2                        final=  10.0 recall_hit=True found_rank=1
-    crag_q3                        final=  10.0 recall_hit=True found_rank=1
-    crag_q4                        final=  10.0 recall_hit=True found_rank=1
-    crag_q5                        final=  10.0 recall_hit=True found_rank=1
-    adaptllm_q1                    final=  28.0 recall_hit=True found_rank=2
-    adaptllm_q2                    final=  10.0 recall_hit=True found_rank=1
-    adaptllm_q3                    final=  10.0 recall_hit=True found_rank=1
-    adaptllm_q4                    final=  10.0 recall_hit=True found_rank=1
-    adaptllm_q5                    final=  10.0 recall_hit=True found_rank=1
-    longrag_q1                     final=  10.0 recall_hit=True found_rank=1
-    longrag_q2                     final=  10.0 recall_hit=True found_rank=1
-    longrag_q3                     final=  10.0 recall_hit=True found_rank=1
-    longrag_q4                     final=  10.0 recall_hit=True found_rank=1
-    longrag_q5                     final=  10.0 recall_hit=True found_rank=1
-    ragbest_q1                     final=  10.0 recall_hit=True found_rank=1
-    ragbest_q2                     final=  10.0 recall_hit=True found_rank=1
-    ragbest_q3                     final=   0.0 recall_hit=True found_rank=1
-    ragbest_q4                     final=   0.0 recall_hit=True found_rank=4
-    ragbest_q5                     final=   0.0 recall_hit=True found_rank=1
-    raglc_q1                       final=   4.0 recall_hit=True found_rank=1
-    raglc_q2                       final=   9.0 recall_hit=True found_rank=1
-    raglc_q3                       final=  10.0 recall_hit=True found_rank=1
-    raglc_q4                       final=  10.0 recall_hit=True found_rank=1
-    raglc_q5                       final=  10.0 recall_hit=True found_rank=1
-    enhancingrag_q1                final=   9.0 recall_hit=True found_rank=1
-    enhancingrag_q2                final=   4.0 recall_hit=True found_rank=1
-    enhancingrag_q3                final=  10.0 recall_hit=True found_rank=1
-    enhancingrag_q4                final=  10.0 recall_hit=True found_rank=5
-    enhancingrag_q5                final=   9.0 recall_hit=True found_rank=3
-  Run 2 scores: final_score=10.2 | answer_correctness=2.58 | faithfulness=2.83 | context_recall=1.67 | context_precision=1.0 | citation_accuracy=81.5 | answer_parse_rate=100.0 | recall_at_k=100.0 | mrr_at_k=92.69 | avg_latency_s=26.193
-  Run 2 per-question:
-    queryrewrite_q1                final=   4.0 recall_hit=True found_rank=1
-    queryrewrite_q2                final=  10.0 recall_hit=True found_rank=1
-    queryrewrite_q3                final=  10.0 recall_hit=True found_rank=2
-    queryrewrite_q4                final=  10.0 recall_hit=True found_rank=1
-    queryrewrite_q5                final=   9.0 recall_hit=True found_rank=3
-    rgb_q1                         final=  10.0 recall_hit=True found_rank=1
-    rgb_q2                         final=  10.0 recall_hit=True found_rank=1
-    rgb_q3                         final=   4.0 recall_hit=True found_rank=1
-    rgb_q4                         final=   9.0 recall_hit=True found_rank=1
-    rgb_q5                         final=   9.0 recall_hit=True found_rank=1
-    ragas_q1                       final=   4.0 recall_hit=True found_rank=1
-    ragas_q2                       final=   4.0 recall_hit=True found_rank=1
-    ragas_q3                       final=  10.0 recall_hit=True found_rank=1
-    ragas_q4                       final=   9.0 recall_hit=True found_rank=1
-    ragas_q5                       final=  10.0 recall_hit=True found_rank=1
-    selfrag_q1                     final=   9.0 recall_hit=True found_rank=1
-    selfrag_q2                     final=  10.0 recall_hit=True found_rank=1
-    selfrag_q3                     final=  10.0 recall_hit=True found_rank=1
-    selfrag_q4                     final=   4.0 recall_hit=True found_rank=1
-    selfrag_q5                     final=  10.0 recall_hit=True found_rank=2
-    filco_q1                       final=  10.0 recall_hit=True found_rank=1
-    filco_q2                       final=  10.0 recall_hit=True found_rank=1
-    filco_q3                       final=  10.0 recall_hit=True found_rank=1
-    filco_q4                       final=  10.0 recall_hit=True found_rank=1
-    filco_q5                       final=  10.0 recall_hit=True found_rank=1
-    ragsurvey_q1                   final=   0.0 recall_hit=True found_rank=1
-    ragsurvey_q2                   final=  10.0 recall_hit=True found_rank=1
-    ragsurvey_q3                   final= 88.25 recall_hit=True found_rank=1
-    ragsurvey_q4                   final=  10.0 recall_hit=True found_rank=1
-    ragsurvey_q5                   final=  10.0 recall_hit=True found_rank=1
-    crag_q1                        final=  10.0 recall_hit=True found_rank=1
-    crag_q2                        final=  10.0 recall_hit=True found_rank=1
-    crag_q3                        final=  10.0 recall_hit=True found_rank=1
-    crag_q4                        final=   0.0 recall_hit=True found_rank=1
-    crag_q5                        final=  10.0 recall_hit=True found_rank=1
-    adaptllm_q1                    final=  54.5 recall_hit=True found_rank=2
-    adaptllm_q2                    final=  10.0 recall_hit=True found_rank=1
-    adaptllm_q3                    final=  10.0 recall_hit=True found_rank=1
-    adaptllm_q4                    final=  10.0 recall_hit=True found_rank=1
-    adaptllm_q5                    final=  10.0 recall_hit=True found_rank=1
-    longrag_q1                     final=  10.0 recall_hit=True found_rank=1
-    longrag_q2                     final=  10.0 recall_hit=True found_rank=1
-    longrag_q3                     final=  10.0 recall_hit=True found_rank=1
-    longrag_q4                     final=  10.0 recall_hit=True found_rank=1
-    longrag_q5                     final=  10.0 recall_hit=True found_rank=1
-    ragbest_q1                     final=  10.0 recall_hit=True found_rank=1
-    ragbest_q2                     final=  10.0 recall_hit=True found_rank=1
-    ragbest_q3                     final=   4.0 recall_hit=True found_rank=1
-    ragbest_q4                     final=  10.0 recall_hit=True found_rank=4
-    ragbest_q5                     final=   0.0 recall_hit=True found_rank=1
-    raglc_q1                       final=   4.0 recall_hit=True found_rank=1
-    raglc_q2                       final=   9.0 recall_hit=True found_rank=1
-    raglc_q3                       final=  10.0 recall_hit=True found_rank=1
-    raglc_q4                       final=  10.0 recall_hit=True found_rank=1
-    raglc_q5                       final=  10.0 recall_hit=True found_rank=1
-    enhancingrag_q1                final=   9.0 recall_hit=True found_rank=1
-    enhancingrag_q2                final=   0.0 recall_hit=True found_rank=1
-    enhancingrag_q3                final=   0.0 recall_hit=True found_rank=1
-    enhancingrag_q4                final=   4.0 recall_hit=True found_rank=5
-    enhancingrag_q5                final=   4.0 recall_hit=True found_rank=3
-  Run 3 scores: final_score=9.89 | answer_correctness=1.33 | faithfulness=1.5 | context_recall=1.67 | context_precision=0.83 | citation_accuracy=86.33 | answer_parse_rate=100.0 | recall_at_k=100.0 | mrr_at_k=92.69 | avg_latency_s=26.641
-  Run 3 per-question:
-    queryrewrite_q1                final=   4.0 recall_hit=True found_rank=1
-    queryrewrite_q2                final=  10.0 recall_hit=True found_rank=1
-    queryrewrite_q3                final=  10.0 recall_hit=True found_rank=2
-    queryrewrite_q4                final=  10.0 recall_hit=True found_rank=1
-    queryrewrite_q5                final=  10.0 recall_hit=True found_rank=3
-    rgb_q1                         final=  10.0 recall_hit=True found_rank=1
-    rgb_q2                         final=  10.0 recall_hit=True found_rank=1
-    rgb_q3                         final=  10.0 recall_hit=True found_rank=1
-    rgb_q4                         final=  10.0 recall_hit=True found_rank=1
-    rgb_q5                         final=  10.0 recall_hit=True found_rank=1
-    ragas_q1                       final=   4.0 recall_hit=True found_rank=1
-    ragas_q2                       final=   9.0 recall_hit=True found_rank=1
-    ragas_q3                       final=  10.0 recall_hit=True found_rank=1
-    ragas_q4                       final=   9.0 recall_hit=True found_rank=1
-    ragas_q5                       final=   0.0 recall_hit=True found_rank=1
-    selfrag_q1                     final=   4.0 recall_hit=True found_rank=1
-    selfrag_q2                     final=   0.0 recall_hit=True found_rank=1
-    selfrag_q3                     final=  10.0 recall_hit=True found_rank=1
-    selfrag_q4                     final=  10.0 recall_hit=True found_rank=1
-    selfrag_q5                     final=   9.0 recall_hit=True found_rank=2
-    filco_q1                       final=   0.0 recall_hit=True found_rank=1
-    filco_q2                       final=  10.0 recall_hit=True found_rank=1
-    filco_q3                       final=  10.0 recall_hit=True found_rank=1
-    filco_q4                       final=  10.0 recall_hit=True found_rank=1
-    filco_q5                       final=  10.0 recall_hit=True found_rank=1
-    ragsurvey_q1                   final=  10.0 recall_hit=True found_rank=1
-    ragsurvey_q2                   final=  10.0 recall_hit=True found_rank=1
-    ragsurvey_q3                   final=  85.5 recall_hit=True found_rank=1
-    ragsurvey_q4                   final=  10.0 recall_hit=True found_rank=1
-    ragsurvey_q5                   final=   9.0 recall_hit=True found_rank=1
-    crag_q1                        final=  10.0 recall_hit=True found_rank=1
-    crag_q2                        final=  10.0 recall_hit=True found_rank=1
-    crag_q3                        final=  10.0 recall_hit=True found_rank=1
-    crag_q4                        final=  10.0 recall_hit=True found_rank=1
-    crag_q5                        final=  10.0 recall_hit=True found_rank=1
-    adaptllm_q1                    final=  10.0 recall_hit=True found_rank=2
-    adaptllm_q2                    final=  10.0 recall_hit=True found_rank=1
-    adaptllm_q3                    final=  10.0 recall_hit=True found_rank=1
-    adaptllm_q4                    final=  10.0 recall_hit=True found_rank=1
-    adaptllm_q5                    final=  10.0 recall_hit=True found_rank=1
-    longrag_q1                     final=  10.0 recall_hit=True found_rank=1
-    longrag_q2                     final=  10.0 recall_hit=True found_rank=1
-    longrag_q3                     final=  10.0 recall_hit=True found_rank=1
-    longrag_q4                     final=  10.0 recall_hit=True found_rank=1
-    longrag_q5                     final=  10.0 recall_hit=True found_rank=1
-    ragbest_q1                     final=  10.0 recall_hit=True found_rank=1
-    ragbest_q2                     final=  10.0 recall_hit=True found_rank=1
-    ragbest_q3                     final=   4.0 recall_hit=True found_rank=1
-    ragbest_q4                     final=  10.0 recall_hit=True found_rank=4
-    ragbest_q5                     final=   0.0 recall_hit=True found_rank=1
-    raglc_q1                       final=   4.0 recall_hit=True found_rank=1
-    raglc_q2                       final=   9.0 recall_hit=True found_rank=1
-    raglc_q3                       final=  10.0 recall_hit=True found_rank=1
-    raglc_q4                       final=  10.0 recall_hit=True found_rank=1
-    raglc_q5                       final=  10.0 recall_hit=True found_rank=1
-    enhancingrag_q1                final=   9.0 recall_hit=True found_rank=1
-    enhancingrag_q2                final=  10.0 recall_hit=True found_rank=1
-    enhancingrag_q3                final=  10.0 recall_hit=True found_rank=1
-    enhancingrag_q4                final=  10.0 recall_hit=True found_rank=5
-    enhancingrag_q5                final=   4.0 recall_hit=True found_rank=3
+    enhancingrag_q4                final= 100.0 recall_hit=True found_rank=4
+    enhancingrag_q5                final=  98.0 recall_hit=True found_rank=3
 
 Winner (highest mean): top5 (83.73)
-Interpretation: top10 pre-fix scores ~10 were a judge evaluation bug (not generator failure).
-  Judge context capped at 5 chunks; stored runs re-scored; 3 fresh runs scheduled post-fix.
-  Report top5 vs top7 for valid comparison; top10 corrected numbers after re-evaluation.
+Interpretation: top5 and top7 perform at baseline (~83.7). top10 drops ~19 pts (mean 64.14) — real performance degradation from context overload at generation, not judge bug. Pre-fix top10 (~10) archived in top10_PRE_FIX/ (judge overflow).
 
 === ABLATION A9 — Ablation 9 - Chunk Size ===
 Research question: Is 256 tokens actually optimal?
@@ -4701,7 +4699,7 @@ Summary table:
 Condition | Mean | Std | Delta | Run1 | Run2 | Run3
 128 | 78.06 | 1.01 | -5.16 | 78.8 | 78.47 | 76.91
 256 | 83.92 | 0.81 | +0.7 | 83.75 | 84.8 | 83.2
-512 | 14.08 | 0.49 | -69.14 | 14.41 | 14.32 | 13.52
+512 | 65.92 | 0.91 | -17.3 | 66.73 | 66.08 | 64.94
 
 --- Condition: 128 ---
 Config override: chunk_size=128
@@ -5083,196 +5081,195 @@ Config override: chunk_size=256
 
 --- Condition: 512 ---
 Config override: chunk_size=512
-  Run 1 scores: final_score=14.41 | answer_correctness=5.92 | faithfulness=6.0 | context_recall=6.67 | context_precision=4.75 | citation_accuracy=90.33 | answer_parse_rate=100.0 | recall_at_k=100.0 | mrr_at_k=88.17 | avg_latency_s=17.453
+  Run 1 scores: final_score=66.73 | answer_correctness=57.33 | faithfulness=64.25 | context_recall=78.42 | context_precision=62.5 | citation_accuracy=86.67 | answer_parse_rate=100.0 | recall_at_k=100.0 | mrr_at_k=88.17 | avg_latency_s=16.151
   Run 1 per-question:
-    queryrewrite_q1                final=  10.0 recall_hit=True found_rank=1
-    queryrewrite_q2                final=  10.0 recall_hit=True found_rank=1
-    queryrewrite_q3                final=  10.0 recall_hit=True found_rank=1
-    queryrewrite_q4                final=  10.0 recall_hit=True found_rank=2
-    queryrewrite_q5                final=   4.0 recall_hit=True found_rank=3
-    rgb_q1                         final=  10.0 recall_hit=True found_rank=1
-    rgb_q2                         final=   9.0 recall_hit=True found_rank=1
-    rgb_q3                         final=  10.0 recall_hit=True found_rank=1
-    rgb_q4                         final=  10.0 recall_hit=True found_rank=1
-    rgb_q5                         final=  10.0 recall_hit=True found_rank=1
-    ragas_q1                       final= 89.25 recall_hit=True found_rank=1
-    ragas_q2                       final=   4.0 recall_hit=True found_rank=1
-    ragas_q3                       final=  10.0 recall_hit=True found_rank=1
-    ragas_q4                       final= 89.75 recall_hit=True found_rank=1
-    ragas_q5                       final=  10.0 recall_hit=True found_rank=1
-    selfrag_q1                     final=  10.0 recall_hit=True found_rank=5
-    selfrag_q2                     final=   9.0 recall_hit=True found_rank=1
-    selfrag_q3                     final=  10.0 recall_hit=True found_rank=1
-    selfrag_q4                     final=  17.0 recall_hit=True found_rank=1
-    selfrag_q5                     final=  10.0 recall_hit=True found_rank=2
-    filco_q1                       final=  10.0 recall_hit=True found_rank=1
-    filco_q2                       final=  10.0 recall_hit=True found_rank=1
-    filco_q3                       final=  10.0 recall_hit=True found_rank=1
-    filco_q4                       final=  10.0 recall_hit=True found_rank=1
-    filco_q5                       final=  10.0 recall_hit=True found_rank=1
-    ragsurvey_q1                   final=  10.0 recall_hit=True found_rank=1
-    ragsurvey_q2                   final=  10.0 recall_hit=True found_rank=2
-    ragsurvey_q3                   final= 89.75 recall_hit=True found_rank=1
-    ragsurvey_q4                   final=  10.0 recall_hit=True found_rank=2
-    ragsurvey_q5                   final=  10.0 recall_hit=True found_rank=1
-    crag_q1                        final=  10.0 recall_hit=True found_rank=1
-    crag_q2                        final=  10.0 recall_hit=True found_rank=1
-    crag_q3                        final=  10.0 recall_hit=True found_rank=1
-    crag_q4                        final=   0.0 recall_hit=True found_rank=1
-    crag_q5                        final=  10.0 recall_hit=True found_rank=1
-    adaptllm_q1                    final=  10.0 recall_hit=True found_rank=2
-    adaptllm_q2                    final=  10.0 recall_hit=True found_rank=1
-    adaptllm_q3                    final=  87.0 recall_hit=True found_rank=1
-    adaptllm_q4                    final=  10.0 recall_hit=True found_rank=1
-    adaptllm_q5                    final=  10.0 recall_hit=True found_rank=1
-    longrag_q1                     final=  10.0 recall_hit=True found_rank=1
-    longrag_q2                     final=  10.0 recall_hit=True found_rank=1
-    longrag_q3                     final=  10.0 recall_hit=True found_rank=1
-    longrag_q4                     final=  10.0 recall_hit=True found_rank=1
-    longrag_q5                     final=  10.0 recall_hit=True found_rank=1
-    ragbest_q1                     final=   4.0 recall_hit=True found_rank=1
-    ragbest_q2                     final=  10.0 recall_hit=True found_rank=3
-    ragbest_q3                     final=   4.0 recall_hit=True found_rank=1
-    ragbest_q4                     final=   4.0 recall_hit=True found_rank=2
-    ragbest_q5                     final=  10.0 recall_hit=True found_rank=1
-    raglc_q1                       final=  10.0 recall_hit=True found_rank=1
-    raglc_q2                       final=  10.0 recall_hit=True found_rank=1
-    raglc_q3                       final=  10.0 recall_hit=True found_rank=1
-    raglc_q4                       final=  10.0 recall_hit=True found_rank=1
-    raglc_q5                       final=  10.0 recall_hit=True found_rank=1
-    enhancingrag_q1                final=   4.0 recall_hit=True found_rank=1
-    enhancingrag_q2                final=  10.0 recall_hit=True found_rank=1
-    enhancingrag_q3                final=  10.0 recall_hit=True found_rank=3
-    enhancingrag_q4                final=   0.0 recall_hit=True found_rank=5
-    enhancingrag_q5                final=  10.0 recall_hit=True found_rank=2
-  Run 2 scores: final_score=14.32 | answer_correctness=5.42 | faithfulness=5.5 | context_recall=6.5 | context_precision=4.33 | citation_accuracy=93.17 | answer_parse_rate=100.0 | recall_at_k=100.0 | mrr_at_k=88.17 | avg_latency_s=17.963
-  Run 2 per-question:
-    queryrewrite_q1                final=   8.0 recall_hit=True found_rank=1
-    queryrewrite_q2                final=   9.0 recall_hit=True found_rank=1
-    queryrewrite_q3                final=  10.0 recall_hit=True found_rank=1
-    queryrewrite_q4                final=  10.0 recall_hit=True found_rank=2
+    queryrewrite_q1                final=  81.5 recall_hit=True found_rank=1
+    queryrewrite_q2                final= 83.75 recall_hit=True found_rank=1
+    queryrewrite_q3                final= 82.25 recall_hit=True found_rank=1
+    queryrewrite_q4                final=  81.0 recall_hit=True found_rank=2
     queryrewrite_q5                final=  10.0 recall_hit=True found_rank=3
-    rgb_q1                         final=  10.0 recall_hit=True found_rank=1
-    rgb_q2                         final=  10.0 recall_hit=True found_rank=1
-    rgb_q3                         final=  10.0 recall_hit=True found_rank=1
-    rgb_q4                         final=  10.0 recall_hit=True found_rank=1
-    rgb_q5                         final=  10.0 recall_hit=True found_rank=1
-    ragas_q1                       final= 80.75 recall_hit=True found_rank=1
-    ragas_q2                       final=  10.0 recall_hit=True found_rank=1
-    ragas_q3                       final=  10.0 recall_hit=True found_rank=1
+    rgb_q1                         final= 85.75 recall_hit=True found_rank=1
+    rgb_q2                         final=  77.5 recall_hit=True found_rank=1
+    rgb_q3                         final=  69.5 recall_hit=True found_rank=1
+    rgb_q4                         final=  65.5 recall_hit=True found_rank=1
+    rgb_q5                         final= 82.75 recall_hit=True found_rank=1
+    ragas_q1                       final= 89.75 recall_hit=True found_rank=1
+    ragas_q2                       final= 80.75 recall_hit=True found_rank=1
+    ragas_q3                       final=  60.5 recall_hit=True found_rank=1
     ragas_q4                       final= 89.25 recall_hit=True found_rank=1
-    ragas_q5                       final=   9.0 recall_hit=True found_rank=1
-    selfrag_q1                     final=   9.0 recall_hit=True found_rank=5
-    selfrag_q2                     final=  10.0 recall_hit=True found_rank=1
-    selfrag_q3                     final=  10.0 recall_hit=True found_rank=1
-    selfrag_q4                     final=  10.0 recall_hit=True found_rank=1
-    selfrag_q5                     final=  10.0 recall_hit=True found_rank=2
-    filco_q1                       final=  10.0 recall_hit=True found_rank=1
-    filco_q2                       final=  10.0 recall_hit=True found_rank=1
-    filco_q3                       final=  10.0 recall_hit=True found_rank=1
-    filco_q4                       final=  10.0 recall_hit=True found_rank=1
-    filco_q5                       final=  10.0 recall_hit=True found_rank=1
-    ragsurvey_q1                   final=  10.0 recall_hit=True found_rank=1
-    ragsurvey_q2                   final=  10.0 recall_hit=True found_rank=2
-    ragsurvey_q3                   final=  87.5 recall_hit=True found_rank=1
-    ragsurvey_q4                   final=  10.0 recall_hit=True found_rank=2
-    ragsurvey_q5                   final=   9.0 recall_hit=True found_rank=1
-    crag_q1                        final=  10.0 recall_hit=True found_rank=1
-    crag_q2                        final=  10.0 recall_hit=True found_rank=1
-    crag_q3                        final=  10.0 recall_hit=True found_rank=1
-    crag_q4                        final=  10.0 recall_hit=True found_rank=1
-    crag_q5                        final=  10.0 recall_hit=True found_rank=1
-    adaptllm_q1                    final=   4.0 recall_hit=True found_rank=2
-    adaptllm_q2                    final=  10.0 recall_hit=True found_rank=1
+    ragas_q5                       final=  45.5 recall_hit=True found_rank=1
+    selfrag_q1                     final=  47.5 recall_hit=True found_rank=5
+    selfrag_q2                     final=  68.5 recall_hit=True found_rank=1
+    selfrag_q3                     final= 81.75 recall_hit=True found_rank=1
+    selfrag_q4                     final=  43.0 recall_hit=True found_rank=1
+    selfrag_q5                     final=  64.5 recall_hit=True found_rank=2
+    filco_q1                       final=  78.0 recall_hit=True found_rank=1
+    filco_q2                       final=  80.5 recall_hit=True found_rank=1
+    filco_q3                       final= 80.75 recall_hit=True found_rank=1
+    filco_q4                       final=  69.5 recall_hit=True found_rank=1
+    filco_q5                       final=  81.5 recall_hit=True found_rank=1
+    ragsurvey_q1                   final= 82.25 recall_hit=True found_rank=1
+    ragsurvey_q2                   final=  53.0 recall_hit=True found_rank=2
+    ragsurvey_q3                   final= 89.75 recall_hit=True found_rank=1
+    ragsurvey_q4                   final=  37.5 recall_hit=True found_rank=2
+    ragsurvey_q5                   final=  28.5 recall_hit=True found_rank=1
+    crag_q1                        final= 89.75 recall_hit=True found_rank=1
+    crag_q2                        final= 87.75 recall_hit=True found_rank=1
+    crag_q3                        final=  88.0 recall_hit=True found_rank=1
+    crag_q4                        final= 90.75 recall_hit=True found_rank=1
+    crag_q5                        final=  74.5 recall_hit=True found_rank=1
+    adaptllm_q1                    final=  81.5 recall_hit=True found_rank=2
+    adaptllm_q2                    final=   9.0 recall_hit=True found_rank=1
     adaptllm_q3                    final= 82.75 recall_hit=True found_rank=1
-    adaptllm_q4                    final=  10.0 recall_hit=True found_rank=1
-    adaptllm_q5                    final=  10.0 recall_hit=True found_rank=1
-    longrag_q1                     final=  10.0 recall_hit=True found_rank=1
-    longrag_q2                     final=  10.0 recall_hit=True found_rank=1
-    longrag_q3                     final=  10.0 recall_hit=True found_rank=1
-    longrag_q4                     final=  10.0 recall_hit=True found_rank=1
-    longrag_q5                     final=  10.0 recall_hit=True found_rank=1
-    ragbest_q1                     final=  10.0 recall_hit=True found_rank=1
-    ragbest_q2                     final=  10.0 recall_hit=True found_rank=3
-    ragbest_q3                     final=  10.0 recall_hit=True found_rank=1
-    ragbest_q4                     final=   4.0 recall_hit=True found_rank=2
-    ragbest_q5                     final=  10.0 recall_hit=True found_rank=1
-    raglc_q1                       final=  10.0 recall_hit=True found_rank=1
-    raglc_q2                       final=   0.0 recall_hit=True found_rank=1
-    raglc_q3                       final=  10.0 recall_hit=True found_rank=1
-    raglc_q4                       final=  10.0 recall_hit=True found_rank=1
-    raglc_q5                       final=  10.0 recall_hit=True found_rank=1
-    enhancingrag_q1                final=   9.0 recall_hit=True found_rank=1
-    enhancingrag_q2                final=   9.0 recall_hit=True found_rank=1
-    enhancingrag_q3                final=   9.0 recall_hit=True found_rank=3
-    enhancingrag_q4                final=   0.0 recall_hit=True found_rank=5
-    enhancingrag_q5                final=  10.0 recall_hit=True found_rank=2
-  Run 3 scores: final_score=13.52 | answer_correctness=5.58 | faithfulness=6.0 | context_recall=6.67 | context_precision=4.83 | citation_accuracy=82.5 | answer_parse_rate=100.0 | recall_at_k=100.0 | mrr_at_k=88.17 | avg_latency_s=17.946
-  Run 3 per-question:
-    queryrewrite_q1                final=   8.0 recall_hit=True found_rank=1
-    queryrewrite_q2                final=   9.0 recall_hit=True found_rank=1
-    queryrewrite_q3                final=  10.0 recall_hit=True found_rank=1
-    queryrewrite_q4                final=   0.0 recall_hit=True found_rank=2
-    queryrewrite_q5                final=   4.0 recall_hit=True found_rank=3
-    rgb_q1                         final=  10.0 recall_hit=True found_rank=1
-    rgb_q2                         final=   4.0 recall_hit=True found_rank=1
-    rgb_q3                         final=   9.0 recall_hit=True found_rank=1
-    rgb_q4                         final=  10.0 recall_hit=True found_rank=1
-    rgb_q5                         final=  10.0 recall_hit=True found_rank=1
-    ragas_q1                       final= 88.75 recall_hit=True found_rank=1
-    ragas_q2                       final=  10.0 recall_hit=True found_rank=1
-    ragas_q3                       final=  10.0 recall_hit=True found_rank=1
-    ragas_q4                       final= 89.25 recall_hit=True found_rank=1
-    ragas_q5                       final=  10.0 recall_hit=True found_rank=1
-    selfrag_q1                     final=  10.0 recall_hit=True found_rank=5
-    selfrag_q2                     final=   9.0 recall_hit=True found_rank=1
-    selfrag_q3                     final=  10.0 recall_hit=True found_rank=1
-    selfrag_q4                     final=  10.0 recall_hit=True found_rank=1
-    selfrag_q5                     final=  10.0 recall_hit=True found_rank=2
-    filco_q1                       final=  10.0 recall_hit=True found_rank=1
-    filco_q2                       final=  10.0 recall_hit=True found_rank=1
-    filco_q3                       final=   0.0 recall_hit=True found_rank=1
-    filco_q4                       final=  10.0 recall_hit=True found_rank=1
-    filco_q5                       final=  10.0 recall_hit=True found_rank=1
-    ragsurvey_q1                   final=  10.0 recall_hit=True found_rank=1
-    ragsurvey_q2                   final=  10.0 recall_hit=True found_rank=2
-    ragsurvey_q3                   final=  87.5 recall_hit=True found_rank=1
-    ragsurvey_q4                   final=  10.0 recall_hit=True found_rank=2
-    ragsurvey_q5                   final=  10.0 recall_hit=True found_rank=1
-    crag_q1                        final=  10.0 recall_hit=True found_rank=1
-    crag_q2                        final=  10.0 recall_hit=True found_rank=1
-    crag_q3                        final=   0.0 recall_hit=True found_rank=1
-    crag_q4                        final=  10.0 recall_hit=True found_rank=1
-    crag_q5                        final=  10.0 recall_hit=True found_rank=1
-    adaptllm_q1                    final=   8.0 recall_hit=True found_rank=2
-    adaptllm_q2                    final=  10.0 recall_hit=True found_rank=1
+    adaptllm_q4                    final=  41.5 recall_hit=True found_rank=1
+    adaptllm_q5                    final=  81.5 recall_hit=True found_rank=1
+    longrag_q1                     final= 83.25 recall_hit=True found_rank=1
+    longrag_q2                     final= 80.25 recall_hit=True found_rank=1
+    longrag_q3                     final=  87.5 recall_hit=True found_rank=1
+    longrag_q4                     final=  34.5 recall_hit=True found_rank=1
+    longrag_q5                     final=  49.0 recall_hit=True found_rank=1
+    ragbest_q1                     final=  49.5 recall_hit=True found_rank=1
+    ragbest_q2                     final=  61.5 recall_hit=True found_rank=3
+    ragbest_q3                     final=   4.0 recall_hit=True found_rank=1
+    ragbest_q4                     final= 91.75 recall_hit=True found_rank=2
+    ragbest_q5                     final=  53.0 recall_hit=True found_rank=1
+    raglc_q1                       final=  52.0 recall_hit=True found_rank=1
+    raglc_q2                       final= 80.25 recall_hit=True found_rank=1
+    raglc_q3                       final= 89.25 recall_hit=True found_rank=1
+    raglc_q4                       final= 82.25 recall_hit=True found_rank=1
+    raglc_q5                       final= 84.75 recall_hit=True found_rank=1
+    enhancingrag_q1                final=  46.5 recall_hit=True found_rank=1
+    enhancingrag_q2                final= 83.75 recall_hit=True found_rank=1
+    enhancingrag_q3                final=  47.0 recall_hit=True found_rank=3
+    enhancingrag_q4                final=  10.0 recall_hit=True found_rank=5
+    enhancingrag_q5                final=  35.0 recall_hit=True found_rank=2
+  Run 2 scores: final_score=66.08 | answer_correctness=56.08 | faithfulness=62.42 | context_recall=78.83 | context_precision=62.0 | citation_accuracy=88.83 | answer_parse_rate=100.0 | recall_at_k=100.0 | mrr_at_k=88.17 | avg_latency_s=15.616
+  Run 2 per-question:
+    queryrewrite_q1                final= 84.75 recall_hit=True found_rank=1
+    queryrewrite_q2                final= 80.75 recall_hit=True found_rank=1
+    queryrewrite_q3                final=  69.5 recall_hit=True found_rank=1
+    queryrewrite_q4                final=  78.5 recall_hit=True found_rank=2
+    queryrewrite_q5                final=  32.5 recall_hit=True found_rank=3
+    rgb_q1                         final= 97.25 recall_hit=True found_rank=1
+    rgb_q2                         final=  38.0 recall_hit=True found_rank=1
+    rgb_q3                         final=  65.5 recall_hit=True found_rank=1
+    rgb_q4                         final=  60.5 recall_hit=True found_rank=1
+    rgb_q5                         final= 81.25 recall_hit=True found_rank=1
+    ragas_q1                       final= 90.25 recall_hit=True found_rank=1
+    ragas_q2                       final= 87.25 recall_hit=True found_rank=1
+    ragas_q3                       final=  70.5 recall_hit=True found_rank=1
+    ragas_q4                       final= 82.75 recall_hit=True found_rank=1
+    ragas_q5                       final=  65.5 recall_hit=True found_rank=1
+    selfrag_q1                     final=  38.5 recall_hit=True found_rank=5
+    selfrag_q2                     final=  70.5 recall_hit=True found_rank=1
+    selfrag_q3                     final= 84.25 recall_hit=True found_rank=1
+    selfrag_q4                     final=  55.0 recall_hit=True found_rank=1
+    selfrag_q5                     final=  62.0 recall_hit=True found_rank=2
+    filco_q1                       final=  66.5 recall_hit=True found_rank=1
+    filco_q2                       final=  44.0 recall_hit=True found_rank=1
+    filco_q3                       final= 81.75 recall_hit=True found_rank=1
+    filco_q4                       final=  70.5 recall_hit=True found_rank=1
+    filco_q5                       final=  82.5 recall_hit=True found_rank=1
+    ragsurvey_q1                   final=  67.0 recall_hit=True found_rank=1
+    ragsurvey_q2                   final=  48.5 recall_hit=True found_rank=2
+    ragsurvey_q3                   final= 91.25 recall_hit=True found_rank=1
+    ragsurvey_q4                   final=  42.0 recall_hit=True found_rank=2
+    ragsurvey_q5                   final=  60.5 recall_hit=True found_rank=1
+    crag_q1                        final=  88.0 recall_hit=True found_rank=1
+    crag_q2                        final= 90.25 recall_hit=True found_rank=1
+    crag_q3                        final=  90.0 recall_hit=True found_rank=1
+    crag_q4                        final=  81.5 recall_hit=True found_rank=1
+    crag_q5                        final= 79.75 recall_hit=True found_rank=1
+    adaptllm_q1                    final=  35.5 recall_hit=True found_rank=2
+    adaptllm_q2                    final=  21.0 recall_hit=True found_rank=1
     adaptllm_q3                    final= 89.75 recall_hit=True found_rank=1
-    adaptllm_q4                    final=  10.0 recall_hit=True found_rank=1
-    adaptllm_q5                    final=   0.0 recall_hit=True found_rank=1
-    longrag_q1                     final=  10.0 recall_hit=True found_rank=1
-    longrag_q2                     final=  10.0 recall_hit=True found_rank=1
-    longrag_q3                     final=  10.0 recall_hit=True found_rank=1
-    longrag_q4                     final=   0.0 recall_hit=True found_rank=1
-    longrag_q5                     final=  10.0 recall_hit=True found_rank=1
-    ragbest_q1                     final=  10.0 recall_hit=True found_rank=1
-    ragbest_q2                     final=  10.0 recall_hit=True found_rank=3
-    ragbest_q3                     final=   0.0 recall_hit=True found_rank=1
-    ragbest_q4                     final=  10.0 recall_hit=True found_rank=2
-    ragbest_q5                     final=  10.0 recall_hit=True found_rank=1
-    raglc_q1                       final=   9.0 recall_hit=True found_rank=1
-    raglc_q2                       final=   9.0 recall_hit=True found_rank=1
-    raglc_q3                       final=  10.0 recall_hit=True found_rank=1
-    raglc_q4                       final=  10.0 recall_hit=True found_rank=1
-    raglc_q5                       final=  10.0 recall_hit=True found_rank=1
-    enhancingrag_q1                final=   4.0 recall_hit=True found_rank=1
-    enhancingrag_q2                final=   9.0 recall_hit=True found_rank=1
-    enhancingrag_q3                final=   4.0 recall_hit=True found_rank=3
-    enhancingrag_q4                final=   0.0 recall_hit=True found_rank=5
-    enhancingrag_q5                final=  10.0 recall_hit=True found_rank=2
+    adaptllm_q4                    final= 82.25 recall_hit=True found_rank=1
+    adaptllm_q5                    final=  81.5 recall_hit=True found_rank=1
+    longrag_q1                     final= 81.25 recall_hit=True found_rank=1
+    longrag_q2                     final= 89.25 recall_hit=True found_rank=1
+    longrag_q3                     final=  59.5 recall_hit=True found_rank=1
+    longrag_q4                     final=  95.0 recall_hit=True found_rank=1
+    longrag_q5                     final=  65.5 recall_hit=True found_rank=1
+    ragbest_q1                     final=  37.5 recall_hit=True found_rank=1
+    ragbest_q2                     final=  55.0 recall_hit=True found_rank=3
+    ragbest_q3                     final=  10.0 recall_hit=True found_rank=1
+    ragbest_q4                     final=  94.0 recall_hit=True found_rank=2
+    ragbest_q5                     final=  49.0 recall_hit=True found_rank=1
+    raglc_q1                       final=  38.5 recall_hit=True found_rank=1
+    raglc_q2                       final=  60.5 recall_hit=True found_rank=1
+    raglc_q3                       final=  77.5 recall_hit=True found_rank=1
+    raglc_q4                       final=  53.5 recall_hit=True found_rank=1
+    raglc_q5                       final=  87.5 recall_hit=True found_rank=1
+    enhancingrag_q1                final=  45.0 recall_hit=True found_rank=1
+    enhancingrag_q2                final=  84.0 recall_hit=True found_rank=1
+    enhancingrag_q3                final=  30.5 recall_hit=True found_rank=3
+    enhancingrag_q4                final=  10.0 recall_hit=True found_rank=5
+    enhancingrag_q5                final=  53.0 recall_hit=True found_rank=2
+  Run 3 scores: final_score=64.94 | answer_correctness=55.83 | faithfulness=60.83 | context_recall=74.67 | context_precision=63.58 | citation_accuracy=89.0 | answer_parse_rate=100.0 | recall_at_k=100.0 | mrr_at_k=88.17 | avg_latency_s=15.63
+  Run 3 per-question:
+    queryrewrite_q1                final= 84.25 recall_hit=True found_rank=1
+    queryrewrite_q2                final= 89.25 recall_hit=True found_rank=1
+    queryrewrite_q3                final= 79.75 recall_hit=True found_rank=1
+    queryrewrite_q4                final=  69.5 recall_hit=True found_rank=2
+    queryrewrite_q5                final=   4.0 recall_hit=True found_rank=3
+    rgb_q1                         final= 90.75 recall_hit=True found_rank=1
+    rgb_q2                         final=  62.0 recall_hit=True found_rank=1
+    rgb_q3                         final=  41.5 recall_hit=True found_rank=1
+    rgb_q4                         final=  64.5 recall_hit=True found_rank=1
+    rgb_q5                         final=  69.0 recall_hit=True found_rank=1
+    ragas_q1                       final=  82.0 recall_hit=True found_rank=1
+    ragas_q2                       final=  92.0 recall_hit=True found_rank=1
+    ragas_q3                       final=  66.5 recall_hit=True found_rank=1
+    ragas_q4                       final= 89.75 recall_hit=True found_rank=1
+    ragas_q5                       final=  60.5 recall_hit=True found_rank=1
+    selfrag_q1                     final=  39.0 recall_hit=True found_rank=5
+    selfrag_q2                     final=  72.5 recall_hit=True found_rank=1
+    selfrag_q3                     final= 82.75 recall_hit=True found_rank=1
+    selfrag_q4                     final=  47.0 recall_hit=True found_rank=1
+    selfrag_q5                     final=  71.5 recall_hit=True found_rank=2
+    filco_q1                       final=  83.0 recall_hit=True found_rank=1
+    filco_q2                       final=  69.5 recall_hit=True found_rank=1
+    filco_q3                       final=  69.5 recall_hit=True found_rank=1
+    filco_q4                       final= 80.75 recall_hit=True found_rank=1
+    filco_q5                       final= 82.75 recall_hit=True found_rank=1
+    ragsurvey_q1                   final=  22.0 recall_hit=True found_rank=1
+    ragsurvey_q2                   final=  45.5 recall_hit=True found_rank=2
+    ragsurvey_q3                   final= 92.25 recall_hit=True found_rank=1
+    ragsurvey_q4                   final=  41.0 recall_hit=True found_rank=2
+    ragsurvey_q5                   final=  34.5 recall_hit=True found_rank=1
+    crag_q1                        final= 84.25 recall_hit=True found_rank=1
+    crag_q2                        final= 89.75 recall_hit=True found_rank=1
+    crag_q3                        final=  98.5 recall_hit=True found_rank=1
+    crag_q4                        final=  71.5 recall_hit=True found_rank=1
+    crag_q5                        final= 82.75 recall_hit=True found_rank=1
+    adaptllm_q1                    final=  79.5 recall_hit=True found_rank=2
+    adaptllm_q2                    final=  25.0 recall_hit=True found_rank=1
+    adaptllm_q3                    final= 81.25 recall_hit=True found_rank=1
+    adaptllm_q4                    final=  46.5 recall_hit=True found_rank=1
+    adaptllm_q5                    final=  80.0 recall_hit=True found_rank=1
+    longrag_q1                     final=  80.5 recall_hit=True found_rank=1
+    longrag_q2                     final=  54.0 recall_hit=True found_rank=1
+    longrag_q3                     final= 82.75 recall_hit=True found_rank=1
+    longrag_q4                     final= 81.25 recall_hit=True found_rank=1
+    longrag_q5                     final=  49.0 recall_hit=True found_rank=1
+    ragbest_q1                     final=  49.0 recall_hit=True found_rank=1
+    ragbest_q2                     final=  69.0 recall_hit=True found_rank=3
+    ragbest_q3                     final=   4.0 recall_hit=True found_rank=1
+    ragbest_q4                     final= 93.75 recall_hit=True found_rank=2
+    ragbest_q5                     final=  53.0 recall_hit=True found_rank=1
+    raglc_q1                       final=  53.0 recall_hit=True found_rank=1
+    raglc_q2                       final=  47.5 recall_hit=True found_rank=1
+    raglc_q3                       final= 81.75 recall_hit=True found_rank=1
+    raglc_q4                       final= 89.25 recall_hit=True found_rank=1
+    raglc_q5                       final= 84.25 recall_hit=True found_rank=1
+    enhancingrag_q1                final=  43.5 recall_hit=True found_rank=1
+    enhancingrag_q2                final= 85.75 recall_hit=True found_rank=1
+    enhancingrag_q3                final=  32.5 recall_hit=True found_rank=3
+    enhancingrag_q4                final=  10.0 recall_hit=True found_rank=5
+    enhancingrag_q5                final=  35.0 recall_hit=True found_rank=2
 
 Winner (highest mean): 256 (83.92)
-Interpretation: chunk 256 optimal among valid sizes. 512 pre-fix scores ~14 were judge bug
-  (same root cause as A8 top10); re-scored and re-run with judge context cap.
+Interpretation: chunk 256 optimal (83.92). 128 loses ~6 pts; 512 loses ~18 pts (mean 65.92 post-fix). Pre-fix 512 (~14) was judge bug; corrected runs in 512/.
 
 ===================================================================
 9. FINDINGS SUMMARY
@@ -5302,8 +5299,8 @@ FINDING 5 — Query format sensitivity (BEIR)
 
 FINDING 6 — Ablation component contributions (valid runs only)
   Largest positive deltas: A5 bge-large (+0.95), A3 xml (+0.88), A8 top5 (+0.51)
-  Largest negative deltas: A4 top_sentences_5 (-14.33), A2 llama3.1-8b (-9.49), A6 none (-5.15)
-  A7 hyde hurt (-1.8). A1 retriever type negligible (~-1 pt).
+  Largest negative deltas: A4 top_sentences_5 (-14.33), A8 top10 (-19.08), A9 512 (-17.30)
+  A2 llama3.1-8b (-9.49), A6 none (-5.15), A7 hyde (-1.8). A1 retriever negligible (~-1 pt).
   A8 top7 post-fix: 83.72 ± 1.54 (vs 82.64 pre-fix — judge cap minimal effect).
 
 FINDING 7 — Judge context overflow (methodological discovery)
@@ -5311,8 +5308,8 @@ FINDING 7 — Judge context overflow (methodological discovery)
   pipeline failures. Judge returns schema-violating JSON when context >~2,500 tokens;
   LLM-judged metrics zero out while citation_accuracy (~80%) remains.
   Fix: cap judge input at 5 chunks / 1920 words. Pre-fix runs in *_PRE_FIX folders.
-  Re-runs in progress for top10 and 512. Broadly applicable hazard for LLM-as-judge
-  papers using variable top-k or large chunk sizes.
+  Post-fix: A8 top10 mean 64.14 (real degradation); A9 512 mean 65.92 (real degradation).
+  Broadly applicable hazard for LLM-as-judge papers using variable top-k or large chunks.
 
 ===================================================================
 10. PAPER NOTES
@@ -5373,10 +5370,10 @@ ARCHIVED PRE-FIX CONDITIONS (for before/after paper evidence):
   Ablation 9 - Chunk Size/512_PRE_FIX/ broken judge: 14.41, 14.32, 13.52
   Original data also in experiments/Results/runs/061-063 (top10), 070-072 (512).
 
-POST-FIX RE-RUN STATUS:
+POST-FIX RE-RUN STATUS (ALL COMPLETE 2026-06-29):
   A8 top7:  DONE — 82.61, 83.08, 85.48 (mean 83.72)
-  A8 top10: IN PROGRESS — supervisor safe mode, WSL2 segfaults during run
-  A9 512:   PENDING
+  A8 top10: DONE — 66.56, 63.23, 62.62 (mean 64.14)
+  A9 512:   DONE — 66.73, 66.08, 64.94 (mean 65.92)
 
 SAFE OVERNIGHT COMMANDS (Ubuntu terminal, tmux recommended):
   .venv/bin/python run_ablation_resilient.py --safe --repair-venv --until-complete \
@@ -5401,3 +5398,41 @@ STABLE MODE DEFAULTS (ablation/stable.py, all ablation runs):
   10min question timeout (20min on 5th attempt)
   CPU embeddings (RAG_CPU_EMBED=1), subprocess per question
   Supervisor --safe adds: 120s retry, +60s post-segfault cooldown, 90min stall timeout
+
+===================================================================
+12. COMPLETION VALIDATION (automated audit)
+===================================================================
+Audit timestamp: 2026-06-29 19:44:13
+Criterion: each condition has 3 runs with scores.json (60 questions each).
+Archived *_PRE_FIX folders excluded from summary statistics.
+
+  Locked Baseline: 3/3 runs complete
+  Ablation 1 - Retriever Type/dense: 3/3 runs  mean=82.06
+  Ablation 1 - Retriever Type/hybrid: 3/3 runs  mean=82.19
+  Ablation 2 - Generator Model Size/llama3.1-8b: 3/3 runs  mean=73.73
+  Ablation 2 - Generator Model Size/qwen2.5-14b: 3/3 runs  mean=83.59
+  Ablation 3 - Output Format/json: 3/3 runs  mean=83.59
+  Ablation 3 - Output Format/xml: 3/3 runs  mean=84.1
+  Ablation 4 - Context Filter/none: 3/3 runs  mean=82.85
+  Ablation 4 - Context Filter/top_sentences_10: 3/3 runs  mean=78.99
+  Ablation 4 - Context Filter/top_sentences_5: 3/3 runs  mean=68.89
+  Ablation 5 - Embedding Model/bge-small: 3/3 runs  mean=83.05
+  Ablation 5 - Embedding Model/bge-large: 3/3 runs  mean=84.17
+  Ablation 6 - Reranker/bge: 3/3 runs  mean=83.53
+  Ablation 6 - Reranker/none: 3/3 runs  mean=78.07
+  Ablation 7 - Query Transformation/none: 3/3 runs  mean=83.21
+  Ablation 7 - Query Transformation/hyde: 3/3 runs  mean=81.42
+  Ablation 8 - Top-K/top5: 3/3 runs  mean=83.73
+  Ablation 8 - Top-K/top7: 3/3 runs  mean=83.72
+  Ablation 8 - Top-K/top10: 3/3 runs  mean=64.14
+  Ablation 9 - Chunk Size/128: 3/3 runs  mean=78.06
+  Ablation 9 - Chunk Size/256: 3/3 runs  mean=83.92
+  Ablation 9 - Chunk Size/512: 3/3 runs  mean=65.92
+
+BEIR (single run each, 50 questions):
+  BEIR - NFCorpus: final_score=32.21
+  BEIR - SciFact: final_score=56.73
+  BEIR - FiQA: final_score=45.15
+
+TOTAL RAG-PAPER ABLATION RUNS: 66 (expected 57 = 3 locked + 18 conditions × 3)
+STATUS: ALL PHASES COMPLETE — ready for paper writing.
