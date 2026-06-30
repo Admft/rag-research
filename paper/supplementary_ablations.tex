@@ -1,0 +1,59 @@
+% Optional supplementary material (not part of 4-page submission).
+% Compile separately or attach as supplementary PDF on OpenReview if allowed.
+
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs}
+\usepackage{times}
+
+\title{Supplementary: Full Ablation Grid\\\large When RAG Evaluation Fails Silently}
+\author{Anonymous}
+\date{}
+
+\begin{document}
+\maketitle
+
+Table~\ref{tab:full} reports all nine ablations (3 runs each; post-fix scores for A8 top-$k{=}10$ and A9 chunk-512).
+$\Delta$ is vs.\ locked baseline run 007 (83.22).
+Sampling noise floor from 3$\times$ baseline replication: $\sigma{=}1.52$.
+
+\begin{table}[h]
+  \centering
+  \small
+  \begin{tabular}{llrr}
+    \toprule
+    \textbf{Ablation} & \textbf{Condition} & \textbf{Mean $\pm$ SD} & \textbf{$\Delta$} \\
+    \midrule
+    A1 Retriever & hybrid & 82.2 $\pm$ 2.4 & $-$1.0 \\
+                 & dense  & 82.1 $\pm$ 0.8 & $-$1.2 \\
+    A2 Generator & Qwen2.5-14B & 83.6 $\pm$ 0.5 & $+$0.4 \\
+                 & Llama3.1-8B & 73.7 $\pm$ 1.2 & $-$9.5 \\
+    A3 Format    & JSON & 83.6 $\pm$ 0.6 & $+$0.4 \\
+                 & XML  & 84.1 $\pm$ 1.5 & $+$0.9 \\
+    A4 Filter    & none & 82.9 $\pm$ 1.0 & $-$0.4 \\
+                 & top-10 sent. & 79.0 $\pm$ 0.7 & $-$4.2 \\
+                 & top-5 sent.  & 68.9 $\pm$ 0.5 & $-$14.3 \\
+    A5 Embedding & bge-small & 83.1 $\pm$ 0.9 & $-$0.2 \\
+                 & bge-large & 84.2 $\pm$ 0.6 & $+$1.0 \\
+    A6 Reranker  & BGE & 83.5 $\pm$ 0.7 & $+$0.3 \\
+                 & none & 78.1 $\pm$ 1.7 & $-$5.2 \\
+    A7 Query     & none & 83.2 $\pm$ 1.4 & $-$0.0 \\
+                 & HyDE & 81.4 $\pm$ 1.0 & $-$1.8 \\
+    A8 Top-$k$   & 5  & 83.7 $\pm$ 1.3 & $+$0.5 \\
+                 & 7  & 83.7 $\pm$ 1.5 & $+$0.5 \\
+                 & 10 (post-fix) & 64.1 $\pm$ 2.1 & $-$19.1 \\
+    A9 Chunk     & 128 & 78.1 $\pm$ 1.0 & $-$5.2 \\
+                 & 256 & 83.9 $\pm$ 0.8 & $+$0.7 \\
+                 & 512 (post-fix) & 65.9 $\pm$ 0.9 & $-$17.3 \\
+    Baseline     & 3$\times$ locked & 81.8 $\pm$ 1.5 & $-$1.4 \\
+    \bottomrule
+  \end{tabular}
+  \caption{Complete ablation grid. Pre-fix A8 top-10 and A9 chunk-512 means were 9.9 and 14.1 (judge overflow artifact).}
+  \label{tab:full}
+\end{table}
+
+\section*{Corpus}
+
+12 RAG papers, 5 questions each (60 total): 2305.14283, 2309.01431, 2309.15217, 2310.11511, 2311.08377, 2312.10997, 2401.15884, 2404.19705, 2406.15319, 2407.01219, 2407.16833, 2501.07391.
+
+\end{document}
