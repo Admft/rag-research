@@ -15,6 +15,7 @@ from . import (
     BEIR_RESULTS_ROOT,
     PROJECT_ROOT,
     dataset_display_name,
+    dataset_eval_path,
     dataset_result_path,
     normalize_dataset_name,
 )
@@ -186,12 +187,23 @@ def _finalize_beir_result(key, display, questions, per_question, index_meta, con
         json.dumps(extract_scores(summary), indent=2) + "\n",
         encoding="utf-8",
     )
+    with (result_dir / "questions.jsonl").open("w", encoding="utf-8") as f:
+        for row in per_question:
+            f.write(json.dumps(row) + "\n")
+
+    eval_source = dataset_eval_path(key)
+    eval_dest = result_dir / "eval_questions.jsonl"
+    if eval_source.exists():
+        eval_dest.write_text(eval_source.read_text(encoding="utf-8"), encoding="utf-8")
+
     (result_dir / "config_snapshot.json").write_text(
         json.dumps({
             "dataset": key,
             "display_name": display,
             "baseline": merged_settings(),
             "eval_questions": len(questions),
+            "eval_questions_path": str(eval_dest.relative_to(PROJECT_ROOT)),
+            "questions_path": str((result_dir / "questions.jsonl").relative_to(PROJECT_ROOT)),
             "result_dir": str(result_dir.relative_to(PROJECT_ROOT)),
         }, indent=2) + "\n",
         encoding="utf-8",
